@@ -45,11 +45,11 @@
   /* NAV */
   nav {
     position: fixed;
-    top: 0; left: 0; right: 0;
+top: 0; left: 0; right: 0;
     z-index: 900;
-    display: flex;
-    flex-wrap: wrap:
-    align-items: center;
+ display: flex;
+ flex-direction: row;
+align-items: center;
     justify-content: space-between;
     padding: 10px 15px;
     background: linear-gradient(to bottom, rgba(8,2,15,0.98), transparent);
@@ -959,7 +959,12 @@
 
   /* RESPONSIVE */
   @media (max-width: 900px) {
-    nav { padding: 10px 15px; flex-direction: column; height; auto; }
+    nav { 
+    flex-direction: column !important; 
+    height: auto !important; 
+    padding: 15px !important; 
+    position: relative !important; 
+  }
     .nav-links { display: flex !important; gap: 10px; justify-content: center; list-style: none; }
     section, .collections-section, .whatsapp-section, .sizes-section { padding: 60px 24px; }
     .about-grid, .collections-grid, .sizes-inner, .footer-inner { grid-template-columns: 1fr; gap: 40px; }
