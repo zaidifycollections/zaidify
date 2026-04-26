@@ -48,9 +48,10 @@
     top: 0; left: 0; right: 0;
     z-index: 900;
     display: flex;
+    flex-wrap: wrap:
     align-items: center;
     justify-content: space-between;
-    padding: 18px 60px;
+    padding: 10px 15px;
     background: linear-gradient(to bottom, rgba(8,2,15,0.98), transparent);
     backdrop-filter: blur(4px);
   }
@@ -63,8 +64,9 @@
   }
 
   .nav-logo svg { width: 36px; height: 36px; }
-
-  .nav-logo-text {
+  .nav-logo img { mix-blend: screen; }
+  .nav-logo img { height: 40px; width: auto; }
+.nav-logo-text {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 22px;
     letter-spacing: 4px;
@@ -74,7 +76,7 @@
   }
 
   .nav-links {
-    display: none !important;
+    display: flex !important;
     gap: 40px;
     list-style: none;
   }
@@ -957,8 +959,8 @@
 
   /* RESPONSIVE */
   @media (max-width: 900px) {
-    nav { padding: 16px 24px; }
-    .nav-links { display: none !important; }
+    nav { padding: 10px 15px; flex-direction: column; height; auto; }
+    .nav-links { display: flex !important; gap: 10px; justify-content: center; list-style: none; }
     section, .collections-section, .whatsapp-section, .sizes-section { padding: 60px 24px; }
     .about-grid, .collections-grid, .sizes-inner, .footer-inner { grid-template-columns: 1fr; gap: 40px; }
     .collections-header { flex-direction: column; align-items: flex-start; gap: 20px; }
@@ -974,16 +976,15 @@
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">
-  <img src="zaidify transparent bg.webp" style="width:36px;height:36px;object-fit:contain;mix-blend-mode:lighten;"/>
+  <img src="zaidify%20collections%20logo.png" style="width:36px;height:36px;object-fit:contain;mix-blend-mode:lighten;"/>
    <span class="nav-logo-text">ZAIDIFY</span>
- </a>
-    <li><a href="#about">About</a></li>
-    <li><a href="#collections">Collections</a></li>
-    <li><a href="#sizes">Sizes</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="https://wa.me/918655171445" class="nav-cta">Order Now</a></li>
-  </ul>
-</nav>
+ <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#collections">Collections</a></li>
+      <li><a href="#sizes">Sizes</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="https://wa.me/..." class="nav-cta">Order Now</a></li>
+    </ul>
 
 <!-- HERO -->
 <section class="hero" style="max-width:100%; padding:0;">
@@ -992,7 +993,7 @@
 
   <div class="hero-content">
     <div class="hero-z">
-      <img src="zaidify transparent bg.webp" style="width:180px;"/>
+      <img src="zaidify%20collections%20logo.png" alt="logo" class="hero-logo" style="mix-blend-mode: screen;">
     </div>
     <p class="hero-eyebrow">Zaidify Collections — Est. Premium Fashion</p>
     <h1 class="hero-title">
