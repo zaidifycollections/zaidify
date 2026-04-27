@@ -3,429 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaidify Collections | Premium Fashion</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <title>Zaidify Collections | Premium Ethnic Wear</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --purple: #8b2fc9;
-            --pink: #e040fb;
-            --dark: #08020f;
-            --darker: #05010a;
-            --white: #ffffff;
-        }
+        :root { --pink: #ff00ff; --darker: #08020f; --glass: rgba(255, 255, 255, 0.05); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--darker); color: white; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-        }
+        nav { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(8, 2, 15, 0.95); position: sticky; top: 0; z-index: 1000; }
+        .logo { height: 40px; }
 
-        /* Performance Fixes */
-        html { scroll-behavior: smooth; } 
+        .hero { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .hero h1 { font-family: 'Bebas Neue'; font-size: 5rem; letter-spacing: 5px; margin: 0; }
+
+        .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: 3rem; margin: 40px 0; letter-spacing: 2px; }
         
-        body {
-            background-color: var(--dark);
-            color: var(--white);
-            font-family: 'Rajdhani', sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+        .collections-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 0 5%; margin-bottom: 60px; }
+        .category-card { background: var(--glass); padding: 40px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .category-card h3 { color: var(--pink); font-family: 'Bebas Neue'; font-size: 2.2rem; }
 
-        /* --- NAVIGATION --- */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background: rgba(8, 2, 15, 0.98);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .nav-logo img {
-            height: 35px;
-            /* Remove all filters and blend modes */
-            filter: none; 
-        }
-        }
-
-        .nav-logo span {
-            color: var(--white);
-            font-weight: 700;
-            letter-spacing: 2px;
-            font-size: 1.1rem;
-        }
-
-        .nav-links { display: none; }
-
-        @media (min-width: 1024px) {
-            .nav-links { display: flex; gap: 25px; align-items: center; }
-            .nav-links a { 
-                color: var(--white); 
-                text-decoration: none; 
-                font-size: 14px; 
-                text-transform: uppercase; 
-                letter-spacing: 1px; 
-                opacity: 0.7; 
-                transition: 0.3s; 
-            }
-            .nav-links a:hover { opacity: 1; color: var(--pink); }
-        }
-
-        .order-btn {
-            background: var(--pink);
-            color: var(--white);
-            padding: 8px 18px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 13px;
+        /* FEATURED PRODUCT */
+        .featured-product { padding: 40px 5%; }
+        .product-card { max-width: 1000px; margin: 0 auto; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; display: flex; overflow: hidden; }
+        .product-img-box { flex: 1; max-width: 450px; }
+        .product-img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        .product-info { flex: 1.2; padding: 40px; }
+        .style-id { color: var(--pink); font-weight: 800; letter-spacing: 1px; }
+        
+        /* CLICKABLE SIZES */
+        .size-row { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .s-box { 
+            border: 1px solid rgba(255,255,255,0.3); 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            cursor: pointer; 
             transition: 0.3s;
+            font-weight: bold;
         }
-        .order-btn:hover { background: var(--purple); transform: scale(1.05); }
+        .s-box:hover { border-color: var(--pink); }
+        .s-box.active { background: var(--pink); border-color: var(--pink); color: white; transform: scale(1.05); }
 
-        /* --- HERO SECTION --- */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 120px 20px 60px 20px;
-            background: radial-gradient(circle at center, #1a0b2e 0%, #08020f 100%);
-        }
+        .price-row { margin: 25px 0; display: flex; align-items: baseline; gap: 15px; }
+        .now { font-size: 3.5rem; font-weight: 800; }
+        .was { text-decoration: line-through; opacity: 0.4; font-size: 1.5rem; }
 
-        .hero-logo {
-            width: 180px;
-            max-width: 50%;
-            margin-bottom: 20px;
-            filter: none;
-        }
-        }
-
-        .hero h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(3.5rem, 12vw, 7rem);
-            line-height: 0.9;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        .hero p.tagline {
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
-            color: var(--pink);
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .cta-main {
-            background: linear-gradient(45deg, var(--purple), var(--pink));
-            color: white;
-            padding: 16px 45px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(139, 47, 201, 0.3);
-        }
-        .cta-main:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(139, 47, 201, 0.5); }
-
-        /* --- CONTENT SECTIONS --- */
-        section {
-            padding: 100px 10%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2.5rem, 8vw, 4rem);
-            margin-bottom: 30px;
-            color: var(--white);
-            text-align: center;
-            letter-spacing: 2px;
-        }
-
-        .about-text {
-            max-width: 800px;
-            margin: 0 auto;
-            font-size: 1.25rem;
-            text-align: center;
-            color: rgba(255,255,255,0.85);
-            line-height: 1.8;
-        }
-
-        /* --- COLLECTIONS --- */
-        .collections-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
-        }
-
-        .category-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 50px 30px;
-            text-align: center;
-            border-radius: 12px;
-            transition: 0.4s;
-            text-decoration: none;
-            color: white;
-        }
-
-        .category-card:hover {
-            border-color: var(--pink);
-            background: rgba(224, 64, 251, 0.08);
-            transform: translateY(-8px);
-        }
-
-        .category-card h3 { font-size: 2.2rem; font-family: 'Bebas Neue'; margin-bottom: 5px; color: var(--pink); }
-        .category-card p { opacity: 0.7; letter-spacing: 2px; font-weight: 600; }
-<style>
-    .featured-section {
-        padding: 60px 5% !important;
-        background: #08020f !important;
-        display: block !important;
-    }
-    .product-wrapper {
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 30px !important;
-        background: rgba(255, 255, 255, 0.05) !important;
-        border-radius: 20px !important;
-        padding: 25px !important;
-        align-items: center !important;
-    }
-    .product-gallery { flex: 1 !important; max-width: 400px !important; }
-    .main-product-img { width: 100% !important; border-radius: 15px !important; }
-
-    /* FORCE SIZES SIDE-BY-SIDE */
-    .chips-container {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
-        gap: 8px !important;
-        margin: 15px 0 !important;
-    }
-    .size-chip {
-        border: 1px solid white !important;
-        padding: 5px 10px !important;
-        border-radius: 4px !important;
-        color: white !important;
-        font-size: 14px !important;
-    }
-
-    /* FORCE BUTTON TO BE SMALL */
-    .wa-order-btn {
-        display: block !important;
-        background: #25d366 !important;
-        color: white !important;
-        text-align: center !important;
-        padding: 15px !important;
-        border-radius: 10px !important;
-        text-decoration: none !important;
-        font-weight: bold !important;
-        width: 100% !important;
-        max-width: 280px !important;
-    }
-
-    @media (max-width: 768px) {
-        .product-wrapper { flex-direction: column !important; }
-    }
-</style>
-
-<section id="featured" class="featured-section">
-    <div class="product-wrapper">
-        <div class="product-gallery">
-            <img src="zw03-1.jpg" class="main-product-img">
-        </div>
-        <div class="product-details-text">
-            <h2 style="color:white; margin:0;">Premium Cotton Kurti Set</h2>
-            <p style="color: #ff00ff; font-weight:bold;">Style: ZW03</p>
-            
-            <div class="chips-container">
-                <div class="size-chip">S</div>
-                <div class="size-chip">M</div>
-                <div class="size-chip">L</div>
-                <div class="size-chip">XL</div>
-                <div class="size-chip">XXL</div>
-                <div class="size-chip">3XL</div>
-            </div>
-
-            <div style="margin: 20px 0;">
-                <span style="font-size: 30px; color: white; font-weight: 800;">₹558</span>
-                <span style="text-decoration: line-through; color: gray; margin-left: 10px;">₹1,199</span>
-            </div>
-
-            <a href="https://wa.me/918655171445?text=Order%20ZW03" class="wa-order-btn">
-                ORDER ON WHATSAPP
-            </a>
-        </div>
-    </div>
-</section>
-        /* --- SIZING --- */
-        .size-box {
-            background: var(--darker);
-            padding: 60px 20px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .size-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 30px;
-        }
-
-        .size-chip {
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 8px 22px;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: 700;
-            transition: 0.3s;
-            cursor: pointer;
-            user-select: none;
-        }
-        .size-chip:hover {
-            border-color: var(--pink);
-            background: rgba(224, 64, 251, 0.1);
-        }
-        .size-chip.active { 
-            background: var(--pink) !important; 
-            border-color: var(--pink) !important; 
-            color: white !important; 
-        }
-
-        .size-chip.active { background: var(--pink); border-color: var(--pink); color: white; }
-
-        /* --- WHATSAPP FLOAT --- */
-        .wa-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
+        .wa-btn {
+            display: block;
             background: #25d366;
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            z-index: 1001;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.3rem;
             transition: 0.3s;
         }
-        .wa-float:hover { transform: scale(1.1); background: #20ba5a; }
-        .wa-float img { width: 35px; height: 35px; }
+        .wa-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37, 211, 102, 0.4); }
 
         @media (max-width: 768px) {
-            section { padding: 80px 6%; }
-            .hero { padding-top: 110px; }
-            .wa-float { width: 55px; height: 55px; bottom: 20px; right: 20px; }
+            .product-card { flex-direction: column; }
+            .product-img-box { max-width: 100%; height: 450px; }
+            .hero h1 { font-size: 3.5rem; }
+            .now { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="#" class="nav-logo">
-            <img src="logo.png" alt="Z">
-            <span>ZAIDIFY</span>
-        </a>
-        <div class="nav-links">
-            <a href="#about">About</a>
-            <a href="#collections">Collections</a>
-            <a href="#sizes">Sizes</a>
-            <a href="https://wa.me/918655171445">Contact</a>
-        </div>
-        <a href="https://wa.me/918655171445" class="order-btn">ORDER NOW</a>
+        <img src="logo.png" alt="Zaidify" class="logo">
     </nav>
 
-    <section class="hero">
-        <img src="logo.png" alt="Zaidify" class="hero-logo">
-        <p class="tagline">Fashion Without Limits</p>
-        <h1>STYLE FOR<br><span style="color:var(--pink)">EVERYONE.</span></h1>
-        <p style="opacity:0.7; letter-spacing:3px; margin-bottom: 35px; font-weight: 600;">PREMIUM TREND-FORWARD CLOTHING</p>
-        <a href="https://wa.me/918655171445" class="cta-main">WHATSAPP TO ORDER</a>
-    </section>
+    <header class="hero">
+        <h1>ZAIDIFY</h1>
+        <p style="letter-spacing: 5px; opacity: 0.7;">PREMIUM ETHNIC WEAR</p>
+    </header>
 
-    <section id="about">
-        <h2>WHO WE ARE</h2>
-        <p class="about-text">
-            Zaidify Collections brings premium, trend-forward clothing for every member of the family — from toddlers to adults 60 and beyond. We believe style has no age, and confidence comes in every size.
-        </p>
-    </section>
+    <h2 class="section-title">OUR COLLECTIONS</h2>
+    <div class="collections-grid">
+        <div class="category-card"><h3>FOR HER</h3><p>Women's Fashion</p></div>
+        <div class="category-card"><h3>FOR HIM</h3><p>Men's Fashion</p></div>
+        <div class="category-card"><h3>FOR KIDS</h3><p>Boys & Girls</p></div>
+    </div>
 
-    <section id="collections">
-        <h2>OUR COLLECTIONS</h2>
-        <div class="collections-grid">
-            <a href="https://wa.me/918655171445?text=Hi, I am interested in the Women's collection" class="category-card">
-                <h3>FOR HER</h3>
-                <p>WOMEN'S FASHION</p>
-            </a>
-            <a href="https://wa.me/918655171445?text=Hi, I am interested in the Men's collection" class="category-card">
-                <h3>FOR HIM</h3>
-                <p>MEN'S FASHION</p>
-            </a>
-            <a href="https://wa.me/918655171445?text=Hi, I am interested in the Kids collection" class="category-card">
-                <h3>FOR KIDS</h3>
-                <p>BOYS & GIRLS</p>
-            </a>
-        </div>
-    </section>
+    <section class="featured-product">
+        <div class="product-card">
+            <div class="product-img-box">
+                <img src="zw03-1.jpg" alt="Premium Kurti Set">
+            </div>
+            <div class="product-info">
+                <p class="style-id">STYLE CODE: ZW03</p>
+                <h2 style="font-size: 2.5rem; margin: 10px 0; line-height: 1.1;">Premium Cotton Kurti Pant Set</h2>
+                <p style="opacity: 0.7; line-height: 1.6;">Luxury 3-piece set featuring striped cotton kurta, matching trousers, and designer dupatta.</p>
+                
+                <p style="margin-top: 25px; font-weight: bold; font-size: 0.9rem; opacity: 0.8;">SELECT YOUR SIZE:</p>
+                <div class="size-row" id="sizePicker">
+                    <div class="s-box" onclick="selectSize(this, 'S')">S</div>
+                    <div class="s-box" onclick="selectSize(this, 'M')">M</div>
+                    <div class="s-box" onclick="selectSize(this, 'L')">L</div>
+                    <div class="s-box" onclick="selectSize(this, 'XL')">XL</div>
+                    <div class="s-box" onclick="selectSize(this, 'XXL')">XXL</div>
+                    <div class="s-box" onclick="selectSize(this, '3XL')">3XL</div>
+                </div>
 
-    <section id="sizes">
-        <div class="size-box">
-            <h2>EVERY BODY, EVERY SIZE</h2>
-            <p style="text-align:center; opacity:0.7; font-size:1.1rem;">Inclusive sizing from toddlers to 5XL.</p>
-            <div class="size-container">
-                <div class="size-chip" onclick="selectSize(this)">S</div>
-                <div class="size-chip" onclick="selectSize(this)">M</div>
-                <div class="size-chip" onclick="selectSize(this)">L</div>
-                <div class="size-chip active" onclick="selectSize(this)">XL</div>
-                <div class="size-chip" onclick="selectSize(this)">2XL</div>
-                <div class="size-chip" onclick="selectSize(this)">3XL</div>
-                <div class="size-chip" onclick="selectSize(this)">4XL</div>
-                <div class="size-chip" onclick="selectSize(this)">5XL</div>
+                <div class="price-row">
+                    <span class="now">₹558</span>
+                    <span class="was">₹1,199</span>
+                    <span style="color: #00ff88; font-weight: bold; font-size: 1.1rem;">53% OFF</span>
+                </div>
+
+                <a href="#" id="waLink" onclick="sendOrder(event)" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
     </section>
 
-    <a href="https://wa.me/918655171445" class="wa-float" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
-    </a>
-
-    <footer style="padding: 60px 20px; text-align: center; opacity: 0.4; font-size: 13px; letter-spacing: 1px;">
-        &copy; 2026 ZAIDIFY COLLECTIONS. ESTABLISHED PREMIUM FASHION.
+    <footer style="text-align: center; padding: 60px 0; opacity: 0.3; font-size: 0.8rem;">
+        &copy; 2026 ZAIDIFY COLLECTIONS. ALL RIGHTS RESERVED.
     </footer>
-<script>
-        function selectSize(element) {
-            // This finds all size chips and removes the pink highlight
-            const chips = document.querySelectorAll('.size-chip');
-            chips.forEach(chip => chip.classList.remove('active'));
-            
-            // This adds the pink highlight to the one you just clicked
+
+    <script>
+        let selectedSize = "";
+
+        function selectSize(element, size) {
+            // Remove 'active' status from all boxes
+            document.querySelectorAll('.s-box').forEach(box => {
+                box.classList.remove('active');
+            });
+            // Make the clicked box pink
             element.classList.add('active');
+            selectedSize = size;
+        }
+
+        function sendOrder(e) {
+            e.preventDefault();
+            if (selectedSize === "") {
+                alert("Please select a size first!");
+                return;
+            }
+            const phoneNumber = "918655171445";
+            const message = `Hi Zaidify! I want to order the Premium Kurti Set (ZW03) in Size: ${selectedSize}. Final Price: ₹558.`;
+            window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
         }
     </script>
+
 </body>
 </html>
