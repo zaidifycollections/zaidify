@@ -10,7 +10,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; overflow-x: hidden; width: 100%; }
 
-        /* --- STICKY NAV (FIXED FOR MOBILE) --- */
+        /* --- STICKY NAV: ALL LINKS VISIBLE ON ALL DEVICES --- */
         nav { 
             width: 100%; padding: 10px 5%; display: flex; justify-content: space-between; 
             align-items: center; background: var(--nav-bg); position: fixed; top: 0; 
@@ -18,18 +18,18 @@
         }
         .logo-box { display: flex; align-items: center; gap: 8px; text-decoration: none; color: white; }
         .logo-img { height: 28px; }
-        .nav-links { display: flex; gap: 12px; align-items: center; }
+        .nav-links { display: flex; gap: 10px; align-items: center; }
         .nav-links a { 
             color: white; text-decoration: none; font-family: 'Bebas Neue'; 
-            font-size: 0.9rem; letter-spacing: 1px; 
+            font-size: 0.85rem; letter-spacing: 1px; 
         }
         .shop-now-btn { 
-            background: var(--pink); padding: 6px 12px; border-radius: 4px; 
-            font-weight: 800; font-size: 0.8rem; text-decoration: none; color: white; 
+            background: var(--pink); padding: 6px 10px; border-radius: 4px; 
+            font-weight: 800; font-size: 0.75rem; text-decoration: none; color: white; 
             font-family: 'Bebas Neue';
         }
 
-        /* --- HERO --- */
+        /* --- HERO SECTION --- */
         .hero { height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 70px; }
         .hero-logo { width: 90px; margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--pink)); }
         .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 10vw, 5.5rem); letter-spacing: 5px; line-height: 1; }
@@ -39,7 +39,7 @@
         section { padding: 60px 5%; }
         .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: clamp(2rem, 8vw, 3.5rem); margin-bottom: 40px; letter-spacing: 2px; }
 
-        /* --- ABOUT --- */
+        /* --- ABOUT SECTION --- */
         .about-text { max-width: 800px; margin: 0 auto; text-align: center; opacity: 0.8; line-height: 1.6; font-size: 1rem; }
 
         /* --- CATEGORIES GRID --- */
@@ -52,7 +52,7 @@
         .card:hover { border-color: var(--pink); background: rgba(255,255,255,0.07); }
         .card h3 { font-family: 'Bebas Neue'; color: var(--pink); font-size: 2.2rem; }
 
-        /* --- PRODUCT --- */
+        /* --- PRODUCT DISPLAY (FOR HER) --- */
         .p-wrapper { 
             max-width: 1000px; margin: 0 auto; background: rgba(255,255,255,0.02); 
             border-radius: 20px; display: flex; flex-wrap: wrap; overflow: hidden;
@@ -62,10 +62,11 @@
         .p-img img { width: 100%; height: 100%; object-fit: cover; }
         .p-content { flex: 1.2; padding: 30px; min-width: 300px; }
         
+        /* SIZE ROW: Fixed for XXS to XXXL --- */
         .s-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 15px 0 25px 0; }
         .s-box { 
-            border: 1px solid rgba(255,255,255,0.3); padding: 10px 16px; border-radius: 6px; 
-            cursor: pointer; font-weight: bold; font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.3); padding: 8px 12px; border-radius: 6px; 
+            cursor: pointer; font-weight: bold; font-size: 0.8rem; min-width: 45px; text-align: center;
         }
         .s-box.active { background: var(--pink); border-color: var(--pink); }
 
@@ -75,8 +76,9 @@
         .wa-btn {
             display: block; background: #25d366; color: white; text-align: center;
             padding: 18px; border-radius: 12px; text-decoration: none;
-            font-weight: 900; font-size: 1.1rem; margin-top: 20px;
+            font-weight: 900; font-size: 1.1rem; margin-top: 20px; transition: 0.3s;
         }
+        .wa-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37, 211, 102, 0.15); }
 
         /* --- DESKTOP ADJUSTMENTS --- */
         @media (min-width: 768px) {
@@ -87,7 +89,7 @@
             .hero-logo { width: 120px; }
         }
 
-        /* --- MOBILE STACKING --- */
+        /* --- MOBILE ADJUSTMENTS --- */
         @media (max-width: 768px) {
             .p-wrapper { flex-direction: column; }
             .p-img { height: 380px; }
@@ -146,10 +148,14 @@
                 
                 <p style="margin-top:20px; font-weight:bold; font-size:0.8rem; opacity:0.8;">SELECT SIZE:</p>
                 <div class="s-row">
+                    <div class="s-box" onclick="selectSize(this, 'XXS')">XXS</div>
+                    <div class="s-box" onclick="selectSize(this, 'XS')">XS</div>
                     <div class="s-box" onclick="selectSize(this, 'S')">S</div>
                     <div class="s-box" onclick="selectSize(this, 'M')">M</div>
                     <div class="s-box" onclick="selectSize(this, 'L')">L</div>
                     <div class="s-box" onclick="selectSize(this, 'XL')">XL</div>
+                    <div class="s-box" onclick="selectSize(this, 'XXL')">XXL</div>
+                    <div class="s-box" onclick="selectSize(this, 'XXXL')">XXXL</div>
                 </div>
 
                 <div class="price-row">
@@ -162,21 +168,22 @@
         </div>
     </section>
 
-    <footer style="text-align:center; padding:40px; opacity:0.3; font-size:0.7rem;">
+    <footer style="text-align:center; padding:40px; opacity:0.3; font-size:0.7rem; border-top: 1px solid rgba(255,255,255,0.05);">
         &copy; 2026 ZAIDIFY COLLECTIONS.
     </footer>
 
     <script>
-        let chosen = "";
+        let chosenSize = "";
         function selectSize(el, s) {
             document.querySelectorAll('.s-box').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
-            chosen = s;
+            chosenSize = s;
         }
         function whatsapp(e) {
             e.preventDefault();
-            if(!chosen) { alert("Please select a size!"); return; }
-            window.open(`https://wa.me/918655171445?text=I want ZW03 Size ${chosen}`, '_blank');
+            if(!chosenSize) { alert("Please select a size first!"); return; }
+            const msg = encodeURIComponent(`Hi Zaidify! I want to order ZW03 in Size: ${chosenSize} (Price: ₹558).`);
+            window.open(`https://wa.me/918655171445?text=${msg}`, '_blank');
         }
     </script>
 </body>
