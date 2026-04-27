@@ -20,9 +20,9 @@
     --glow-pink: 0 0 20px rgba(224, 64, 251, 0.6), 0 0 60px rgba(224, 64, 251, 0.2);
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+ * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: auto; }
 
   body {
     background: var(--dark);
@@ -998,7 +998,7 @@ align-items: center;
 
   <div class="hero-content">
     <div class="hero-z">
-      <img src="logo.png" alt="logo" class="hero-logo" style="width:180px; mix-blend-mode: multiply; filter: invert(1);">
+      <img src="logo.png" alt="logo" class="hero-logo" style="width:180px; filter: invert(1) hue-rotate(180deg); mix-blend-mode: screen;">
     </div>
     <p class="hero-eyebrow">Zaidify Collections — Est. Premium Fashion</p>
     <h1 class="hero-title">
