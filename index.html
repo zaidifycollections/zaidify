@@ -204,7 +204,7 @@
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (900+ Reviews)</div></div>
                 <span style="color:var(--pink); font-weight:900;">CODE: ZW03</span>
                 <h2 class="product-name">Cotton Floral Set</h2>
-                <p class="label">Color: <span style="color:white; font-weight:400; text-transform:none;">Blue & White</span></p>
+                <p class="label">Color: <span style="color:white; font-weight:400; text-transform:none;">Maroon</span></p>
 
                 <p class="label" style="margin-top:20px;">Select Size:</p>
                 <div class="row">
@@ -225,11 +225,10 @@
     </section>
 
     <script>
-        // Pre-filling ZW03 color so it is ready to order immediately
         let selections = { 
             'ZW01': { size: '', price: '', color: '' }, 
             'ZW02': { size: '', price: '', color: '' }, 
-            'ZW03': { size: '', price: '', color: 'Blue & White' } 
+            'ZW03': { size: '', price: '', color: 'Maroon' } 
         };
         let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0 };
 
@@ -258,7 +257,7 @@
             e.preventDefault();
             const d = selections[id];
             if(!d.size || !d.color) { 
-                alert("Please select both Color and Size!"); 
+                alert("Please select a Size!"); 
                 return; 
             }
             const msg = `Hi Zaidify! I want to order:\n\n*Product:* ${name} (${id})\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
