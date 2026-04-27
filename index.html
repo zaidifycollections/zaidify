@@ -10,7 +10,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--white); font-family: 'Poppins', sans-serif; overflow-x: hidden; width: 100%; -webkit-font-smoothing: antialiased; }
 
-        /* NAVIGATION */
         nav { width: 100%; padding: 12px 6%; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); position: fixed; top: 0; z-index: 9999; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .logo-box { display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; }
         .logo-img { height: 30px; }
@@ -18,61 +17,61 @@
         .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 1px; }
         .shop-now-btn { background: var(--pink); padding: 8px 16px; border-radius: 5px; font-weight: 800; text-decoration: none; color: white; font-family: 'Bebas Neue'; }
 
-        /* HERO */
-        .hero { height: 45vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
+        .hero { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
         .hero-logo { width: 100px; margin-bottom: 15px; filter: drop-shadow(0 0 15px var(--pink)); }
         .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3rem, 12vw, 6rem); letter-spacing: 8px; line-height: 1; }
 
         section { padding: 60px 6%; width: 100%; max-width: 1400px; margin: 0 auto; }
         .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 8vw, 3.5rem); margin-bottom: 40px; color: var(--pink); }
 
-        /* CATEGORIES */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: rgba(255,255,255,0.03); padding: 50px 30px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: white; transition: 0.4s; }
-        .card h3 { font-family: 'Bebas Neue'; font-size: 2.5rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .card { background: rgba(255,255,255,0.03); padding: 40px 20px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: white; }
+        .card h3 { font-family: 'Bebas Neue'; font-size: 2rem; }
 
-        /* PRODUCT STYLING */
         .p-wrapper { display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.02); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 60px; }
-        .p-img-box { flex: 1; min-width: 350px; }
+        .p-img-box { flex: 1; min-width: 350px; position: relative; }
         .p-content { flex: 1.2; padding: 40px; min-width: 350px; }
 
         .slider-container { position: relative; width: 100%; height: 550px; overflow: hidden; background: #000; }
         .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; }
         .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
-        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 15px; cursor: pointer; z-index: 10; border-radius: 50%; width: 50px; height: 50px; }
+        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 15px; cursor: pointer; z-index: 10; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
         .prev { left: 15px; } .next { right: 15px; }
 
         .rating-box { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-        .stars { color: var(--gold); }
-        .rev-count { color: rgba(255,255,255,0.4); font-size: 0.85rem; }
-        .product-code { color: var(--pink); font-weight: 900; }
-        .product-name { font-size: 2.2rem; margin: 5px 0 10px 0; font-weight: 700; }
+        .stars { color: var(--gold); font-size: 0.9rem; }
+        .rev-count { color: rgba(255,255,255,0.4); font-size: 0.8rem; }
+        .product-code { color: var(--pink); font-weight: 900; font-size: 0.9rem; }
+        .product-name { font-size: 2rem; margin: 5px 0 10px 0; font-weight: 700; line-height: 1.2; }
 
-        .option-label { font-weight: bold; font-size: 0.8rem; opacity: 0.5; margin-top: 15px; text-transform: uppercase; }
+        .option-label { font-weight: bold; font-size: 0.75rem; opacity: 0.5; margin-top: 15px; text-transform: uppercase; }
         .s-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 15px 0; }
-        .s-box { border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; min-width: 45px; text-align: center; }
-        .s-box.active { background: var(--pink); border-color: var(--pink); color: white; }
+        .s-box { border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; min-width: 45px; text-align: center; transition: 0.2s; }
+        .s-box.active { background: var(--pink); border-color: var(--pink); color: white; font-weight: bold; }
 
-        .price-container { margin-top: 20px; display: flex; align-items: baseline; gap: 12px; }
-        .price-now { font-size: 2.8rem; font-weight: 900; }
-        .price-old { text-decoration: line-through; opacity: 0.3; font-size: 1.3rem; }
+        .price-now { font-size: 2.5rem; font-weight: 900; }
+        .price-old { text-decoration: line-through; opacity: 0.3; font-size: 1.2rem; margin-left: 10px; }
 
-        .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 18px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-top: 25px; }
+        .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 18px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.1rem; margin-top: 25px; transition: 0.3s; }
+        .wa-btn:hover { transform: scale(1.02); background: #1ebe57; }
 
-        /* MOBILE VIEW */
         @media (max-width: 768px) {
             .p-wrapper { flex-direction: column; }
-            .p-img-box, .slider-container { height: 450px; }
+            .p-img-box, .slider-container { height: 420px; }
             .p-content { padding: 30px 20px; text-align: center; }
-            .s-row, .price-container { justify-content: center; }
+            .s-row { justify-content: center; }
             .nav-links a:not(.shop-now-btn) { display: none; }
+            .price-now { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="#" class="logo-box"><img src="logo.png" class="logo-img"><span style="font-family:'Bebas Neue'; font-size:1.4rem;">ZAIDIFY</span></a>
+        <a href="#" class="logo-box">
+            <img src="logo.png" class="logo-img">
+            <span style="font-family:'Bebas Neue'; font-size:1.4rem;">ZAIDIFY</span>
+        </a>
         <div class="nav-links">
             <a href="#about">ABOUT</a>
             <a href="#women">WOMEN</a>
@@ -110,7 +109,7 @@
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (6,800+ 5-Star Reviews)</div></div>
+                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (6,800+ Reviews)</div></div>
                 <span class="product-code">CODE: ZW01</span>
                 <h2 class="product-name">Batik Print Suit Set</h2>
                 <p class="option-label">Color:</p>
@@ -134,7 +133,7 @@
                     <div class="s-box" onclick="selectPrice(this,'ZW01','5XL',484)">5XL</div>
                     <div class="s-box" onclick="selectPrice(this,'ZW01','6XL',484)">6XL</div>
                 </div>
-                <div class="price-container"><span class="price-now" id="price-zw01">₹---</span><span class="price-old">₹899</span></div>
+                <div><span class="price-now" id="price-zw01">₹---</span><span class="price-old">₹899</span></div>
                 <a href="#" onclick="order(event,'ZW01','Batik Print Suit Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
@@ -143,24 +142,25 @@
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw02">
                     <div class="slides">
-                        <img src="zw02-8.jpg"> <img src="zw02-1.jpg"><img src="zw02-2.jpg"><img src="zw02-3.jpg">
-                        <img src="zw02-4.jpg"><img src="zw02-5.jpg"><img src="zw02-6.jpg"><img src="zw02-7.jpg">
+                        <img src="zw02/zw02-1.jpg"><img src="zw02/zw02-2.jpg"><img src="zw02/zw02-3.jpg">
+                        <img src="zw02/zw02-4.jpg"><img src="zw02/zw02-5.jpg"><img src="zw02/zw02-6.jpg">
+                        <img src="zw02/zw02-7.jpg"><img src="zw02/zw02-8.jpg">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw02', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw02', 1)">&#10095;</button>
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (19,000+ 5-Star Reviews)</div></div>
+                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (19,000+ Reviews)</div></div>
                 <span class="product-code">CODE: ZW02</span>
                 <h2 class="product-name">Floral Kurta Set</h2>
-                <p style="opacity:0.6; font-size:0.9rem;">Fabric: Premium Cotton</p>
+                <p style="opacity:0.6; font-size:0.85rem;">Fabric: Premium Cotton</p>
                 <p class="option-label">Color:</p>
                 <div class="s-row">
                     <div class="s-box" onclick="selectColor(this,'ZW02','Navy Blue')">Navy Blue</div>
                     <div class="s-box" onclick="selectColor(this,'ZW02','White')">White</div>
                     <div class="s-box" onclick="selectColor(this,'ZW02','Yellow')">Yellow</div>
-                    <div class="s-box" onclick="selectColor(this,'ZW02','Cyan Blue')">Cyan Blue</div>
+                    <div class="s-box" onclick="selectColor(this,'ZW02','Aqua Blue')">Aqua Blue</div>
                 </div>
                 <p class="option-label">Size:</p>
                 <div class="s-row">
@@ -168,14 +168,14 @@
                     <div class="s-box" onclick="selectPrice(this,'ZW02','XS',387)">XS</div>
                     <div class="s-box" onclick="selectPrice(this,'ZW02','S',394)">S</div>
                     <div class="s-box" onclick="selectPrice(this,'ZW02','M',396)">M</div>
-                    <div class="s-box" onclick="selectPrice(this,'ZW02', 'L', 406)">L</div>
-                    <div class="s-box" onclick="selectPrice(this,'ZW02', 'XL', 416)">XL</div>
-                    <div class="s-box" onclick="selectPrice(this,'ZW02', 'XXL', 426)">XXL</div>
-                    <div class="s-box" onclick="selectPrice(this,'ZW02', '3XL', 436)">3XL</div>
-                    <div class="s-box" onclick="selectPrice(this,'ZW02', '4XL', 446)">4XL</div>
-                    <div class="s-box" onclick="selectPrice(this,'ZW02', '5XL', 446)">5XL</div>
+                    <div class="s-box" onclick="selectPrice(this,'ZW02','L',406)">L</div>
+                    <div class="s-box" onclick="selectPrice(this,'ZW02','XL',416)">XL</div>
+                    <div class="s-box" onclick="selectPrice(this,'ZW02','XXL',426)">XXL</div>
+                    <div class="s-box" onclick="selectPrice(this,'ZW02','3XL',436)">3XL</div>
+                    <div class="s-box" onclick="selectPrice(this,'ZW02','4XL',446)">4XL</div>
+                    <div class="s-box" onclick="selectPrice(this,'ZW02','5XL',446)">5XL</div>
                 </div>
-                <div class="price-container"><span class="price-now" id="price-zw02">₹---</span><span class="price-old">₹799</span></div>
+                <div><span class="price-now" id="price-zw02">₹---</span><span class="price-old">₹799</span></div>
                 <a href="#" onclick="order(event,'ZW02','Floral Kurta Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
@@ -191,7 +191,7 @@
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (900+ 5-Star Reviews)</div></div>
+                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (900+ Reviews)</div></div>
                 <span class="product-code">CODE: ZW03</span>
                 <h2 class="product-name">Cotton Floral Set</h2>
                 <p class="option-label">Size:</p>
@@ -205,7 +205,7 @@
                     <div class="s-box" onclick="selectPrice(this,'ZW03','XXL',558)">XXL</div>
                     <div class="s-box" onclick="selectPrice(this,'ZW03','3XL',558)">3XL</div>
                 </div>
-                <div class="price-container"><span class="price-now">₹558</span><span class="price-old">₹1,199</span></div>
+                <div><span class="price-now">₹558</span><span class="price-old">₹1,199</span></div>
                 <a href="#" onclick="order(event,'ZW03','Cotton Floral Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
@@ -220,7 +220,8 @@
         let sliderPositions = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0 };
 
         function moveSlide(id, step) {
-            const slides = document.getElementById(id).querySelector('.slides');
+            const container = document.getElementById(id);
+            const slides = container.querySelector('.slides');
             const total = slides.querySelectorAll('img').length;
             sliderPositions[id] = (sliderPositions[id] + step + total) % total;
             slides.style.transform = `translateX(-${sliderPositions[id] * 100}%)`;
@@ -244,8 +245,11 @@
         function order(e, id, name) {
             e.preventDefault();
             const d = selections[id];
-            if(!d.size || (id !== 'ZW03' && !d.color)) { alert("Select color & size!"); return; }
-            const msg = `Hi Zaidify! Order Details:\n\n*Product:* ${name} (${id})\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
+            if(!d.size || (id !== 'ZW03' && !d.color)) { 
+                alert("Please select both color and size!"); 
+                return; 
+            }
+            const msg = `Hi Zaidify! I'd like to order:\n\n*Product:* ${name} (${id})\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
             window.open(`https://wa.me/918655171445?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
