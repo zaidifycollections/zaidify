@@ -10,57 +10,40 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--white); font-family: 'Poppins', sans-serif; overflow-x: hidden; width: 100%; -webkit-font-smoothing: antialiased; }
 
-        /* --- STICKY NAVIGATION --- */
-        nav { 
-            width: 100%; padding: 12px 6%; 
-            display: flex; justify-content: space-between; align-items: center; 
-            background: var(--nav-bg); position: fixed; top: 0; 
-            z-index: 9999; border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
+        nav { width: 100%; padding: 12px 6%; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); position: fixed; top: 0; z-index: 9999; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .logo-box { display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; }
         .logo-img { height: 30px; }
         .nav-links { display: flex; gap: 20px; align-items: center; }
         .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 1px; }
         .shop-now-btn { background: var(--pink); padding: 8px 16px; border-radius: 5px; font-weight: 800; text-decoration: none; color: white; font-family: 'Bebas Neue'; }
 
-        /* --- HERO SECTION --- */
         .hero { height: 45vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
         .hero-logo { width: 100px; margin-bottom: 15px; filter: drop-shadow(0 0 15px var(--pink)); }
         .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3rem, 12vw, 6rem); letter-spacing: 8px; line-height: 1; }
 
-        /* --- SECTIONS --- */
         section { padding: 60px 6%; width: 100%; max-width: 1400px; margin: 0 auto; }
         .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 8vw, 3.5rem); margin-bottom: 40px; color: var(--pink); }
-        .about-text { max-width: 800px; margin: 0 auto; text-align: center; opacity: 0.8; line-height: 1.8; }
 
-        /* --- CATEGORY CARDS --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: rgba(255,255,255,0.03); padding: 50px 30px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: white; transition: 0.4s; }
-        .card:hover { border-color: var(--pink); transform: translateY(-10px); }
-        .card h3 { font-family: 'Bebas Neue'; font-size: 2.5rem; }
-
-        /* --- PREMIUM SLIDER --- */
-        .slider-container { position: relative; width: 100%; height: 550px; overflow: hidden; background: #000; border-radius: 15px 0 0 15px; }
-        .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; }
-        .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
-        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 15px; cursor: pointer; z-index: 10; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
-        .prev { left: 15px; } .next { right: 15px; }
-
-        /* --- PRODUCT CONTENT --- */
         .p-wrapper { display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.02); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 60px; }
         .p-img-box { flex: 1; min-width: 350px; }
         .p-content { flex: 1.2; padding: 40px; min-width: 350px; display: flex; flex-direction: column; justify-content: center; }
         
+        .slider-container { position: relative; width: 100%; height: 550px; overflow: hidden; background: #000; }
+        .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; }
+        .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
+        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 15px; cursor: pointer; z-index: 10; border-radius: 50%; }
+        .prev { left: 15px; } .next { right: 15px; }
+
         .rating-box { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-        .stars { color: var(--gold); font-size: 1.1rem; letter-spacing: 2px; }
+        .stars { color: var(--gold); }
         .rev-count { color: rgba(255,255,255,0.4); font-size: 0.85rem; }
-
         .product-code { color: var(--pink); font-weight: 900; font-size: 0.9rem; }
-        .product-name { font-size: 2.2rem; margin: 5px 0 20px 0; font-weight: 700; }
+        .product-name { font-size: 2.2rem; margin: 5px 0 10px 0; font-weight: 700; }
+        .desc { opacity: 0.6; font-size: 0.9rem; margin-bottom: 20px; }
 
-        .option-label { font-weight: bold; font-size: 0.8rem; opacity: 0.5; margin-top: 20px; text-transform: uppercase; }
-        .s-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 20px 0; }
-        .s-box { border: 1px solid rgba(255,255,255,0.2); padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem; min-width: 50px; text-align: center; }
+        .option-label { font-weight: bold; font-size: 0.8rem; opacity: 0.5; margin-top: 15px; text-transform: uppercase; }
+        .s-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 8px 0 15px 0; }
+        .s-box { border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; min-width: 45px; text-align: center; }
         .s-box.active { background: var(--pink); border-color: var(--pink); color: white; }
 
         .price-container { margin-top: 20px; display: flex; align-items: baseline; gap: 12px; }
@@ -71,10 +54,9 @@
 
         @media (max-width: 768px) {
             .p-wrapper { flex-direction: column; }
-            .p-img-box, .slider-container { border-radius: 15px 15px 0 0; height: 450px; }
+            .p-img-box, .slider-container { height: 450px; }
             .p-content { padding: 30px 20px; text-align: center; }
-            .s-row { justify-content: center; }
-            .price-container { justify-content: center; }
+            .s-row, .price-container { justify-content: center; }
         }
     </style>
 </head>
@@ -86,7 +68,6 @@
             <span style="font-family:'Bebas Neue'; font-size: 1.4rem;">ZAIDIFY</span>
         </a>
         <div class="nav-links">
-            <a href="#about">ABOUT</a>
             <a href="#women">WOMEN</a>
             <a href="#women" class="shop-now-btn">SHOP NOW</a>
         </div>
@@ -98,19 +79,6 @@
         <p>PREMIUM ETHNIC COLLECTIONS</p>
     </header>
 
-    <section id="about">
-        <h2 class="section-title">THE BRAND</h2>
-        <p class="about-text">Handcrafted Batik prints and premium floral sets designed for elegance.</p>
-    </section>
-
-    <section id="categories">
-        <div class="grid">
-            <a href="#women" class="card"><h3>WOMEN</h3><p>Suit Sets & Kurtis</p></a>
-            <div class="card" style="opacity: 0.4;"><h3>MEN</h3><p>Coming Soon</p></div>
-            <div class="card" style="opacity: 0.4;"><h3>KIDS</h3><p>Coming Soon</p></div>
-        </div>
-    </section>
-
     <section id="women">
         <h2 class="section-title">WOMEN'S COLLECTION</h2>
 
@@ -118,56 +86,78 @@
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw01">
                     <div class="slides">
-                        <img src="Product photos/zw01-1.jpg" alt="Img 1">
-                        <img src="Product photos/zw01-2.jpg" alt="Img 2">
-                        <img src="Product photos/zw01-3.jpg" alt="Img 3">
-                        <img src="Product photos/zw01-4.jpg" alt="Img 4">
-                        <img src="Product photos/zw01-5.jpg" alt="Img 5">
-                        <img src="Product photos/zw01-6.jpg" alt="Img 6">
-                        <img src="Product photos/zw01-7.jpg" alt="Img 7">
-                        <img src="Product photos/zw01-8.jpg" alt="Img 8">
-                        <img src="Product photos/zw01-9.jpg" alt="Img 9">
+                        <img src="Product photos/zw01-1.jpg"><img src="Product photos/zw01-2.jpg"><img src="Product photos/zw01-3.jpg">
+                        <img src="Product photos/zw01-4.jpg"><img src="Product photos/zw01-5.jpg"><img src="Product photos/zw01-6.jpg">
+                        <img src="Product photos/zw01-7.jpg"><img src="Product photos/zw01-8.jpg"><img src="Product photos/zw01-9.jpg">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw01', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw01', 1)">&#10095;</button>
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box">
-                    <div class="stars">★★★★★</div>
-                    <div class="rev-count">4.1 (6,800+ 5-Star Reviews)</div>
-                </div>
+                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (6,800+ Reviews)</div></div>
                 <span class="product-code">CODE: ZW01</span>
                 <h2 class="product-name">Batik Print Suit Set</h2>
-
-                <p class="option-label">Select Color:</p>
+                <p class="option-label">Color:</p>
                 <div class="s-row">
                     <div class="s-box" onclick="selectColor(this, 'ZW01', 'Grey')">Grey</div>
                     <div class="s-box" onclick="selectColor(this, 'ZW01', 'Aqua Blue')">Aqua Blue</div>
                     <div class="s-box" onclick="selectColor(this, 'ZW01', 'Pink')">Pink</div>
                     <div class="s-box" onclick="selectColor(this, 'ZW01', 'Yellow')">Yellow</div>
                 </div>
-
-                <p class="option-label">Select Size:</p>
+                <p class="option-label">Size:</p>
                 <div class="s-row">
-                    <div class="s-box" onclick="selectZW01(this, 'XXS', 294)">XXS</div>
-                    <div class="s-box" onclick="selectZW01(this, 'XS', 359)">XS</div>
-                    <div class="s-box" onclick="selectZW01(this, 'S', 484)">S</div>
-                    <div class="s-box" onclick="selectZW01(this, 'M', 484)">M</div>
-                    <div class="s-box" onclick="selectZW01(this, 'L', 484)">L</div>
-                    <div class="s-box" onclick="selectZW01(this, 'XL', 484)">XL</div>
-                    <div class="s-box" onclick="selectZW01(this, 'XXL', 484)">XXL</div>
-                    <div class="s-box" onclick="selectZW01(this, '3XL', 484)">3XL</div>
-                    <div class="s-box" onclick="selectZW01(this, '4XL', 484)">4XL</div>
-                    <div class="s-box" onclick="selectZW01(this, '5XL', 484)">5XL</div>
-                    <div class="s-box" onclick="selectZW01(this, '6XL', 484)">6XL</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW01', 'XXS', 294)">XXS</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW01', 'XS', 359)">XS</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW01', 'S', 484)">S</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW01', 'M', 484)">M</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW01', 'L', 484)">L</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW01', 'XL', 484)">XL</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW01', 'XXL', 484)">XXL</div>
                 </div>
+                <div class="price-container"><span class="price-now" id="price-zw01">₹---</span><span class="price-old">₹899</span></div>
+                <a href="#" onclick="order(event, 'ZW01', 'Batik Print Suit Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+            </div>
+        </div>
 
-                <div class="price-container">
-                    <span class="price-now" id="price-zw01">₹---</span>
-                    <span class="price-old">₹899</span>
+        <div class="p-wrapper">
+            <div class="p-img-box">
+                <div class="slider-container" id="slider-zw02">
+                    <div class="slides">
+                        <img src="zw02/zw02-1.jpg"><img src="zw02/zw02-2.jpg"><img src="zw02/zw02-3.jpg"><img src="zw02/zw02-4.jpg">
+                        <img src="zw02/zw02-5.jpg"><img src="zw02/zw02-6.jpg"><img src="zw02/zw02-7.jpg"><img src="zw02/zw02-8.jpg">
+                    </div>
+                    <button class="slider-btn prev" onclick="moveSlide('slider-zw02', -1)">&#10094;</button>
+                    <button class="slider-btn next" onclick="moveSlide('slider-zw02', 1)">&#10095;</button>
                 </div>
-                <a href="#" onclick="order(event, 'ZW01')" class="wa-btn">ORDER ON WHATSAPP</a>
+            </div>
+            <div class="p-content">
+                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (19,000+ Reviews)</div></div>
+                <span class="product-code">CODE: ZW02</span>
+                <h2 class="product-name">Floral Kurta Set</h2>
+                <p class="desc">Fabric: Premium Cotton</p>
+                <p class="option-label">Color:</p>
+                <div class="s-row">
+                    <div class="s-box" onclick="selectColor(this, 'ZW02', 'Navy Blue')">Navy Blue</div>
+                    <div class="s-box" onclick="selectColor(this, 'ZW02', 'White')">White</div>
+                    <div class="s-box" onclick="selectColor(this, 'ZW02', 'Yellow')">Yellow</div>
+                    <div class="s-box" onclick="selectColor(this, 'ZW02', 'Cyan Blue')">Cyan Blue</div>
+                </div>
+                <p class="option-label">Size:</p>
+                <div class="s-row">
+                    <div class="s-box" onclick="selectPrice(this, 'ZW02', 'XXS', 312)">XXS</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW02', 'XS', 387)">XS</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW02', 'S', 394)">S</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW02', 'M', 396)">M</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW02', 'L', 406)">L</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW02', 'XL', 416)">XL</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW02', 'XXL', 426)">XXL</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW02', '3XL', 436)">3XL</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW02', '4XL', 446)">4XL</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW02', '5XL', 446)">5XL</div>
+                </div>
+                <div class="price-container"><span class="price-now" id="price-zw02">₹---</span><span class="price-old">₹799</span></div>
+                <a href="#" onclick="order(event, 'ZW02', 'Floral Kurta Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
 
@@ -175,45 +165,35 @@
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw03">
                     <div class="slides">
-                        <img src="zw03-1.jpg" alt="ZW03-1">
-                        <img src="zw03-2.jpg" alt="ZW03-2">
-                        <img src="zw03-3.jpg" alt="ZW03-3">
-                        <img src="zw03-4.jpg" alt="ZW03-4">
+                        <img src="zw03-1.jpg"><img src="zw03-2.jpg"><img src="zw03-3.jpg"><img src="zw03-4.jpg">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw03', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw03', 1)">&#10095;</button>
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box">
-                    <div class="stars">★★★★★</div>
-                    <div class="rev-count">4.1 (900+ 5-Star Reviews)</div>
-                </div>
+                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (900+ Reviews)</div></div>
                 <span class="product-code">CODE: ZW03</span>
                 <h2 class="product-name">Cotton Floral Set</h2>
-                <p class="option-label">Select Size:</p>
+                <p class="option-label">Size:</p>
                 <div class="s-row">
-                    <div class="s-box" onclick="selectNormal(this, 'ZW03', 'XXS')">XXS</div>
-                    <div class="s-box" onclick="selectNormal(this, 'ZW03', 'XS')">XS</div>
-                    <div class="s-box" onclick="selectNormal(this, 'ZW03', 'S')">S</div>
-                    <div class="s-box" onclick="selectNormal(this, 'ZW03', 'M')">M</div>
-                    <div class="s-box" onclick="selectNormal(this, 'ZW03', 'L')">L</div>
-                    <div class="s-box" onclick="selectNormal(this, 'ZW03', 'XL')">XL</div>
-                    <div class="s-box" onclick="selectNormal(this, 'ZW03', 'XXL')">XXL</div>
-                    <div class="s-box" onclick="selectNormal(this, 'ZW03', '3XL')">3XL</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW03', 'S', 558)">S</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW03', 'M', 558)">M</div>
+                    <div class="s-box" onclick="selectPrice(this, 'ZW03', 'L', 558)">L</div>
                 </div>
-                <div class="price-container">
-                    <span class="price-now">₹558</span>
-                    <span class="price-old">₹1,199</span>
-                </div>
-                <a href="#" onclick="order(event, 'ZW03')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <div class="price-container"><span class="price-now">₹558</span><span class="price-old">₹1,199</span></div>
+                <a href="#" onclick="order(event, 'ZW03', 'Cotton Floral Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
     </section>
 
     <script>
-        let selections = { 'ZW01': { size: '', color: '', price: '' }, 'ZW03': { size: '', color: 'N/A', price: '558' } };
-        let sliderPositions = { 'slider-zw01': 0, 'slider-zw03': 0 };
+        let selections = { 
+            'ZW01': { size: '', color: '', price: '' }, 
+            'ZW02': { size: '', color: '', price: '' }, 
+            'ZW03': { size: '', color: 'N/A', price: '558' } 
+        };
+        let sliderPositions = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0 };
 
         function moveSlide(id, step) {
             const container = document.getElementById(id);
@@ -229,25 +209,20 @@
             selections[id].color = color;
         }
 
-        function selectZW01(el, size, price) {
+        function selectPrice(el, id, size, price) {
             el.parentElement.querySelectorAll('.s-box').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
-            document.getElementById('price-zw01').innerText = "₹" + price;
-            selections['ZW01'].size = size;
-            selections['ZW01'].price = price;
-        }
-
-        function selectNormal(el, id, size) {
-            el.parentElement.querySelectorAll('.s-box').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
+            const pDisplay = document.getElementById('price-' + id.toLowerCase());
+            if(pDisplay) pDisplay.innerText = "₹" + price;
             selections[id].size = size;
+            selections[id].price = price;
         }
 
-        function order(e, id) {
+        function order(e, id, name) {
             e.preventDefault();
             const d = selections[id];
-            if(!d.size || (id === 'ZW01' && !d.color)) { alert(`Please select color and size!`); return; }
-            const msg = `Hi Zaidify! Order Details:\nProduct: ${id}\nColor: ${d.color}\nSize: ${d.size}\nPrice: ₹${d.price}`;
+            if(!d.size || (id !== 'ZW03' && !d.color)) { alert("Please select color and size!"); return; }
+            const msg = `Hi Zaidify! I'd like to order:\n\n*Product:* ${name} (${id})\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
             window.open(`https://wa.me/918655171445?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
