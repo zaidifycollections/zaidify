@@ -6,133 +6,217 @@
     <title>Zaidify Collections | Premium Ethnic Wear</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --pink: #ff00ff; --bg: #08020f; --nav-bg: #000; }
+        :root { --pink: #ff00ff; --bg: #08020f; --nav-bg: #000; --gold: #ffd700; --white: #ffffff; }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; overflow-x: hidden; width: 100%; }
+        
+        body { 
+            background: var(--bg); 
+            color: var(--white); 
+            font-family: 'Poppins', sans-serif; 
+            overflow-x: hidden; 
+            width: 100%; 
+            -webkit-font-smoothing: antialiased;
+        }
 
-        /* --- STICKY NAV --- */
+        /* --- STICKY NAVIGATION --- */
         nav { 
-            width: 100%; padding: 10px 5%; display: flex; justify-content: space-between; 
-            align-items: center; background: var(--nav-bg); position: fixed; top: 0; 
+            width: 100%; padding: 12px 6%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: var(--nav-bg); position: fixed; top: 0; 
             z-index: 9999; border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .logo-box { display: flex; align-items: center; gap: 8px; text-decoration: none; color: white; }
-        .logo-img { height: 28px; }
-        .nav-links { display: flex; gap: 12px; align-items: center; }
-        .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 0.85rem; letter-spacing: 1px; }
-        .shop-now-btn { background: var(--pink); padding: 6px 12px; border-radius: 4px; font-weight: 800; font-size: 0.8rem; text-decoration: none; color: white; font-family: 'Bebas Neue'; }
+        .logo-box { display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; }
+        .logo-img { height: 30px; }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-links a { 
+            color: white; text-decoration: none; font-family: 'Bebas Neue'; 
+            font-size: 1rem; letter-spacing: 1px; transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--pink); }
+        .shop-now-btn { 
+            background: var(--pink); padding: 8px 16px; border-radius: 5px; 
+            font-weight: 800; text-decoration: none; color: white; 
+            font-family: 'Bebas Neue'; box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+        }
 
-        /* --- HERO --- */
-        .hero { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 70px; }
-        .hero-logo { width: 90px; margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--pink)); }
-        .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 10vw, 5rem); letter-spacing: 5px; line-height: 1; }
+        /* --- HERO SECTION --- */
+        .hero { 
+            height: 45vh; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; text-align: center; 
+            margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%);
+        }
+        .hero-logo { width: 100px; margin-bottom: 15px; filter: drop-shadow(0 0 15px var(--pink)); }
+        .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3rem, 12vw, 6rem); letter-spacing: 8px; line-height: 1; margin-bottom: 5px; }
+        .hero p { letter-spacing: 4px; opacity: 0.6; font-size: 0.9rem; font-weight: 300; }
 
-        /* --- SECTIONS --- */
-        section { padding: 60px 5%; }
-        .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: 2.5rem; margin-bottom: 30px; letter-spacing: 2px; color: var(--pink); }
+        /* --- UTILITY SECTIONS --- */
+        section { padding: 80px 6%; width: 100%; max-width: 1400px; margin: 0 auto; }
+        .section-title { 
+            text-align: center; font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 8vw, 3.5rem); 
+            margin-bottom: 40px; letter-spacing: 3px; color: var(--pink); 
+        }
 
-        /* --- ABOUT & CATEGORIES --- */
-        .about-text { max-width: 700px; margin: 0 auto; text-align: center; opacity: 0.8; line-height: 1.6; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; }
+        .about-text { max-width: 800px; margin: 0 auto; text-align: center; opacity: 0.8; line-height: 1.8; font-size: 1.05rem; }
+
+        /* --- CATEGORY CARDS --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
         .card { 
-            background: rgba(255,255,255,0.03); padding: 40px 20px; border-radius: 15px; 
-            text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;
+            background: rgba(255,255,255,0.03); padding: 50px 30px; border-radius: 20px; 
+            text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.4s;
             text-decoration: none; color: white;
         }
-        .card:hover { border-color: var(--pink); transform: translateY(-5px); }
-        .card h3 { font-family: 'Bebas Neue'; font-size: 2rem; margin-bottom: 5px; }
+        .card:hover { border-color: var(--pink); transform: translateY(-10px); background: rgba(255,255,255,0.05); }
+        .card h3 { font-family: 'Bebas Neue'; font-size: 2.5rem; margin-bottom: 10px; }
+        .card p { opacity: 0.6; font-size: 0.9rem; }
 
-        /* --- SLIDER --- */
-        .slider-container { position: relative; width: 100%; height: 480px; overflow: hidden; background: #000; }
-        .slides { display: flex; transition: transform 0.5s ease-in-out; height: 100%; }
+        /* --- PREMIUM SLIDER --- */
+        .slider-container { position: relative; width: 100%; height: 550px; overflow: hidden; background: #000; border-radius: 15px 0 0 15px; }
+        .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; }
         .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
-        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; padding: 12px; cursor: pointer; z-index: 10; border-radius: 50%; width: 45px; height: 45px; }
-        .prev { left: 10px; }
-        .next { right: 10px; }
-
-        /* --- PRODUCT WRAPPER --- */
-        .p-wrapper { max-width: 1000px; margin: 0 auto 50px auto; background: rgba(255,255,255,0.02); border-radius: 20px; display: flex; flex-wrap: wrap; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-        .p-img-box { flex: 1; min-width: 300px; }
-        .p-content { flex: 1.2; padding: 30px; min-width: 300px; }
         
-        .option-label { font-weight: bold; font-size: 0.75rem; opacity: 0.6; margin-top: 15px; text-transform: uppercase; }
-        .s-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 15px 0; }
-        .s-box { border: 1px solid rgba(255,255,255,0.3); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.8rem; min-width: 45px; text-align: center; }
-        .s-box.active { background: var(--pink); border-color: var(--pink); color: white; }
-
-        .price-now { font-size: 2.5rem; font-weight: 900; margin-top: 10px; }
-        .price-old { text-decoration: line-through; opacity: 0.3; margin-left: 8px; font-size: 1.2rem; }
-
-        .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 18px; border-radius: 12px; text-decoration: none; font-weight: 900; font-size: 1.1rem; margin-top: 20px; transition: 0.3s; }
-
-        @media (max-width: 768px) {
-            .p-wrapper { flex-direction: column; }
-            .slider-container { height: 400px; }
-            .p-content { text-align: center; }
-            .s-row { justify-content: center; }
+        .slider-btn { 
+            position: absolute; top: 50%; transform: translateY(-50%); 
+            background: rgba(0,0,0,0.7); color: white; border: 1px solid rgba(255,255,255,0.2); 
+            padding: 15px; cursor: pointer; z-index: 10; border-radius: 50%; 
+            width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
+            transition: 0.3s;
         }
+        .slider-btn:hover { background: var(--pink); border-color: var(--pink); }
+        .prev { left: 15px; } .next { right: 15px; }
+
+        /* --- PRODUCT CONTENT --- */
+        .p-wrapper { 
+            display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.02); 
+            border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); 
+            margin-bottom: 60px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .p-img-box { flex: 1; min-width: 350px; }
+        .p-content { flex: 1.2; padding: 40px; min-width: 350px; display: flex; flex-direction: column; justify-content: center; }
+        
+        .rating-box { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+        .stars { color: var(--gold); font-size: 1.1rem; letter-spacing: 2px; }
+        .rev-count { color: rgba(255,255,255,0.4); font-size: 0.85rem; }
+
+        .product-code { color: var(--pink); font-weight: 900; font-size: 0.9rem; letter-spacing: 1px; }
+        .product-name { font-size: 2.2rem; margin: 5px 0 20px 0; font-weight: 700; line-height: 1.2; }
+
+        .option-label { font-weight: bold; font-size: 0.8rem; opacity: 0.5; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .s-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 20px 0; }
+        .s-box { 
+            border: 1px solid rgba(255,255,255,0.2); padding: 10px 15px; border-radius: 8px; 
+            cursor: pointer; font-weight: bold; font-size: 0.85rem; min-width: 50px; 
+            text-align: center; transition: 0.2s;
+        }
+        .s-box:hover { border-color: var(--pink); }
+        .s-box.active { background: var(--pink); border-color: var(--pink); color: white; transform: scale(1.05); }
+
+        .price-container { margin-top: 20px; display: flex; align-items: baseline; gap: 12px; }
+        .price-now { font-size: 2.8rem; font-weight: 900; color: white; }
+        .price-old { text-decoration: line-through; opacity: 0.3; font-size: 1.3rem; }
+
+        .wa-btn { 
+            display: block; background: #25d366; color: white; text-align: center; 
+            padding: 20px; border-radius: 15px; text-decoration: none; font-weight: 900; 
+            font-size: 1.2rem; margin-top: 30px; transition: 0.3s; 
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
+        }
+        .wa-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(37, 211, 102, 0.3); }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 768px) {
+            nav { padding: 10px 4%; }
+            .nav-links a:not(.shop-now-btn) { display: none; }
+            .hero { height: 35vh; }
+            .p-wrapper { flex-direction: column; }
+            .p-img-box, .slider-container { border-radius: 15px 15px 0 0; height: 450px; }
+            .p-content { padding: 30px 20px; text-align: center; }
+            .s-row { justify-content: center; }
+            .price-container { justify-content: center; }
+        }
+
+        footer { text-align: center; padding: 60px 5%; opacity: 0.3; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
 
     <nav>
         <a href="#" class="logo-box">
-            <img src="logo.png" class="logo-img" alt="Z">
-            <span style="font-family:'Bebas Neue'; font-size: 1.2rem;">ZAIDIFY</span>
+            <img src="logo.png" class="logo-img" alt="Zaidify Logo">
+            <span style="font-family:'Bebas Neue'; font-size: 1.4rem; letter-spacing: 1px;">ZAIDIFY</span>
         </a>
         <div class="nav-links">
             <a href="#about">ABOUT</a>
-            <a href="#categories">CATEGORIES</a>
-            <a href="#shop" class="shop-now-btn">SHOP NOW</a>
+            <a href="#women">WOMEN</a>
+            <a href="#women" class="shop-now-btn">SHOP NOW</a>
         </div>
     </nav>
 
     <header class="hero">
         <img src="logo.png" class="hero-logo">
         <h1>ZAIDIFY</h1>
-        <p style="letter-spacing: 3px; opacity: 0.6; font-size: 0.8rem;">PREMIUM ETHNIC WEAR</p>
+        <p>PREMIUM ETHNIC COLLECTIONS</p>
     </header>
 
     <section id="about">
         <h2 class="section-title">THE BRAND</h2>
-        <p class="about-text">Curating the finest ethnic wear for those who value tradition and style.</p>
+        <p class="about-text">
+            Zaidify Collections stands at the intersection of heritage and modern style. 
+            We specialize in handcrafted Batik prints and premium cotton fabrics designed 
+            to bring timeless elegance to the modern wardrobe. Quality is our signature.
+        </p>
     </section>
 
     <section id="categories">
-        <h2 class="section-title">COLLECTIONS</h2>
+        <h2 class="section-title">CATEGORIES</h2>
         <div class="grid">
-            <a href="#shop" class="card"><h3>FOR HER</h3><p>Premium Sets</p></a>
-            <div class="card"><h3>FOR HIM</h3><p>Coming Soon</p></div>
-            <div class="card"><h3>FOR KIDS</h3><p>Coming Soon</p></div>
+            <a href="#women" class="card">
+                <h3>WOMEN</h3>
+                <p>Suit Sets & Premium Kurtis</p>
+            </a>
+            <div class="card" style="opacity: 0.4; cursor: default;">
+                <h3>MEN</h3>
+                <p>Collection Launching Soon</p>
+            </div>
+            <div class="card" style="opacity: 0.4; cursor: default;">
+                <h3>KIDS</h3>
+                <p>Launching Summer 2026</p>
+            </div>
         </div>
     </section>
 
-    <section id="shop">
-        <h2 class="section-title">NEW ARRIVALS</h2>
+    <section id="women">
+        <h2 class="section-title">WOMEN'S ARRIVALS</h2>
 
         <div class="p-wrapper">
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw01">
                     <div class="slides">
-                        <img src="Product photos/zw01-blue.jpeg" alt="Blue">
-                        <img src="Product photos/zw01-pink.jpeg" alt="Pink">
-                        <img src="Product photos/zw01-yellow.jpeg" alt="Yellow">
-                        <img src="Product photos/zw01-teal.jpeg" alt="Teal">
+                        <img src="Product photos/zw01-1.jpg" alt="Grey Batik Print">
+                        <img src="Product photos/zw01-2.jpg" alt="Aqua Blue Batik Print">
+                        <img src="Product photos/zw01-3.jpg" alt="Pink Batik Print">
+                        <img src="Product photos/zw01-4.jpg" alt="Yellow Batik Print">
+                        <img src="Product photos/zw01-5.jpg" alt="Product Detail View">
+                        <img src="Product photos/zw01-6.jpg" alt="Fabric Detail">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw01', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw01', 1)">&#10095;</button>
                 </div>
             </div>
             <div class="p-content">
-                <span style="color:var(--pink); font-weight:900;">CODE: ZW01</span>
-                <h2 style="font-size: 2rem;">Batik Print Suit Set</h2>
+                <div class="rating-box">
+                    <div class="stars">★★★★★</div>
+                    <div class="rev-count">4.1 (6,800+ 5-Star Reviews)</div>
+                </div>
+                <span class="product-code">CODE: ZW01</span>
+                <h2 class="product-name">Batik Print Suit Set</h2>
 
                 <p class="option-label">Select Color:</p>
-                <div class="s-row" id="color-zw01">
-                    <div class="s-box" onclick="selectColor(this, 'ZW01', 'Blue')">Blue</div>
+                <div class="s-row">
+                    <div class="s-box" onclick="selectColor(this, 'ZW01', 'Grey')">Grey</div>
+                    <div class="s-box" onclick="selectColor(this, 'ZW01', 'Aqua Blue')">Aqua Blue</div>
                     <div class="s-box" onclick="selectColor(this, 'ZW01', 'Pink')">Pink</div>
                     <div class="s-box" onclick="selectColor(this, 'ZW01', 'Yellow')">Yellow</div>
-                    <div class="s-box" onclick="selectColor(this, 'ZW01', 'Teal')">Teal</div>
                 </div>
 
                 <p class="option-label">Select Size:</p>
@@ -150,7 +234,7 @@
                     <div class="s-box" onclick="selectZW01(this, '6XL', 484)">6XL</div>
                 </div>
 
-                <div class="price-row">
+                <div class="price-container">
                     <span class="price-now" id="price-zw01">₹---</span>
                     <span class="price-old">₹899</span>
                 </div>
@@ -162,27 +246,35 @@
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw03">
                     <div class="slides">
-                        <img src="zw03-1.jpg" alt="1">
-                        <img src="zw03-2.jpg" alt="2">
-                        <img src="zw03-3.jpg" alt="3">
-                        <img src="zw03-4.jpg" alt="4">
+                        <img src="zw03-1.jpg" alt="Cotton Set View 1">
+                        <img src="zw03-2.jpg" alt="Cotton Set View 2">
+                        <img src="zw03-3.jpg" alt="Cotton Set View 3">
+                        <img src="zw03-4.jpg" alt="Cotton Set View 4">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw03', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw03', 1)">&#10095;</button>
                 </div>
             </div>
             <div class="p-content">
-                <span style="color:var(--pink); font-weight:900;">CODE: ZW03</span>
-                <h2 style="font-size: 2rem;">Cotton Kurti Set</h2>
+                <div class="rating-box">
+                    <div class="stars">★★★★★</div>
+                    <div class="rev-count">4.1 (900+ 5-Star Reviews)</div>
+                </div>
+                <span class="product-code">CODE: ZW03</span>
+                <h2 class="product-name">Cotton Floral Set</h2>
                 
                 <p class="option-label">Select Size:</p>
                 <div class="s-row">
+                    <div class="s-box" onclick="selectNormal(this, 'ZW03', 'XXS')">XXS</div>
+                    <div class="s-box" onclick="selectNormal(this, 'ZW03', 'XS')">XS</div>
                     <div class="s-box" onclick="selectNormal(this, 'ZW03', 'S')">S</div>
                     <div class="s-box" onclick="selectNormal(this, 'ZW03', 'M')">M</div>
                     <div class="s-box" onclick="selectNormal(this, 'ZW03', 'L')">L</div>
                     <div class="s-box" onclick="selectNormal(this, 'ZW03', 'XL')">XL</div>
+                    <div class="s-box" onclick="selectNormal(this, 'ZW03', 'XXL')">XXL</div>
+                    <div class="s-box" onclick="selectNormal(this, 'ZW03', '3XL')">3XL</div>
                 </div>
-                <div class="price-row">
+                <div class="price-container">
                     <span class="price-now">₹558</span>
                     <span class="price-old">₹1,199</span>
                 </div>
@@ -191,15 +283,20 @@
         </div>
     </section>
 
-    <footer style="text-align:center; padding:40px; opacity:0.3; font-size:0.7rem;">&copy; 2026 ZAIDIFY COLLECTIONS.</footer>
+    <footer>
+        &copy; 2026 ZAIDIFY COLLECTIONS. ALL RIGHTS RESERVED.
+    </footer>
 
     <script>
+        // Data management for order message construction
         let selections = {
             'ZW01': { size: '', color: '', price: '' },
             'ZW03': { size: '', color: 'N/A', price: '558' }
         };
+
         let sliderPositions = { 'slider-zw01': 0, 'slider-zw03': 0 };
 
+        // Slider Navigation Logic
         function moveSlide(id, step) {
             const container = document.getElementById(id);
             const slides = container.querySelector('.slides');
@@ -208,6 +305,7 @@
             slides.style.transform = `translateX(-${sliderPositions[id] * 100}%)`;
         }
 
+        // Selection Handlers
         function selectColor(el, id, color) {
             el.parentElement.querySelectorAll('.s-box').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
@@ -228,14 +326,20 @@
             selections[id].size = size;
         }
 
+        // WhatsApp Order Generation
         function order(e, id) {
             e.preventDefault();
             const d = selections[id];
+            
+            // Validation
             if(!d.size || (id === 'ZW01' && !d.color)) { 
-                alert(`Please select both color and size for ${id}!`); return; 
+                alert(`Please select both color and size for ${id}!`); 
+                return; 
             }
-            const text = encodeURIComponent(`Hi Zaidify! I want to order ${id}\nColor: ${d.color}\nSize: ${d.size}\nPrice: ₹${d.price}`);
-            window.open(`https://wa.me/918655171445?text=${text}`, '_blank');
+            
+            const message = `Hi Zaidify! I'd like to order:\n\n*Product:* ${id}\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
+            const encodedText = encodeURIComponent(message);
+            window.open(`https://wa.me/918655171445?text=${encodedText}`, '_blank');
         }
     </script>
 </body>
