@@ -3,96 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaidify Collections | Premium Ethnic Wear</title>
+    <title>Zaidify Collections</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --pink: #ff00ff; --bg: #08020f; --nav-bg: rgba(0,0,0,0.95); }
+        :root { --pink: #ff00ff; --bg: #08020f; }
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+        
+        body { 
+            background: var(--bg); 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            overflow-x: hidden; 
+            width: 100%;
+        }
 
-        /* --- NAVIGATION --- */
+        /* --- FIXED MOBILE HEADER --- */
         nav { 
-            padding: 15px 5%; 
+            width: 100%;
+            padding: 12px 5%; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            background: var(--nav-bg); 
-            position: sticky; 
+            background: #000; 
+            position: fixed; /* Forced to stay at top */
             top: 0; 
-            z-index: 1000;
+            left: 0;
+            z-index: 9999;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .logo-box { display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; }
-        .logo-img { height: 35px; }
-        .nav-links { display: flex; gap: 20px; align-items: center; }
-        .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1.1rem; letter-spacing: 1px; transition: 0.3s; }
-        .nav-links a:hover { color: var(--pink); }
-        .order-now-btn { background: var(--pink); padding: 8px 15px; border-radius: 5px; font-weight: bold; }
+        .logo-box { display: flex; align-items: center; gap: 8px; text-decoration: none; color: white; }
+        .logo-img { height: 30px; width: auto; }
+        .nav-brand { font-family: 'Bebas Neue'; font-size: 1.4rem; letter-spacing: 2px; }
+        
+        .order-btn-mobile { 
+            background: var(--pink); 
+            color: white; 
+            text-decoration: none; 
+            padding: 6px 12px; 
+            border-radius: 4px; 
+            font-size: 0.8rem; 
+            font-weight: bold; 
+            font-family: 'Bebas Neue';
+            letter-spacing: 1px;
+        }
 
-        /* --- HERO SECTION --- */
+        /* --- HERO SECTION (Adjusted for Fixed Nav) --- */
         .hero {
-            height: 60vh;
+            height: 50vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px;
+            margin-top: 60px; /* Space for the fixed nav */
         }
-        .hero-logo { width: 100px; margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--pink)); }
-        .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3rem, 10vw, 5.5rem); letter-spacing: 8px; line-height: 1; }
-        .hero p { letter-spacing: 5px; opacity: 0.7; font-weight: 300; margin-top: 10px; font-size: clamp(0.7rem, 2vw, 1rem); }
+        .hero-logo { width: 80px; margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--pink)); }
+        .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 10vw, 5rem); letter-spacing: 5px; }
 
-        /* --- SECTIONS --- */
+        /* --- PRODUCT WRAPPER --- */
         section { padding: 60px 5%; }
-        .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: clamp(2rem, 8vw, 3.5rem); margin-bottom: 40px; letter-spacing: 3px; }
+        .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: 2.5rem; margin-bottom: 30px; }
 
-        /* --- CATEGORIES GRID --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .card { 
-            background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; text-align: center; 
-            border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; text-decoration: none; color: white;
-        }
-        .card:hover { transform: translateY(-10px); border-color: var(--pink); background: rgba(255,255,255,0.08); }
-        .card h3 { font-family: 'Bebas Neue'; color: var(--pink); font-size: 2.5rem; }
-
-        /* --- RESPONSIVE PRODUCT WRAPPER --- */
         .p-wrapper { 
             max-width: 1000px; margin: 0 auto; background: rgba(255,255,255,0.03); 
-            border-radius: 30px; display: flex; flex-wrap: wrap; overflow: hidden;
+            border-radius: 20px; display: flex; flex-wrap: wrap; overflow: hidden;
             border: 1px solid rgba(255,255,255,0.1);
         }
-        .p-img { flex: 1; min-width: 300px; }
-        .p-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .p-content { flex: 1.2; padding: 40px; min-width: 300px; }
+        .p-img { flex: 1; min-width: 300px; height: 400px; }
+        .p-img img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* SIZE SELECTOR */
-        .s-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0 30px 0; }
-        .s-box { border: 1px solid rgba(255,255,255,0.3); padding: 12px 18px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-weight: bold; }
-        .s-box.active { background: var(--pink) !important; border-color: var(--pink) !important; color: white; transform: scale(1.1); }
+        .p-content { flex: 1.2; padding: 30px; min-width: 300px; }
+        
+        .s-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 15px 0; }
+        .s-box { border: 1px solid rgba(255,255,255,0.3); padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+        .s-box.active { background: var(--pink); border-color: var(--pink); }
 
-        .price-now { font-size: clamp(2.5rem, 6vw, 3.5rem); font-weight: 900; line-height: 1; }
-        .price-old { text-decoration: line-through; opacity: 0.4; margin-left: 10px; font-size: 1.2rem; }
-
+        .price-now { font-size: 2.8rem; font-weight: 900; color: white; }
         .wa-btn {
             display: block; background: #25d366; color: white; text-align: center;
-            padding: 20px; border-radius: 15px; text-decoration: none;
-            font-weight: 900; font-size: 1.2rem; margin-top: 20px; transition: 0.3s;
+            padding: 18px; border-radius: 12px; text-decoration: none;
+            font-weight: 900; font-size: 1.1rem; margin-top: 15px;
         }
 
-        /* --- SIZE TABLE --- */
-        .size-table { width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse; }
-        .size-table tr { border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .size-table td { padding: 15px; font-size: 0.9rem; }
-
-        /* --- MOBILE TWEAKS --- */
-        @media (max-width: 768px) {
-            .nav-links { display: none; } /* Keeps header clean on phone */
-            .p-wrapper { flex-direction: column; }
-            .p-img { min-width: 100%; height: 400px; }
-            .p-content { padding: 25px; text-align: center; }
-            .s-row { justify-content: center; }
-            section { padding: 40px 5%; }
+        /* --- DESKTOP TWEAKS --- */
+        @media (min-width: 768px) {
+            .nav-brand { font-size: 1.8rem; }
+            .logo-img { height: 40px; }
+            .hero-logo { width: 120px; }
+            .order-btn-mobile { padding: 10px 20px; font-size: 1rem; }
         }
     </style>
 </head>
@@ -100,104 +98,54 @@
 
     <nav>
         <a href="#" class="logo-box">
-            <img src="logo.png" class="logo-img" alt="Zaidify">
-            <span style="font-family:'Bebas Neue'; font-size: 1.4rem; letter-spacing: 2px;">ZAIDIFY</span>
+            <img src="logo.png" class="logo-img" alt="Z">
+            <span class="nav-brand">ZAIDIFY</span>
         </a>
-        <div class="nav-links">
-            <a href="#about">ABOUT</a>
-            <a href="#women">WOMEN</a>
-            <a href="#sizes">SIZES</a>
-            <a href="#women" class="order-now-btn">ORDER NOW</a>
-        </div>
+        <a href="#women" class="order-btn-mobile">SHOP NOW</a>
     </nav>
 
     <header class="hero">
         <img src="logo.png" alt="Logo" class="hero-logo">
         <h1>ZAIDIFY</h1>
-        <p>PREMIUM ETHNIC WEAR</p>
+        <p style="opacity: 0.6; letter-spacing: 3px;">PREMIUM ETHNIC</p>
     </header>
 
-    <section id="about" style="text-align: center;">
-        <h2 class="section-title">THE BRAND</h2>
-        <p style="max-width: 700px; margin: 0 auto; opacity: 0.7; line-height: 1.8;">
-            Zaidify Collections offers high-quality Indian traditional wear. We focus on comfort, premium fabrics, and designs that stand out.
-        </p>
-    </section>
-
-    <section id="categories">
-        <h2 class="section-title">COLLECTIONS</h2>
-        <div class="grid">
-            <a href="#women" class="card">
-                <h3>FOR HER</h3>
-                <p>Women's Kurti Sets</p>
-            </a>
-            <div class="card"><h3>FOR HIM</h3><p>Coming Soon</p></div>
-            <div class="card"><h3>FOR KIDS</h3><p>Coming Soon</p></div>
-        </div>
-    </section>
-
-    <section id="women" style="background: rgba(255,255,255,0.02);">
-        <h2 class="section-title">WOMEN'S SHOP</h2>
+    <section id="women">
+        <h2 class="section-title">WOMEN'S COLLECTION</h2>
         <div class="p-wrapper">
-            <div class="p-img"><img src="zw03-1.jpg" alt="Kurti Set"></div>
+            <div class="p-img"><img src="zw03-1.jpg" alt="Product"></div>
             <div class="p-content">
-                <span style="color:var(--pink); font-weight:900;">BEST SELLER: ZW03</span>
-                <h2 style="font-size: clamp(1.8rem, 5vw, 2.5rem); margin: 10px 0;">Premium Cotton Kurti Pant Set</h2>
+                <span style="color:var(--pink); font-weight:bold;">ZW03</span>
+                <h2 style="margin: 5px 0;">Cotton Kurti Set</h2>
                 
-                <p style="margin-top:20px; font-weight:bold; font-size:0.8rem; opacity: 0.8;">SELECT SIZE:</p>
                 <div class="s-row">
-                    <div class="s-box" onclick="setChoice(this, 'S')">S</div>
-                    <div class="s-box" onclick="setChoice(this, 'M')">M</div>
-                    <div class="s-box" onclick="setChoice(this, 'L')">L</div>
-                    <div class="s-box" onclick="setChoice(this, 'XL')">XL</div>
-                    <div class="s-box" onclick="setChoice(this, 'XXL')">XXL</div>
+                    <div class="s-box" onclick="setSize(this, 'S')">S</div>
+                    <div class="s-box" onclick="setSize(this, 'M')">M</div>
+                    <div class="s-box" onclick="setSize(this, 'L')">L</div>
+                    <div class="s-box" onclick="setSize(this, 'XL')">XL</div>
                 </div>
 
-                <div class="price-area">
+                <div style="margin: 15px 0;">
                     <span class="price-now">₹558</span>
-                    <span class="price-old">₹1,199</span>
-                    <span style="color:#00ff88; font-weight:bold; margin-left:10px;">53% OFF</span>
+                    <span style="text-decoration:line-through; opacity:0.4; margin-left:10px;">₹1,199</span>
                 </div>
 
-                <a href="#" onclick="buy(event)" class="wa-btn">ORDER ON WHATSAPP</a>
+                <a href="#" onclick="orderWA(event)" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
     </section>
 
-    <section id="sizes">
-        <h2 class="section-title">SIZE CHART</h2>
-        <table class="size-table">
-            <tr style="color:var(--pink); font-weight:bold;"><td>SIZE</td><td>BUST (INCHES)</td></tr>
-            <tr><td>Small (S)</td><td>36"</td></tr>
-            <tr><td>Medium (M)</td><td>38"</td></tr>
-            <tr><td>Large (L)</td><td>40"</td></tr>
-            <tr><td>Extra Large (XL)</td><td>42"</td></tr>
-            <tr><td>Double XL (XXL)</td><td>44"</td></tr>
-        </table>
-    </section>
-
-    <footer style="text-align:center; padding:40px; opacity:0.3; font-size:0.8rem;">
-        &copy; 2026 ZAIDIFY COLLECTIONS. ALL RIGHTS RESERVED.
-    </footer>
-
     <script>
-        let mySize = "";
-
-        function setChoice(el, s) {
+        let selectedSize = "";
+        function setSize(el, s) {
             document.querySelectorAll('.s-box').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
-            mySize = s;
+            selectedSize = s;
         }
-
-        function buy(e) {
+        function orderWA(e) {
             e.preventDefault();
-            if(!mySize) {
-                alert("Please select a size first!");
-                return;
-            }
-            const phone = "918655171445";
-            const text = `Hi Zaidify! I want to order the ZW03 Women's Set. Size: ${mySize}. Price: ₹558.`;
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+            if(!selectedSize) { alert("Select a size!"); return; }
+            window.open(`https://wa.me/918655171445?text=I want ZW03 Size ${selectedSize}`, '_blank');
         }
     </script>
 
