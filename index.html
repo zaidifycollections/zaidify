@@ -7,17 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --pink: #ff00ff; --bg: #08020f; --nav-bg: #000; --gold: #ffd700; --white: #ffffff; }
-        
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        
-        body { 
-            background: var(--bg); 
-            color: var(--white); 
-            font-family: 'Poppins', sans-serif; 
-            overflow-x: hidden; 
-            width: 100%; 
-            -webkit-font-smoothing: antialiased;
-        }
+        body { background: var(--bg); color: var(--white); font-family: 'Poppins', sans-serif; overflow-x: hidden; width: 100%; -webkit-font-smoothing: antialiased; }
 
         /* --- STICKY NAVIGATION --- */
         nav { 
@@ -29,68 +20,34 @@
         .logo-box { display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; }
         .logo-img { height: 30px; }
         .nav-links { display: flex; gap: 20px; align-items: center; }
-        .nav-links a { 
-            color: white; text-decoration: none; font-family: 'Bebas Neue'; 
-            font-size: 1rem; letter-spacing: 1px; transition: 0.3s;
-        }
-        .nav-links a:hover { color: var(--pink); }
-        .shop-now-btn { 
-            background: var(--pink); padding: 8px 16px; border-radius: 5px; 
-            font-weight: 800; text-decoration: none; color: white; 
-            font-family: 'Bebas Neue'; box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
-        }
+        .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 1px; }
+        .shop-now-btn { background: var(--pink); padding: 8px 16px; border-radius: 5px; font-weight: 800; text-decoration: none; color: white; font-family: 'Bebas Neue'; }
 
         /* --- HERO SECTION --- */
-        .hero { 
-            height: 45vh; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; text-align: center; 
-            margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%);
-        }
+        .hero { height: 45vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
         .hero-logo { width: 100px; margin-bottom: 15px; filter: drop-shadow(0 0 15px var(--pink)); }
-        .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3rem, 12vw, 6rem); letter-spacing: 8px; line-height: 1; margin-bottom: 5px; }
-        .hero p { letter-spacing: 4px; opacity: 0.6; font-size: 0.9rem; font-weight: 300; }
+        .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3rem, 12vw, 6rem); letter-spacing: 8px; line-height: 1; }
 
-        /* --- UTILITY SECTIONS --- */
-        section { padding: 80px 6%; width: 100%; max-width: 1400px; margin: 0 auto; }
-        .section-title { 
-            text-align: center; font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 8vw, 3.5rem); 
-            margin-bottom: 40px; letter-spacing: 3px; color: var(--pink); 
-        }
-
-        .about-text { max-width: 800px; margin: 0 auto; text-align: center; opacity: 0.8; line-height: 1.8; font-size: 1.05rem; }
+        /* --- SECTIONS --- */
+        section { padding: 60px 6%; width: 100%; max-width: 1400px; margin: 0 auto; }
+        .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 8vw, 3.5rem); margin-bottom: 40px; color: var(--pink); }
+        .about-text { max-width: 800px; margin: 0 auto; text-align: center; opacity: 0.8; line-height: 1.8; }
 
         /* --- CATEGORY CARDS --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
-        .card { 
-            background: rgba(255,255,255,0.03); padding: 50px 30px; border-radius: 20px; 
-            text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.4s;
-            text-decoration: none; color: white;
-        }
-        .card:hover { border-color: var(--pink); transform: translateY(-10px); background: rgba(255,255,255,0.05); }
-        .card h3 { font-family: 'Bebas Neue'; font-size: 2.5rem; margin-bottom: 10px; }
-        .card p { opacity: 0.6; font-size: 0.9rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .card { background: rgba(255,255,255,0.03); padding: 50px 30px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: white; transition: 0.4s; }
+        .card:hover { border-color: var(--pink); transform: translateY(-10px); }
+        .card h3 { font-family: 'Bebas Neue'; font-size: 2.5rem; }
 
         /* --- PREMIUM SLIDER --- */
         .slider-container { position: relative; width: 100%; height: 550px; overflow: hidden; background: #000; border-radius: 15px 0 0 15px; }
         .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; }
         .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
-        
-        .slider-btn { 
-            position: absolute; top: 50%; transform: translateY(-50%); 
-            background: rgba(0,0,0,0.7); color: white; border: 1px solid rgba(255,255,255,0.2); 
-            padding: 15px; cursor: pointer; z-index: 10; border-radius: 50%; 
-            width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
-            transition: 0.3s;
-        }
-        .slider-btn:hover { background: var(--pink); border-color: var(--pink); }
+        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 15px; cursor: pointer; z-index: 10; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
         .prev { left: 15px; } .next { right: 15px; }
 
         /* --- PRODUCT CONTENT --- */
-        .p-wrapper { 
-            display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.02); 
-            border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); 
-            margin-bottom: 60px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
+        .p-wrapper { display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.02); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 60px; }
         .p-img-box { flex: 1; min-width: 350px; }
         .p-content { flex: 1.2; padding: 40px; min-width: 350px; display: flex; flex-direction: column; justify-content: center; }
         
@@ -98,52 +55,35 @@
         .stars { color: var(--gold); font-size: 1.1rem; letter-spacing: 2px; }
         .rev-count { color: rgba(255,255,255,0.4); font-size: 0.85rem; }
 
-        .product-code { color: var(--pink); font-weight: 900; font-size: 0.9rem; letter-spacing: 1px; }
-        .product-name { font-size: 2.2rem; margin: 5px 0 20px 0; font-weight: 700; line-height: 1.2; }
+        .product-code { color: var(--pink); font-weight: 900; font-size: 0.9rem; }
+        .product-name { font-size: 2.2rem; margin: 5px 0 20px 0; font-weight: 700; }
 
-        .option-label { font-weight: bold; font-size: 0.8rem; opacity: 0.5; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .option-label { font-weight: bold; font-size: 0.8rem; opacity: 0.5; margin-top: 20px; text-transform: uppercase; }
         .s-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 20px 0; }
-        .s-box { 
-            border: 1px solid rgba(255,255,255,0.2); padding: 10px 15px; border-radius: 8px; 
-            cursor: pointer; font-weight: bold; font-size: 0.85rem; min-width: 50px; 
-            text-align: center; transition: 0.2s;
-        }
-        .s-box:hover { border-color: var(--pink); }
-        .s-box.active { background: var(--pink); border-color: var(--pink); color: white; transform: scale(1.05); }
+        .s-box { border: 1px solid rgba(255,255,255,0.2); padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem; min-width: 50px; text-align: center; }
+        .s-box.active { background: var(--pink); border-color: var(--pink); color: white; }
 
         .price-container { margin-top: 20px; display: flex; align-items: baseline; gap: 12px; }
-        .price-now { font-size: 2.8rem; font-weight: 900; color: white; }
+        .price-now { font-size: 2.8rem; font-weight: 900; }
         .price-old { text-decoration: line-through; opacity: 0.3; font-size: 1.3rem; }
 
-        .wa-btn { 
-            display: block; background: #25d366; color: white; text-align: center; 
-            padding: 20px; border-radius: 15px; text-decoration: none; font-weight: 900; 
-            font-size: 1.2rem; margin-top: 30px; transition: 0.3s; 
-            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
-        }
-        .wa-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(37, 211, 102, 0.3); }
+        .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 20px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-top: 30px; }
 
-        /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 768px) {
-            nav { padding: 10px 4%; }
-            .nav-links a:not(.shop-now-btn) { display: none; }
-            .hero { height: 35vh; }
             .p-wrapper { flex-direction: column; }
             .p-img-box, .slider-container { border-radius: 15px 15px 0 0; height: 450px; }
             .p-content { padding: 30px 20px; text-align: center; }
             .s-row { justify-content: center; }
             .price-container { justify-content: center; }
         }
-
-        footer { text-align: center; padding: 60px 5%; opacity: 0.3; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
 
     <nav>
         <a href="#" class="logo-box">
-            <img src="logo.png" class="logo-img" alt="Zaidify Logo">
-            <span style="font-family:'Bebas Neue'; font-size: 1.4rem; letter-spacing: 1px;">ZAIDIFY</span>
+            <img src="logo.png" class="logo-img" alt="Logo">
+            <span style="font-family:'Bebas Neue'; font-size: 1.4rem;">ZAIDIFY</span>
         </a>
         <div class="nav-links">
             <a href="#about">ABOUT</a>
@@ -160,44 +100,33 @@
 
     <section id="about">
         <h2 class="section-title">THE BRAND</h2>
-        <p class="about-text">
-            Zaidify Collections stands at the intersection of heritage and modern style. 
-            We specialize in handcrafted Batik prints and premium cotton fabrics designed 
-            to bring timeless elegance to the modern wardrobe. Quality is our signature.
-        </p>
+        <p class="about-text">Handcrafted Batik prints and premium floral sets designed for elegance.</p>
     </section>
 
     <section id="categories">
-        <h2 class="section-title">CATEGORIES</h2>
         <div class="grid">
-            <a href="#women" class="card">
-                <h3>WOMEN</h3>
-                <p>Suit Sets & Premium Kurtis</p>
-            </a>
-            <div class="card" style="opacity: 0.4; cursor: default;">
-                <h3>MEN</h3>
-                <p>Collection Launching Soon</p>
-            </div>
-            <div class="card" style="opacity: 0.4; cursor: default;">
-                <h3>KIDS</h3>
-                <p>Launching Summer 2026</p>
-            </div>
+            <a href="#women" class="card"><h3>WOMEN</h3><p>Suit Sets & Kurtis</p></a>
+            <div class="card" style="opacity: 0.4;"><h3>MEN</h3><p>Coming Soon</p></div>
+            <div class="card" style="opacity: 0.4;"><h3>KIDS</h3><p>Coming Soon</p></div>
         </div>
     </section>
 
     <section id="women">
-        <h2 class="section-title">WOMEN'S ARRIVALS</h2>
+        <h2 class="section-title">WOMEN'S COLLECTION</h2>
 
         <div class="p-wrapper">
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw01">
                     <div class="slides">
-                        <img src="Product photos/zw01-1.jpg" alt="Grey Batik Print">
-                        <img src="Product photos/zw01-2.jpg" alt="Aqua Blue Batik Print">
-                        <img src="Product photos/zw01-3.jpg" alt="Pink Batik Print">
-                        <img src="Product photos/zw01-4.jpg" alt="Yellow Batik Print">
-                        <img src="Product photos/zw01-5.jpg" alt="Product Detail View">
-                        <img src="Product photos/zw01-6.jpg" alt="Fabric Detail">
+                        <img src="Product photos/zw01-1.jpg" alt="Img 1">
+                        <img src="Product photos/zw01-2.jpg" alt="Img 2">
+                        <img src="Product photos/zw01-3.jpg" alt="Img 3">
+                        <img src="Product photos/zw01-4.jpg" alt="Img 4">
+                        <img src="Product photos/zw01-5.jpg" alt="Img 5">
+                        <img src="Product photos/zw01-6.jpg" alt="Img 6">
+                        <img src="Product photos/zw01-7.jpg" alt="Img 7">
+                        <img src="Product photos/zw01-8.jpg" alt="Img 8">
+                        <img src="Product photos/zw01-9.jpg" alt="Img 9">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw01', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw01', 1)">&#10095;</button>
@@ -246,10 +175,10 @@
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw03">
                     <div class="slides">
-                        <img src="zw03-1.jpg" alt="Cotton Set View 1">
-                        <img src="zw03-2.jpg" alt="Cotton Set View 2">
-                        <img src="zw03-3.jpg" alt="Cotton Set View 3">
-                        <img src="zw03-4.jpg" alt="Cotton Set View 4">
+                        <img src="zw03-1.jpg" alt="ZW03-1">
+                        <img src="zw03-2.jpg" alt="ZW03-2">
+                        <img src="zw03-3.jpg" alt="ZW03-3">
+                        <img src="zw03-4.jpg" alt="ZW03-4">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw03', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw03', 1)">&#10095;</button>
@@ -262,7 +191,6 @@
                 </div>
                 <span class="product-code">CODE: ZW03</span>
                 <h2 class="product-name">Cotton Floral Set</h2>
-                
                 <p class="option-label">Select Size:</p>
                 <div class="s-row">
                     <div class="s-box" onclick="selectNormal(this, 'ZW03', 'XXS')">XXS</div>
@@ -283,20 +211,10 @@
         </div>
     </section>
 
-    <footer>
-        &copy; 2026 ZAIDIFY COLLECTIONS. ALL RIGHTS RESERVED.
-    </footer>
-
     <script>
-        // Data management for order message construction
-        let selections = {
-            'ZW01': { size: '', color: '', price: '' },
-            'ZW03': { size: '', color: 'N/A', price: '558' }
-        };
-
+        let selections = { 'ZW01': { size: '', color: '', price: '' }, 'ZW03': { size: '', color: 'N/A', price: '558' } };
         let sliderPositions = { 'slider-zw01': 0, 'slider-zw03': 0 };
 
-        // Slider Navigation Logic
         function moveSlide(id, step) {
             const container = document.getElementById(id);
             const slides = container.querySelector('.slides');
@@ -305,7 +223,6 @@
             slides.style.transform = `translateX(-${sliderPositions[id] * 100}%)`;
         }
 
-        // Selection Handlers
         function selectColor(el, id, color) {
             el.parentElement.querySelectorAll('.s-box').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
@@ -326,20 +243,12 @@
             selections[id].size = size;
         }
 
-        // WhatsApp Order Generation
         function order(e, id) {
             e.preventDefault();
             const d = selections[id];
-            
-            // Validation
-            if(!d.size || (id === 'ZW01' && !d.color)) { 
-                alert(`Please select both color and size for ${id}!`); 
-                return; 
-            }
-            
-            const message = `Hi Zaidify! I'd like to order:\n\n*Product:* ${id}\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
-            const encodedText = encodeURIComponent(message);
-            window.open(`https://wa.me/918655171445?text=${encodedText}`, '_blank');
+            if(!d.size || (id === 'ZW01' && !d.color)) { alert(`Please select color and size!`); return; }
+            const msg = `Hi Zaidify! Order Details:\nProduct: ${id}\nColor: ${d.color}\nSize: ${d.size}\nPrice: ₹${d.price}`;
+            window.open(`https://wa.me/918655171445?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
 </body>
