@@ -9,60 +9,51 @@
         :root { --pink: #ff00ff; --bg: #08020f; --nav-bg: #000; --gold: #ffd700; --white: #ffffff; }
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--white); font-family: 'Poppins', sans-serif; overflow-x: hidden; width: 100%; -webkit-font-smoothing: antialiased; }
-
-        /* NAV */
+        
+        /* Navigation - Desktop & Mobile */
         nav { width: 100%; padding: 12px 6%; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); position: fixed; top: 0; z-index: 9999; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .logo-box { display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; }
         .logo-img { height: 30px; }
         .nav-links { display: flex; gap: 20px; align-items: center; }
         .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 1px; }
         .shop-now-btn { background: var(--pink); padding: 8px 16px; border-radius: 5px; font-weight: 800; text-decoration: none; color: white; font-family: 'Bebas Neue'; }
-
-        /* HERO */
+        
+        /* Hero */
         .hero { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
         .hero-logo { width: 100px; margin-bottom: 15px; filter: drop-shadow(0 0 15px var(--pink)); }
         .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3rem, 12vw, 6rem); letter-spacing: 8px; line-height: 1; }
 
-        /* SECTIONS */
-        section { padding: 80px 6% 40px 6%; width: 100%; max-width: 1400px; margin: 0 auto; }
+        section { padding: 60px 6%; width: 100%; max-width: 1400px; margin: 0 auto; }
         .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 8vw, 3.5rem); margin-bottom: 40px; color: var(--pink); letter-spacing: 2px; }
-
-        /* CATEGORIES */
+        
+        /* Categories Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
         .card { background: rgba(255,255,255,0.03); padding: 50px 20px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: white; transition: 0.3s; }
-        .card:hover { border-color: var(--pink); background: rgba(255,255,255,0.06); transform: translateY(-5px); }
-        .card h3 { font-family: 'Bebas Neue'; font-size: 2.5rem; margin-bottom: 10px; }
-        .card p { opacity: 0.6; font-size: 0.9rem; letter-spacing: 1px; }
+        .card h3 { font-family: 'Bebas Neue'; font-size: 2.2rem; }
 
-        /* PRODUCT UI */
+        /* Product Layout - Laptop View */
         .p-wrapper { display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.02); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 60px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
         .p-img-box { flex: 1; min-width: 350px; position: relative; }
         .p-content { flex: 1.2; padding: 40px; min-width: 350px; display: flex; flex-direction: column; justify-content: center; }
-
+        
+        /* Slider */
         .slider-container { position: relative; width: 100%; height: 550px; overflow: hidden; background: #000; }
         .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; }
         .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
         .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; padding: 15px; cursor: pointer; z-index: 10; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
         .prev { left: 15px; } .next { right: 15px; }
 
-        .rating-box { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-        .stars { color: var(--gold); letter-spacing: 2px; }
-        .rev-count { color: rgba(255,255,255,0.4); font-size: 0.85rem; }
-        .product-code { color: var(--pink); font-weight: 900; font-size: 0.9rem; }
-        .product-name { font-size: 2.2rem; margin: 5px 0 10px 0; font-weight: 700; line-height: 1.2; }
-
-        .option-label { font-weight: bold; font-size: 0.8rem; opacity: 0.5; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        /* Product UI */
+        .product-code { color: var(--pink); font-weight: 900; }
+        .product-name { font-size: 2.2rem; margin: 5px 0 10px 0; font-weight: 700; }
         .s-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 20px 0; }
-        .s-box { border: 1px solid rgba(255,255,255,0.2); padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; min-width: 50px; text-align: center; font-weight: 600; transition: 0.2s; }
-        .s-box:hover { border-color: var(--pink); }
+        .s-box { border: 1px solid rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; min-width: 45px; text-align: center; }
         .s-box.active { background: var(--pink); border-color: var(--pink); color: white; transform: scale(1.05); }
-
         .price-now { font-size: 2.8rem; font-weight: 900; }
         .price-old { text-decoration: line-through; opacity: 0.3; font-size: 1.3rem; margin-left: 12px; }
-
         .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 20px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-top: 30px; transition: 0.3s; }
-        .wa-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37,211,102,0.3); }
 
+        /* Mobile View Fixes */
         @media (max-width: 768px) {
             .p-wrapper { flex-direction: column; }
             .p-img-box, .slider-container { height: 450px; }
@@ -70,7 +61,6 @@
             .s-row { justify-content: center; }
             .nav-links a:not(.shop-now-btn) { display: none; }
         }
-        footer { text-align: center; padding: 40px; opacity: 0.3; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
@@ -78,7 +68,7 @@
     <nav>
         <a href="#" class="logo-box"><img src="logo.png" class="logo-img"><span style="font-family:'Bebas Neue'; font-size:1.4rem;">ZAIDIFY</span></a>
         <div class="nav-links">
-            <a href="#about">ABOUT</a>
+            <a href="#about-sec">ABOUT</a>
             <a href="#women">WOMEN</a>
             <a href="#women" class="shop-now-btn">SHOP NOW</a>
         </div>
@@ -90,28 +80,19 @@
         <p>PREMIUM ETHNIC COLLECTIONS</p>
     </header>
 
-    <section id="about">
+    <section id="about-sec">
         <h2 class="section-title">THE BRAND</h2>
-        <p style="text-align:center; max-width:850px; margin:0 auto; opacity:0.8; line-height:1.8; font-size: 1.1rem;">
-            Zaidify Collections is dedicated to bringing you the finest handcrafted ethnic wear. From intricate Batik prints to premium quality cotton fabrics, our collections are designed to celebrate tradition with a modern touch of elegance.
+        <p style="text-align:center; opacity: 0.8; font-size: 1.1rem; line-height: 1.8;">
+            Zaidify Collections specialize in handcrafted ethnic wear, combining premium cotton fabrics with timeless Batik prints for the modern wardrobe.
         </p>
     </section>
 
     <section id="categories">
         <h2 class="section-title">OUR CATEGORIES</h2>
         <div class="grid">
-            <a href="#women" class="card">
-                <h3>WOMEN</h3>
-                <p>Suit Sets & Premium Kurtas</p>
-            </a>
-            <div class="card" style="opacity:0.4; cursor: default;">
-                <h3>MEN</h3>
-                <p>Launching Fall 2026</p>
-            </div>
-            <div class="card" style="opacity:0.4; cursor: default;">
-                <h3>KIDS</h3>
-                <p>New Collection Coming Soon</p>
-            </div>
+            <a href="#women" class="card"><h3>WOMEN</h3><p>Kurtas & premium sets</p></a>
+            <div class="card" style="opacity:0.4;"><h3>MEN</h3><p>Coming Soon</p></div>
+            <div class="card" style="opacity:0.4;"><h3>KIDS</h3><p>Coming Soon</p></div>
         </div>
     </section>
 
@@ -131,17 +112,8 @@
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (6.8k+ Reviews)</div></div>
                 <span class="product-code">CODE: ZW01</span>
                 <h2 class="product-name">Batik Print Suit Set</h2>
-                <p class="option-label">Color:</p>
-                <div class="s-row">
-                    <div class="s-box" onclick="selectColor(this,'ZW01','Grey')">Grey</div>
-                    <div class="s-box" onclick="selectColor(this,'ZW01','Aqua Blue')">Aqua Blue</div>
-                    <div class="s-box" onclick="selectColor(this,'ZW01','Pink')">Pink</div>
-                    <div class="s-box" onclick="selectColor(this,'ZW01','Yellow')">Yellow</div>
-                </div>
-                <p class="option-label">Size:</p>
                 <div class="s-row">
                     <div class="s-box" onclick="selectPrice(this,'ZW01','XXS',294)">XXS</div>
                     <div class="s-box" onclick="selectPrice(this,'ZW01','XS',359)">XS</div>
@@ -156,7 +128,7 @@
                     <div class="s-box" onclick="selectPrice(this,'ZW01','6XL',484)">6XL</div>
                 </div>
                 <div><span class="price-now" id="price-zw01">₹---</span><span class="price-old">₹899</span></div>
-                <a href="#" onclick="order(event,'ZW01','Batik Print Suit Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <a href="#" onclick="order(event,'ZW01','Batik Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
 
@@ -164,26 +136,16 @@
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw02">
                     <div class="slides">
-                        <img src="zw02/zw02-1.jpg"><img src="zw02/zw02-2.jpg"><img src="zw02/zw02-3.jpg">
-                        <img src="zw02/zw02-4.jpg"><img src="zw02/zw02-5.jpg"><img src="zw02/zw02-6.jpg">
-                        <img src="zw02/zw02-7.jpg"><img src="zw02/zw02-8.jpg">
+                        <img src="zw02/zw02-2.jpg"><img src="zw02/zw02-3.jpg"><img src="zw02/zw02-4.jpg">
+                        <img src="zw02/zw02-5.jpg"><img src="zw02/zw02-6.jpg"><img src="zw02/zw02-7.jpg"><img src="zw02/zw02-8.jpg">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw02', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw02', 1)">&#10095;</button>
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (19k+ Reviews)</div></div>
                 <span class="product-code">CODE: ZW02</span>
                 <h2 class="product-name">Floral Kurta Set</h2>
-                <p class="option-label">Color:</p>
-                <div class="s-row">
-                    <div class="s-box" onclick="selectColor(this,'ZW02','Navy Blue')">Navy Blue</div>
-                    <div class="s-box" onclick="selectColor(this,'ZW02','White')">White</div>
-                    <div class="s-box" onclick="selectColor(this,'ZW02','Yellow')">Yellow</div>
-                    <div class="s-box" onclick="selectColor(this,'ZW02','Aqua Blue')">Aqua Blue</div>
-                </div>
-                <p class="option-label">Size:</p>
                 <div class="s-row">
                     <div class="s-box" onclick="selectPrice(this,'ZW02','XXS',312)">XXS</div>
                     <div class="s-box" onclick="selectPrice(this,'ZW02','XS',387)">XS</div>
@@ -197,7 +159,7 @@
                     <div class="s-box" onclick="selectPrice(this,'ZW02','5XL',446)">5XL</div>
                 </div>
                 <div><span class="price-now" id="price-zw02">₹---</span><span class="price-old">₹799</span></div>
-                <a href="#" onclick="order(event,'ZW02','Floral Kurta Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <a href="#" onclick="order(event,'ZW02','Floral Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
 
@@ -212,10 +174,8 @@
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (900+ Reviews)</div></div>
                 <span class="product-code">CODE: ZW03</span>
                 <h2 class="product-name">Cotton Floral Set</h2>
-                <p class="option-label">Size:</p>
                 <div class="s-row">
                     <div class="s-box" onclick="selectPrice(this,'ZW03','XXS',558)">XXS</div>
                     <div class="s-box" onclick="selectPrice(this,'ZW03','XS',558)">XS</div>
@@ -226,35 +186,21 @@
                     <div class="s-box" onclick="selectPrice(this,'ZW03','XXL',558)">XXL</div>
                     <div class="s-box" onclick="selectPrice(this,'ZW03','3XL',558)">3XL</div>
                 </div>
-                <div><span class="price-now" id="price-zw03">₹558</span><span class="price-old">₹1,199</span></div>
-                <a href="#" onclick="order(event,'ZW03','Cotton Floral Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <div><span class="price-now" id="price-zw03">₹---</span><span class="price-old">₹1,199</span></div>
+                <a href="#" onclick="order(event,'ZW03','Floral Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
     </section>
 
-    <footer>
-        &copy; 2026 ZAIDIFY COLLECTIONS. PREMIUM ETHNIC WEAR.
-    </footer>
-
     <script>
-        let selections = { 
-            'ZW01': { size: '', color: '', price: '' }, 
-            'ZW02': { size: '', color: '', price: '' }, 
-            'ZW03': { size: '', color: 'N/A', price: '558' } 
-        };
-        let sliderPositions = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0 };
+        let selections = { 'ZW01': { size: '', price: '' }, 'ZW02': { size: '', price: '' }, 'ZW03': { size: '', price: '' } };
+        let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0 };
 
         function moveSlide(id, step) {
             const slides = document.getElementById(id).querySelector('.slides');
             const total = slides.querySelectorAll('img').length;
-            sliderPositions[id] = (sliderPositions[id] + step + total) % total;
-            slides.style.transform = `translateX(-${sliderPositions[id] * 100}%)`;
-        }
-
-        function selectColor(el, id, color) {
-            el.parentElement.querySelectorAll('.s-box').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
-            selections[id].color = color;
+            sliderPos[id] = (sliderPos[id] + step + total) % total;
+            slides.style.transform = `translateX(-${sliderPos[id] * 100}%)`;
         }
 
         function selectPrice(el, id, size, price) {
@@ -269,9 +215,8 @@
         function order(e, id, name) {
             e.preventDefault();
             const d = selections[id];
-            if(!d.size || (id !== 'ZW03' && !d.color)) { alert("Please select color & size!"); return; }
-            const msg = `Hi Zaidify! Order Details:\n\n*Product:* ${name} (${id})\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
-            window.open(`https://wa.me/918655171445?text=${encodeURIComponent(msg)}`, '_blank');
+            if(!d.size) { alert("Please select a size!"); return; }
+            window.open(`https://wa.me/918655171445?text=Order:${name}(${id}) Size:${d.size} Price:₹${d.price}`, '_blank');
         }
     </script>
 </body>
