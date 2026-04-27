@@ -221,6 +221,17 @@
             font-size: 16px;
             font-weight: 700;
             transition: 0.3s;
+            cursor: pointer;
+            user-select: none;
+        }
+        .size-chip:hover {
+            border-color: var(--pink);
+            background: rgba(224, 64, 251, 0.1);
+        }
+        .size-chip.active { 
+            background: var(--pink) !important; 
+            border-color: var(--pink) !important; 
+            color: white !important; 
         }
 
         .size-chip.active { background: var(--pink); border-color: var(--pink); color: white; }
@@ -305,14 +316,14 @@
             <h2>EVERY BODY, EVERY SIZE</h2>
             <p style="text-align:center; opacity:0.7; font-size:1.1rem;">Inclusive sizing from toddlers to 5XL.</p>
             <div class="size-container">
-                <div class="size-chip">S</div>
-                <div class="size-chip">M</div>
-                <div class="size-chip">L</div>
-                <div class="size-chip active">XL</div>
-                <div class="size-chip">2XL</div>
-                <div class="size-chip">3XL</div>
-                <div class="size-chip">4XL</div>
-                <div class="size-chip">5XL</div>
+                <div class="size-chip" onclick="selectSize(this)">S</div>
+                <div class="size-chip" onclick="selectSize(this)">M</div>
+                <div class="size-chip" onclick="selectSize(this)">L</div>
+                <div class="size-chip active" onclick="selectSize(this)">XL</div>
+                <div class="size-chip" onclick="selectSize(this)">2XL</div>
+                <div class="size-chip" onclick="selectSize(this)">3XL</div>
+                <div class="size-chip" onclick="selectSize(this)">4XL</div>
+                <div class="size-chip" onclick="selectSize(this)">5XL</div>
             </div>
         </div>
     </section>
@@ -324,6 +335,15 @@
     <footer style="padding: 60px 20px; text-align: center; opacity: 0.4; font-size: 13px; letter-spacing: 1px;">
         &copy; 2026 ZAIDIFY COLLECTIONS. ESTABLISHED PREMIUM FASHION.
     </footer>
-
+<script>
+        function selectSize(element) {
+            // This finds all size chips and removes the pink highlight
+            const chips = document.querySelectorAll('.size-chip');
+            chips.forEach(chip => chip.classList.remove('active'));
+            
+            // This adds the pink highlight to the one you just clicked
+            element.classList.add('active');
+        }
+    </script>
 </body>
 </html>
