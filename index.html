@@ -200,120 +200,83 @@
         .category-card p { opacity: 0.7; letter-spacing: 2px; font-weight: 600; }
 <style>
     .featured-section {
-        padding: 60px 5%;
-        background: #08020f;
-        color: white;
-    }
-    .subsection-title {
-        text-align: center;
-        font-family: 'Bebas Neue', sans-serif;
-        font-size: 2.5rem;
-        letter-spacing: 3px;
-        margin-bottom: 40px;
+        padding: 60px 5% !important;
+        background: #08020f !important;
+        display: block !important;
     }
     .product-wrapper {
-        display: flex;
-        gap: 40px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        padding: 30px;
-        max-width: 1100px;
-        margin: 0 auto;
-        align-items: center;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 30px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-radius: 20px !important;
+        padding: 25px !important;
+        align-items: center !important;
     }
-    .product-gallery {
-        flex: 1;
-        position: relative;
-        max-width: 450px;
-    }
-    .main-product-img {
-        width: 100%;
-        height: auto;
-        border-radius: 15px;
-        display: block;
-    }
-    .product-details-text {
-        flex: 1.2;
-    }
-    .premium-title { font-size: 2.2rem; margin-bottom: 10px; line-height: 1.1; }
-    
-    /* FIX SIZES - Row Layout */
+    .product-gallery { flex: 1 !important; max-width: 400px !important; }
+    .main-product-img { width: 100% !important; border-radius: 15px !important; }
+
+    /* FORCE SIZES SIDE-BY-SIDE */
     .chips-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin: 20px 0;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        margin: 15px 0 !important;
     }
     .size-chip {
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        padding: 8px 12px;
-        border-radius: 5px;
-        font-size: 0.85rem;
-        min-width: 40px;
-        text-align: center;
+        border: 1px solid white !important;
+        padding: 5px 10px !important;
+        border-radius: 4px !important;
+        color: white !important;
+        font-size: 14px !important;
     }
 
-    /* FIX PRICING - ₹558 */
-    .pricing-box { margin: 25px 0; display: flex; align-items: baseline; }
-    .current-price { font-size: 2.8rem; font-weight: 800; color: white; }
-    .old-price { text-decoration: line-through; color: rgba(255,255,255,0.4); margin: 0 15px; font-size: 1.2rem; }
-    .discount-tag { color: #00ff88; font-weight: bold; font-size: 1.1rem; }
-
-    /* FIX WHATSAPP BUTTON - No Overlap */
+    /* FORCE BUTTON TO BE SMALL */
     .wa-order-btn {
-        display: block;
-        background: #25d366;
-        color: white;
-        padding: 18px;
-        border-radius: 12px;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 1.2rem;
-        text-align: center;
-        transition: 0.3s;
+        display: block !important;
+        background: #25d366 !important;
+        color: white !important;
+        text-align: center !important;
+        padding: 15px !important;
+        border-radius: 10px !important;
+        text-decoration: none !important;
+        font-weight: bold !important;
+        width: 100% !important;
+        max-width: 280px !important;
     }
 
     @media (max-width: 768px) {
-        .product-wrapper { flex-direction: column; text-align: center; }
-        .chips-container { justify-content: center; }
-        .pricing-box { justify-content: center; }
+        .product-wrapper { flex-direction: column !important; }
     }
 </style>
 
 <section id="featured" class="featured-section">
-    <div class="container">
-        <h3 class="subsection-title">NEW ARRIVAL</h3>
-        <div class="product-wrapper">
-            <div class="product-gallery">
-                <img src="zw03-1.jpg" alt="ZW03 Kurti Set" class="main-product-img">
+    <div class="product-wrapper">
+        <div class="product-gallery">
+            <img src="zw03-1.jpg" class="main-product-img">
+        </div>
+        <div class="product-details-text">
+            <h2 style="color:white; margin:0;">Premium Cotton Kurti Set</h2>
+            <p style="color: #ff00ff; font-weight:bold;">Style: ZW03</p>
+            
+            <div class="chips-container">
+                <div class="size-chip">S</div>
+                <div class="size-chip">M</div>
+                <div class="size-chip">L</div>
+                <div class="size-chip">XL</div>
+                <div class="size-chip">XXL</div>
+                <div class="size-chip">3XL</div>
             </div>
-            <div class="product-details-text">
-                <p style="color: #ff00ff; font-weight: bold; letter-spacing: 1px;">STYLE CODE: ZW03</p>
-                <h2 class="premium-title">Premium Cotton Kurti Pant Set</h2>
-                <p style="color: rgba(255,255,255,0.7); line-height: 1.6;">
-                    Elegant three-piece Indian ethnic set featuring a fancy striped cotton kurta, matching printed trousers, and a designer dupatta.
-                </p>
-                
-                <div class="chips-container">
-                    <div class="size-chip">S</div>
-                    <div class="size-chip">M</div>
-                    <div class="size-chip">L</div>
-                    <div class="size-chip">XL</div>
-                    <div class="size-chip">XXL</div>
-                    <div class="size-chip">3XL</div>
-                </div>
 
-                <div class="pricing-box">
-                    <span class="current-price">₹558</span>
-                    <span class="old-price">₹1,199</span>
-                    <span class="discount-tag">53% OFF</span>
-                </div>
-
-                <a href="https://wa.me/918655171445?text=I%20want%20to%20order%20the%20ZW03%20Kurti%20Set" class="wa-order-btn">
-                    ORDER ON WHATSAPP
-                </a>
+            <div style="margin: 20px 0;">
+                <span style="font-size: 30px; color: white; font-weight: 800;">₹558</span>
+                <span style="text-decoration: line-through; color: gray; margin-left: 10px;">₹1,199</span>
             </div>
+
+            <a href="https://wa.me/918655171445?text=Order%20ZW03" class="wa-order-btn">
+                ORDER ON WHATSAPP
+            </a>
         </div>
     </div>
 </section>
