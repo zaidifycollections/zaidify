@@ -54,9 +54,6 @@
         .price-old { text-decoration: line-through; opacity: 0.3; font-size: 1.3rem; margin-left: 12px; }
         .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 20px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-top: 20px; transition: 0.3s; }
 
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .modal-card { background: #08020f; border: 1px solid var(--pink); padding: 30px; border-radius: 20px; max-width: 500px; width: 100%; position: relative; box-shadow: 0 0 30px var(--pink); }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: var(--pink); font-weight: bold; }
         .policy-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-family: 'Bebas Neue'; letter-spacing: 2px; margin: 40px auto; display: block; }
 
         @media (max-width: 768px) {
@@ -64,7 +61,6 @@
             .p-img-box { height: 400px; }
             .p-content { padding: 30px 20px; text-align: center; }
             .row { justify-content: center; }
-            .nav-links a:not(.shop-now-btn) { display: none; }
         }
     </style>
 </head>
@@ -73,7 +69,7 @@
     <nav>
         <a href="#" class="logo-box"><img src="logo.png" class="logo-img"><span>ZAIDIFY</span></a>
         <div class="nav-links">
-            <a href="#about-sec">ABOUT</a>
+            <a href="#categories">EXPLORE</a>
             <a href="#women">WOMEN</a>
             <a href="https://wa.me/918655171445" class="shop-now-btn">WHATSAPP ORDER</a>
         </div>
@@ -104,14 +100,11 @@
     </section>
 
     <section id="women">
-        <h2 class="section-title">WOMEN'S ARRIVALS</h2>
-
         <div class="p-wrapper" id="zw01">
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw01">
                     <div class="slides">
-                        <img src="Product photos/zw01-1.jpg"><img src="Product photos/zw01-2.jpg"><img src="Product photos/zw01-3.jpg">
-                        <img src="Product photos/zw01-4.jpg"><img src="Product photos/zw01-5.jpg"><img src="Product photos/zw01-6.jpg">
+                        <img src="Product photos/zw01-1.jpg"><img src="Product photos/zw01-2.jpg"><img src="Product photos/zw01-3.jpg"><img src="Product photos/zw01-4.jpg"><img src="Product photos/zw01-5.jpg"><img src="Product photos/zw01-6.jpg">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw01', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw01', 1)">&#10095;</button>
@@ -119,8 +112,7 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (6k+ Reviews)</div></div>
-                <span style="color:var(--pink); font-weight:900;">CODE: ZW01</span>
-                <h2 class="product-name">Cotton Kurta Set</h2>
+                <h2 class="product-name">Cotton Kurta Set (ZW01)</h2>
                 <p class="label">Colors:</p>
                 <div class="row">
                     <div class="box active" onclick="selectOption(this,'ZW01','color','Grey')">Grey</div>
@@ -132,7 +124,15 @@
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW01','XXS',294)">XXS</div>
                     <div class="box" onclick="selectPrice(this,'ZW01','XS',359)">XS</div>
-                    <div class="box" onclick="selectPrice(this,'ZW01','S-6XL',484)">S–6XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW01','S',484)">S</div>
+                    <div class="box" onclick="selectPrice(this,'ZW01','M',484)">M</div>
+                    <div class="box" onclick="selectPrice(this,'ZW01','L',484)">L</div>
+                    <div class="box" onclick="selectPrice(this,'ZW01','XL',484)">XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW01','XXL',484)">XXL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW01','XXXL',484)">XXXL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW01','4XL',484)">4XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW01','5XL',484)">5XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW01','6XL',484)">6XL</div>
                 </div>
                 <div><span class="price-now" id="price-zw01">₹---</span><span class="price-old">₹899</span></div>
                 <a href="#" onclick="order(event,'ZW01','Cotton Kurta Set')" class="wa-btn">ORDER ON WHATSAPP</a>
@@ -143,7 +143,7 @@
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw02">
                     <div class="slides">
-                        <img src="zw02/zw02-2.jpg"><img src="zw02/zw02-3.jpg"><img src="zw02/zw02-4.jpg"><img src="zw02/zw02-5.jpg">
+                        <img src="zw02/zw02-1.jpg"><img src="zw02/zw02-2.jpg"><img src="zw02/zw02-3.jpg"><img src="zw02/zw02-4.jpg"><img src="zw02/zw02-5.jpg">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw02', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw02', 1)">&#10095;</button>
@@ -151,8 +151,7 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (19k+ Reviews)</div></div>
-                <span style="color:var(--pink); font-weight:900;">CODE: ZW02</span>
-                <h2 class="product-name">Shree Harji Kurtis</h2>
+                <h2 class="product-name">Shree Harji Kurtis (ZW02)</h2>
                 <p class="label">Colors:</p>
                 <div class="row">
                     <div class="box active" onclick="selectOption(this,'ZW02','color','Navy Blue')">Navy Blue</div>
@@ -170,7 +169,8 @@
                     <div class="box" onclick="selectPrice(this,'ZW02','XL',416)">XL</div>
                     <div class="box" onclick="selectPrice(this,'ZW02','XXL',426)">XXL</div>
                     <div class="box" onclick="selectPrice(this,'ZW02','XXXL',436)">XXXL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW02','4XL-5XL',446)">4XL–5XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW02','4XL',446)">4XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW02','5XL',446)">5XL</div>
                 </div>
                 <div><span class="price-now" id="price-zw02">₹---</span><span class="price-old">₹799</span></div>
                 <a href="#" onclick="order(event,'ZW02','Shree Harji Kurti')" class="wa-btn">ORDER ON WHATSAPP</a>
@@ -189,12 +189,20 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (900+ Reviews)</div></div>
-                <span style="color:var(--pink); font-weight:900;">CODE: ZW03</span>
-                <h2 class="product-name">Kurti Pant Set</h2>
+                <h2 class="product-name">Kurti Pant Set (ZW03)</h2>
                 <p class="label">Color:</p>
                 <div class="row"><div class="box active">Maroon</div></div>
                 <p class="label">Sizes:</p>
-                <div class="row"><div class="box" onclick="selectPrice(this,'ZW03','XXS-XXXL',528)">XXS–XXXL</div></div>
+                <div class="row">
+                    <div class="box" onclick="selectPrice(this,'ZW03','XXS',528)">XXS</div>
+                    <div class="box" onclick="selectPrice(this,'ZW03','XS',528)">XS</div>
+                    <div class="box" onclick="selectPrice(this,'ZW03','S',528)">S</div>
+                    <div class="box" onclick="selectPrice(this,'ZW03','M',528)">M</div>
+                    <div class="box" onclick="selectPrice(this,'ZW03','L',528)">L</div>
+                    <div class="box" onclick="selectPrice(this,'ZW03','XL',528)">XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW03','XXL',528)">XXL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW03','XXXL',528)">XXXL</div>
+                </div>
                 <div><span class="price-now" id="price-zw03">₹---</span><span class="price-old">₹1,199</span></div>
                 <a href="#" onclick="order(event,'ZW03','Kurti Pant Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
@@ -212,8 +220,7 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (4k+ Reviews)</div></div>
-                <span style="color:var(--pink); font-weight:900;">CODE: ZW04</span>
-                <h2 class="product-name">Printed Kurta Set</h2>
+                <h2 class="product-name">Printed Kurta Set (ZW04)</h2>
                 <p class="label">Color:</p>
                 <div class="row"><div class="box active">Pink</div></div>
                 <p class="label">Sizes:</p>
@@ -223,7 +230,8 @@
                     <div class="box" onclick="selectPrice(this,'ZW04','M',400)">M</div>
                     <div class="box" onclick="selectPrice(this,'ZW04','L',440)">L</div>
                     <div class="box" onclick="selectPrice(this,'ZW04','XL',472)">XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW04','XXL-XXXL',479)">XXL–XXXL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW04','XXL',479)">XXL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW04','XXXL',479)">XXXL</div>
                 </div>
                 <div><span class="price-now" id="price-zw04">₹---</span><span class="price-old">₹799</span></div>
                 <a href="#" onclick="order(event,'ZW04','Printed Kurta Set')" class="wa-btn">ORDER ON WHATSAPP</a>
@@ -242,8 +250,7 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.0 (2k+ Reviews)</div></div>
-                <span style="color:var(--pink); font-weight:900;">CODE: ZW05</span>
-                <h2 class="product-name">Designer Kurta Set</h2>
+                <h2 class="product-name">Designer Kurta Set (ZW05)</h2>
                 <p class="label">Colors:</p>
                 <div class="row">
                     <div class="box active" onclick="selectOption(this,'ZW05','color','Purple')">Purple</div>
@@ -255,7 +262,9 @@
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW05','XXS',498)">XXS</div>
                     <div class="box" onclick="selectPrice(this,'ZW05','S',502)">S</div>
-                    <div class="box" onclick="selectPrice(this,'ZW05','M-XL',514)">M–XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW05','M',514)">M</div>
+                    <div class="box" onclick="selectPrice(this,'ZW05','L',514)">L</div>
+                    <div class="box" onclick="selectPrice(this,'ZW05','XL',514)">XL</div>
                 </div>
                 <div><span class="price-now" id="price-zw05">₹---</span><span class="price-old">₹899</span></div>
                 <a href="#" onclick="order(event,'ZW05','Designer Kurta Set')" class="wa-btn">ORDER ON WHATSAPP</a>
@@ -274,8 +283,7 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.0 (800+ Reviews)</div></div>
-                <span style="color:var(--pink); font-weight:900;">CODE: ZW06</span>
-                <h2 class="product-name">Trendy Designer Kurti</h2>
+                <h2 class="product-name">Trendy Designer Kurti (ZW06)</h2>
                 <p class="label">Colors:</p>
                 <div class="row">
                     <div class="box active" onclick="selectOption(this,'ZW06','color','Aqua Blue')">Aqua Blue</div>
@@ -285,7 +293,12 @@
                     <div class="box" onclick="selectOption(this,'ZW06','color','Navy Blue')">Navy Blue</div>
                 </div>
                 <p class="label">Sizes:</p>
-                <div class="row"><div class="box" onclick="selectPrice(this,'ZW06','S-XL',619)">S–XL</div></div>
+                <div class="row">
+                    <div class="box" onclick="selectPrice(this,'ZW06','S',619)">S</div>
+                    <div class="box" onclick="selectPrice(this,'ZW06','M',619)">M</div>
+                    <div class="box" onclick="selectPrice(this,'ZW06','L',619)">L</div>
+                    <div class="box" onclick="selectPrice(this,'ZW06','XL',619)">XL</div>
+                </div>
                 <div><span class="price-now" id="price-zw06">₹---</span><span class="price-old">₹999</span></div>
                 <a href="#" onclick="order(event,'ZW06','Trendy Designer Kurti')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
@@ -303,8 +316,7 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.3 (2k+ Reviews)</div></div>
-                <span style="color:var(--pink); font-weight:900;">CODE: ZW07</span>
-                <h2 class="product-name">Kurta with Bottomwear</h2>
+                <h2 class="product-name">Kurta Bottomwear (ZW07)</h2>
                 <p class="label">Colors:</p>
                 <div class="row">
                     <div class="box active" onclick="selectOption(this,'ZW07','color','Aqua Blue/White')">Aqua Blue/White</div>
@@ -313,27 +325,17 @@
                 <p class="label">Sizes:</p>
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW07','XXS',446)">XXS</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','XS-XL',476)">XS–XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW07','XS',476)">XS</div>
+                    <div class="box" onclick="selectPrice(this,'ZW07','S',476)">S</div>
+                    <div class="box" onclick="selectPrice(this,'ZW07','M',476)">M</div>
+                    <div class="box" onclick="selectPrice(this,'ZW07','L',476)">L</div>
+                    <div class="box" onclick="selectPrice(this,'ZW07','XL',476)">XL</div>
                 </div>
                 <div><span class="price-now" id="price-zw07">₹---</span><span class="price-old">₹799</span></div>
                 <a href="#" onclick="order(event,'ZW07','Kurta Bottomwear Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
-
-        <button class="policy-btn" onclick="toggleModal(true)">Return & Exchange Policy</button>
     </section>
-
-    <div class="modal-overlay" id="policyModal">
-        <div class="modal-card">
-            <span class="close-modal" onclick="toggleModal(false)">&times;</span>
-            <h2 style="font-family:'Bebas Neue'; color:var(--pink); margin-bottom:15px; font-size:2rem;">Return & Exchange Policy</h2>
-            <div style="font-size:0.85rem; line-height:1.6; opacity:0.9;">
-                <p><b>7-Day Easy Returns:</b> Initiate within 7 days of delivery.</p>
-                <p><b>Unboxing Video (Required):</b> Record a continuous video while opening to verify defects.</p>
-                <p><b>How to Request:</b> Send video/photos via WhatsApp for immediate review.</p>
-            </div>
-        </div>
-    </div>
 
     <script>
         let selections = { 
@@ -346,8 +348,6 @@
             'ZW07': { size: '', price: '', color: 'Aqua Blue/White' }
         };
         let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 'slider-zw04': 0, 'slider-zw05': 0, 'slider-zw06': 0, 'slider-zw07': 0 };
-
-        function toggleModal(show) { document.getElementById('policyModal').style.display = show ? 'flex' : 'none'; }
 
         function moveSlide(id, step) {
             const slides = document.getElementById(id).querySelector('.slides');
