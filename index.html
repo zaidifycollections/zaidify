@@ -393,7 +393,7 @@
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">3.9 (200+ Reviews)</div></div>
                 <h2 class="product-name">Stylish Women Coord Set</h2>
                 <div class="admin-ref">ZW10</div>
-                <p class="label">Color: <span style="color:white; font-weight:400;">Yellow/Orange</span></p>
+               <p class="label">Color: <span style="color:white; font-weight:400;">Multicolour</span></p>
                 <p class="label">Sizes:</p>
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW10','XS',405)">XS</div>
@@ -426,7 +426,6 @@
 
     <script>
         let selections = { 
-            let selections = { 
             'ZW01': { size: '', price: '', color: 'Grey' }, 
             'ZW02': { size: '', price: '', color: 'Navy Blue' }, 
             'ZW03': { size: '', price: '', color: 'Maroon' },
@@ -438,9 +437,13 @@
             'ZW09': { size: '', price: '', color: 'Brown' },
             'ZW10': { size: '', price: '', color: 'Multicolour' }
         };
+        
+        let sliderPos = { 
+            'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 'slider-zw04': 0, 
+            'slider-zw05': 0, 'slider-zw06': 0, 'slider-zw07': 0, 'slider-zw08': 0, 
+            'slider-zw09': 0, 'slider-zw10': 0 
         };
-        let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 'slider-zw04': 0, 'slider-zw05': 0, 'slider-zw06': 0, 'slider-zw07': 0, 'slider-zw08': 0, 'slider-zw09': 0, 'slider-zw10': 0 };
-
+       
         function toggleModal(show) { document.getElementById('policyModal').style.display = show ? 'flex' : 'none'; }
         function moveSlide(id, step) {
             const slides = document.getElementById(id).querySelector('.slides');
