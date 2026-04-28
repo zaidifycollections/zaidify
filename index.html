@@ -58,6 +58,12 @@
         .price-old { text-decoration: line-through; opacity: 0.3; font-size: 1.3rem; margin-left: 12px; }
         .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 20px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-top: 20px; transition: 0.3s; }
 
+        /* Policy Modal Styles */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .modal-card { background: #1a052e; border: 1px solid var(--pink); padding: 30px; border-radius: 20px; max-width: 500px; width: 100%; position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: var(--pink); }
+        .policy-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-family: 'Bebas Neue'; letter-spacing: 1px; margin-top: 40px; }
+
         @media (max-width: 768px) {
             .p-wrapper { flex-direction: column; }
             .p-img-box { height: 400px; }
@@ -119,7 +125,6 @@
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (6,800+ Reviews)</div></div>
                 <span style="color:var(--pink); font-weight:900;">CODE: ZW01</span>
                 <h2 class="product-name">Batik Print Suit Set</h2>
-                
                 <p class="label">Select Color:</p>
                 <div class="row">
                     <div class="box" onclick="selectOption(this,'ZW01','color','Grey')">Grey</div>
@@ -127,7 +132,6 @@
                     <div class="box" onclick="selectOption(this,'ZW01','color','Pink')">Pink</div>
                     <div class="box" onclick="selectOption(this,'ZW01','color','Yellow')">Yellow</div>
                 </div>
-
                 <p class="label">Select Size:</p>
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW01','XXS',294)">XXS</div>
@@ -138,11 +142,7 @@
                     <div class="box" onclick="selectPrice(this,'ZW01','XL',484)">XL</div>
                     <div class="box" onclick="selectPrice(this,'ZW01','XXL',484)">XXL</div>
                     <div class="box" onclick="selectPrice(this,'ZW01','3XL',484)">3XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW01','4XL',484)">4XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW01','5XL',484)">5XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW01','6XL',484)">6XL</div>
                 </div>
-
                 <div><span class="price-now" id="price-zw01">₹---</span><span class="price-old">₹899</span></div>
                 <a href="#" onclick="order(event,'ZW01','Batik Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
@@ -162,7 +162,6 @@
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (19,000+ Reviews)</div></div>
                 <span style="color:var(--pink); font-weight:900;">CODE: ZW02</span>
                 <h2 class="product-name">Floral Kurta Set</h2>
-
                 <p class="label">Select Color:</p>
                 <div class="row">
                     <div class="box" onclick="selectOption(this,'ZW02','color','Navy Blue')">Navy Blue</div>
@@ -170,7 +169,6 @@
                     <div class="box" onclick="selectOption(this,'ZW02','color','Yellow')">Yellow</div>
                     <div class="box" onclick="selectOption(this,'ZW02','color','Cyan Blue')">Cyan Blue</div>
                 </div>
-
                 <p class="label">Select Size:</p>
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW02','XXS',312)">XXS</div>
@@ -180,11 +178,7 @@
                     <div class="box" onclick="selectPrice(this,'ZW02','L',406)">L</div>
                     <div class="box" onclick="selectPrice(this,'ZW02','XL',416)">XL</div>
                     <div class="box" onclick="selectPrice(this,'ZW02','XXL',426)">XXL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW02','3XL',436)">3XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW02','4XL',446)">4XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW02','5XL',446)">5XL</div>
                 </div>
-
                 <div><span class="price-now" id="price-zw02">₹---</span><span class="price-old">₹799</span></div>
                 <a href="#" onclick="order(event,'ZW02','Floral Kurta')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
@@ -204,8 +198,7 @@
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (900+ Reviews)</div></div>
                 <span style="color:var(--pink); font-weight:900;">CODE: ZW03</span>
                 <h2 class="product-name">Cotton Floral Set</h2>
-                <p class="label">Color: <span style="color:white; font-weight:400; text-transform:none;">Blue & White</span></p>
-
+                <p class="label">Color: <span style="color:white; font-weight:400; text-transform:none;">Maroon</span></p>
                 <p class="label" style="margin-top:20px;">Select Size:</p>
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW03','XXS',558)">XXS</div>
@@ -214,24 +207,69 @@
                     <div class="box" onclick="selectPrice(this,'ZW03','M',558)">M</div>
                     <div class="box" onclick="selectPrice(this,'ZW03','L',558)">L</div>
                     <div class="box" onclick="selectPrice(this,'ZW03','XL',558)">XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW03','XXL',558)">XXL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW03','3XL',558)">3XL</div>
                 </div>
-
                 <div><span class="price-now" id="price-zw03">₹---</span><span class="price-old">₹1,199</span></div>
                 <a href="#" onclick="order(event,'ZW03','Cotton Floral Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
+
+        <div class="p-wrapper">
+            <div class="p-img-box">
+                <div class="slider-container" id="slider-zw04">
+                    <div class="slides">
+                        <img src="zw04/zw04-1.jpg"><img src="zw04/zw04-2.jpg"><img src="zw04/zw04-3.jpg"><img src="zw04/zw04-4.jpg">
+                    </div>
+                    <button class="slider-btn prev" onclick="moveSlide('slider-zw04', -1)">&#10094;</button>
+                    <button class="slider-btn next" onclick="moveSlide('slider-zw04', 1)">&#10095;</button>
+                </div>
+            </div>
+            <div class="p-content">
+                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (4,400+ 5-Stars)</div></div>
+                <span style="color:var(--pink); font-weight:900;">CODE: ZW04</span>
+                <h2 class="product-name">Super Printed Kurta Set</h2>
+                <p class="label">Color: <span style="color:white; font-weight:400; text-transform:none;">Pink</span></p>
+                <p class="label" style="margin-top:20px;">Select Size:</p>
+                <div class="row">
+                    <div class="box" onclick="selectPrice(this,'ZW04','XS',353)">XS</div>
+                    <div class="box" onclick="selectPrice(this,'ZW04','S',373)">S</div>
+                    <div class="box" onclick="selectPrice(this,'ZW04','M',400)">M</div>
+                    <div class="box" onclick="selectPrice(this,'ZW04','L',440)">L</div>
+                    <div class="box" onclick="selectPrice(this,'ZW04','XL',472)">XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW04','XXL',479)">XXL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW04','3XL',479)">3XL</div>
+                </div>
+                <div><span class="price-now" id="price-zw04">₹---</span><span class="price-old">₹699</span></div>
+                <a href="#" onclick="order(event,'ZW04','Super Printed Kurta Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+            </div>
+        </div>
+
+        <center><button class="policy-btn" onclick="toggleModal(true)">Return & Exchange Policy</button></center>
     </section>
 
+    <div class="modal-overlay" id="policyModal">
+        <div class="modal-card">
+            <span class="close-modal" onclick="toggleModal(false)">&times;</span>
+            <h2 style="font-family:'Bebas Neue'; color:var(--pink); margin-bottom:15px; font-size:2rem;">Return & Exchange Policy</h2>
+            <div style="font-size:0.85rem; line-height:1.6; opacity:0.9;">
+                <p>We want you to be completely satisfied with your purchase! If something isn't right, here is how we can help:</p><br>
+                <p><b>7-Day Easy Returns:</b> You have 7 days from delivery to initiate a return or exchange.</p>
+                <p><b>Unboxing Video (Required):</b> Record a continuous unboxing video when opening your package to verify the condition.</p>
+                <p><b>Defect Reporting:</b> If you notice a defect, take clear photos and videos.</p><br>
+                <p><b>📲 How to Request a Return:</b> Simply send your unboxing video and photos of the defect to us via WhatsApp. Our team will guide you through the next steps immediately!</p>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Pre-filling ZW03 color so it is ready to order immediately
         let selections = { 
             'ZW01': { size: '', price: '', color: '' }, 
             'ZW02': { size: '', price: '', color: '' }, 
-            'ZW03': { size: '', price: '', color: 'Blue & White' } 
+            'ZW03': { size: '', price: '', color: 'Maroon' },
+            'ZW04': { size: '', price: '', color: 'Pink' }
         };
-        let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0 };
+        let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 'slider-zw04': 0 };
+
+        function toggleModal(show) { document.getElementById('policyModal').style.display = show ? 'flex' : 'none'; }
 
         function moveSlide(id, step) {
             const slides = document.getElementById(id).querySelector('.slides');
@@ -257,10 +295,7 @@
         function order(e, id, name) {
             e.preventDefault();
             const d = selections[id];
-            if(!d.size || !d.color) { 
-                alert("Please select both Color and Size!"); 
-                return; 
-            }
+            if(!d.size || !d.color) { alert("Please select both Color and Size!"); return; }
             const msg = `Hi Zaidify! I want to order:\n\n*Product:* ${name} (${id})\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
             window.open(`https://wa.me/918655171445?text=${encodeURIComponent(msg)}`, '_blank');
         }
