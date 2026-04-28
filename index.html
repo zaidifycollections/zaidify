@@ -97,15 +97,6 @@
         </p>
     </section>
 
-    <section id="categories">
-        <h2 class="section-title">OUR CATEGORIES</h2>
-        <div class="grid">
-            <a href="#women" class="card"><h3>WOMEN</h3><p>Kurtas & premium sets</p></a>
-            <div class="card" style="opacity:0.3;"><h3>MEN</h3><p>Coming Soon</p></div>
-            <div class="card" style="opacity:0.3;"><h3>KIDS</h3><p>Coming Soon</p></div>
-        </div>
-    </section>
-
     <section id="women">
         <h2 class="section-title">WOMEN'S ARRIVALS</h2>
 
@@ -286,6 +277,44 @@
             </div>
         </div>
 
+        <div class="p-wrapper">
+            <div class="p-img-box">
+                <div class="slider-container" id="slider-zw06">
+                    <div class="slides">
+                        <img src="zw06/zw06-1.jpg"><img src="zw06/zw06-2.jpg"><img src="zw06/zw06-3.jpg">
+                        <img src="zw06/zw06-4.jpg"><img src="zw06/zw06-5.jpg"><img src="zw06/zw06-6.jpg">
+                        <img src="zw06/zw06-7.jpg"><img src="zw06/zw06-8.jpg"><img src="zw06/zw06-9.jpg">
+                    </div>
+                    <button class="slider-btn prev" onclick="moveSlide('slider-zw06', -1)">&#10094;</button>
+                    <button class="slider-btn next" onclick="moveSlide('slider-zw06', 1)">&#10095;</button>
+                </div>
+            </div>
+            <div class="p-content">
+                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.0 (800+ 5-Stars)</div></div>
+                <span style="color:var(--pink); font-weight:900;">CODE: ZW06</span>
+                <h2 class="product-name">Trendy Dupatta Sharara Set</h2>
+                <p class="label">Fabric: <span style="color:white; font-weight:400; text-transform:none;">Cotton</span></p>
+                <p class="label">Select Color:</p>
+                <div class="row">
+                    <div class="box" onclick="selectOption(this,'ZW06','color','Aqua Blue/Cyan')">Aqua Blue</div>
+                    <div class="box" onclick="selectOption(this,'ZW06','color','Purple')">Purple</div>
+                    <div class="box" onclick="selectOption(this,'ZW06','color','Green')">Green</div>
+                    <div class="box" onclick="selectOption(this,'ZW06','color','Yellow')">Yellow</div>
+                    <div class="box" onclick="selectOption(this,'ZW06','color','Navy Blue')">Navy Blue</div>
+                </div>
+                <p class="label">Select Size:</p>
+                <div class="row">
+                    <div class="box" onclick="selectPrice(this,'ZW06','S',619)">S</div>
+                    <div class="box" onclick="selectPrice(this,'ZW06','M',619)">M</div>
+                    <div class="box" onclick="selectPrice(this,'ZW06','L',619)">L</div>
+                    <div class="box" onclick="selectPrice(this,'ZW06','XL',619)">XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW06','2XL',619)">2XL</div>
+                </div>
+                <div><span class="price-now" id="price-zw06">₹---</span><span class="price-old">₹799</span></div>
+                <a href="#" onclick="order(event,'ZW06','Trendy Dupatta Sharara Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+            </div>
+        </div>
+
         <button class="policy-btn" onclick="toggleModal(true)">Return & Exchange Policy</button>
     </section>
 
@@ -307,11 +336,12 @@
         let selections = { 
             'ZW01': { size: '', price: '', color: '' }, 
             'ZW02': { size: '', price: '', color: '' }, 
-            'ZW03': { size: '', price: '', color: 'Maroon' },
+            'ZW03': { size: '', price: '558', color: 'Maroon' },
             'ZW04': { size: '', price: '', color: 'Pink' },
-            'ZW05': { size: '', price: '', color: '' }
+            'ZW05': { size: '', price: '', color: '' },
+            'ZW06': { size: '', price: '', color: '' }
         };
-        let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 'slider-zw04': 0, 'slider-zw05': 0 };
+        let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 'slider-zw04': 0, 'slider-zw05': 0, 'slider-zw06': 0 };
 
         function toggleModal(show) { document.getElementById('policyModal').style.display = show ? 'flex' : 'none'; }
 
