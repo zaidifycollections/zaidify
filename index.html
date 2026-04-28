@@ -3,63 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaidify | Premium Ethnic Wear</title>
+    <title>Zaidify | Premium Ethnic Collections</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --pink: #ff00ff; --bg: #08020f; --nav-bg: #000; --white: #ffffff; }
+        :root { --pink: #ff00ff; --bg: #08020f; --nav-bg: #000; --gold: #ffd700; --white: #ffffff; }
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--white); font-family: 'Poppins', sans-serif; overflow-x: hidden; }
         
-        nav { width: 100%; padding: 15px 6%; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); position: fixed; top: 0; z-index: 9999; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .logo-img { height: 40px; }
-        .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1.2rem; margin-left: 25px; }
+        nav { width: 100%; padding: 12px 6%; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); position: fixed; top: 0; z-index: 9999; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .logo { font-family: 'Bebas Neue'; font-size: 1.8rem; letter-spacing: 2px; color: var(--pink); }
+        .nav-links { display: flex; gap: 15px; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1.1rem; letter-spacing: 1px; }
 
-        .hero { height: 35vh; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
+        .hero { height: 35vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
         .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3rem, 10vw, 5rem); letter-spacing: 8px; }
 
         section { padding: 40px 6%; max-width: 1200px; margin: 0 auto; }
-        .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: 3rem; margin-bottom: 40px; color: var(--pink); }
+        .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: 2.8rem; margin-bottom: 30px; color: var(--pink); }
 
-        .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 50px; }
-        .cat-card { height: 300px; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 25px; border: 1px solid rgba(255,255,255,0.1); }
+        .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .cat-card { height: 280px; border-radius: 15px; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
         .cat-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.5; }
-        .cat-card h3 { font-family: 'Bebas Neue'; font-size: 2rem; }
+        .cat-card h3 { font-family: 'Bebas Neue'; font-size: 1.8rem; }
         .locked { filter: grayscale(1); opacity: 0.6; }
 
-        .p-wrapper { display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.02); border-radius: 25px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 50px; }
-        .p-img-box { flex: 1; min-width: 350px; height: 600px; position: relative; }
-        .p-content { flex: 1.2; padding: 40px; min-width: 350px; }
+        .p-wrapper { display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.02); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 40px; }
+        .p-img-box { flex: 1; min-width: 350px; height: 500px; position: relative; }
+        .p-content { flex: 1.2; padding: 30px; min-width: 350px; }
         
         .slider { position: relative; width: 100%; height: 100%; overflow: hidden; }
         .slides { display: flex; transition: 0.5s ease-in-out; height: 100%; }
         .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
-        .s-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; }
-        .prev { left: 10px; } .next { right: 10px; }
+        .s-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; z-index: 10; }
+        .prev { left: 8px; } .next { right: 8px; }
 
-        .label { font-size: 0.75rem; font-weight: 800; color: var(--pink); text-transform: uppercase; margin-top: 20px; letter-spacing: 1px; }
-        .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-        .box { border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.05); font-size: 0.85rem; }
+        .rating { color: var(--gold); margin-bottom: 5px; font-size: 0.85rem; }
+        .p-name { font-size: 1.8rem; font-weight: 900; margin-bottom: 5px; }
+        .p-code { font-size: 0.9rem; color: rgba(255,255,255,0.6); margin-bottom: 15px; font-family: 'Bebas Neue'; letter-spacing: 1px; }
+        .label { font-size: 0.75rem; font-weight: 800; color: var(--pink); text-transform: uppercase; margin-top: 15px; letter-spacing: 1px; }
+        .row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+        .box { border: 1px solid rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.05); font-size: 0.8rem; }
         .box.active { background: var(--pink); border-color: var(--pink); font-weight: bold; }
-        .box.disabled { opacity: 0.2; cursor: not-allowed; text-decoration: line-through; border: 1px dashed rgba(255,255,255,0.2); }
+        .box.disabled { opacity: 0.2; cursor: not-allowed; text-decoration: line-through; }
 
-        .price-now { font-size: 3rem; font-weight: 900; margin-top: 20px; display: block; }
-        .price-old { text-decoration: line-through; opacity: 0.4; font-size: 1.2rem; margin-left: 10px; }
+        .price-now { font-size: 2.5rem; font-weight: 900; margin-top: 15px; display: block; }
+        .price-old { text-decoration: line-through; opacity: 0.4; font-size: 1.1rem; margin-left: 8px; }
         
-        .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 20px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-top: 25px; border-bottom: 4px solid #128c7e; }
+        .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 900; font-size: 1.1rem; margin-top: 20px; border-bottom: 4px solid #128c7e; max-width: 250px; }
 
-        @media (max-width: 768px) { .p-wrapper { flex-direction: column; } .p-img-box { height: 400px; } }
+        @media (max-width: 768px) { .p-wrapper { flex-direction: column; } .p-img-box { height: 350px; } }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo"><img src="logo.png" class="logo-img"></div>
-        <div class="nav-links"><a href="#women">WOMEN</a><a href="https://wa.me/918655171445">ORDER</a></div>
+        <div class="logo">ZAIDIFY</div>
+        <div class="nav-links"><a href="#women">WOMEN</a><a href="https://wa.me/918655171445">WHATSAPP</a></div>
     </nav>
 
     <header class="hero">
         <h1>ZAIDIFY</h1>
-        <p>PREMIUM ETHNIC COLLECTIONS</p>
+        <p>Premium Ethnic Wear</p>
     </header>
 
     <section id="categories">
@@ -84,11 +88,13 @@
                 </div>
             </div>
             <div class="p-content">
-                <h2 class="p-name">Batik Print Suit Set [ZW01]</h2>
+                <div class="rating">★★★★☆</div>
+                <h2 class="p-name">Batik Print Suit Set</h2>
+                <p class="p-code">Code: ZW01</p>
                 <p class="label">Color:</p>
                 <div class="row">
                     <div class="box" onclick="setOpt(this,'ZW01','c','Grey')">Grey</div>
-                    <div class="box" onclick="setOpt(this,'ZW01','c','Cyan Blue')">Cyan Blue</div>
+                    <div class="box" onclick="setOpt(this,'ZW01','c','Cyan Blue')">Cyan</div>
                     <div class="box" onclick="setOpt(this,'ZW01','c','Yellow')">Yellow</div>
                     <div class="box" onclick="setOpt(this,'ZW01','c','Pink')">Pink</div>
                 </div>
@@ -122,13 +128,15 @@
                 </div>
             </div>
             <div class="p-content">
-                <h2 class="p-name">Floral Kurta Set [ZW02]</h2>
+                <div class="rating">★★★★☆</div>
+                <h2 class="p-name">Floral Kurta Set</h2>
+                <p class="p-code">Code: ZW02</p>
                 <p class="label">Color:</p>
                 <div class="row">
-                    <div class="box" onclick="setOpt(this,'ZW02','c','Navy Blue')">Navy Blue</div>
+                    <div class="box" onclick="setOpt(this,'ZW02','c','Navy')">Navy</div>
                     <div class="box" onclick="setOpt(this,'ZW02','c','White')">White</div>
                     <div class="box" onclick="setOpt(this,'ZW02','c','Yellow')">Yellow</div>
-                    <div class="box" onclick="setOpt(this,'ZW02','c','Cyan Blue')">Cyan Blue</div>
+                    <div class="box" onclick="setOpt(this,'ZW02','c','Cyan')">Cyan</div>
                 </div>
                 <p class="label">Size:</p>
                 <div class="row">
@@ -140,14 +148,15 @@
                     <div class="box" onclick="setPrice(this,'ZW02','5XL',396)">5XL</div>
                 </div>
                 <span class="price-now" id="p-zw02">₹---</span>
-                <a href="#" onclick="buy(event,'ZW02','Floral Set')" class="wa-btn">ORDER VIA WHATSAPP</a>
+                <a href="#" onclick="buy(event,'ZW02','Floral Kurta')" class="wa-btn">ORDER VIA WHATSAPP</a>
             </div>
         </div>
 
         <div class="p-wrapper">
             <div class="p-img-box"><img src="zw03-1.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
             <div class="p-content">
-                <h2 class="p-name">Cotton Floral Set [ZW03]</h2>
+                <h2 class="p-name">Cotton Floral Set</h2>
+                <p class="p-code">Code: ZW03</p>
                 <p class="label">Color:</p>
                 <div class="row"><div class="box active" onclick="setOpt(this,'ZW03','c','Maroon')">Maroon</div></div>
                 <p class="label">Size:</p>
@@ -166,7 +175,8 @@
         <div class="p-wrapper">
             <div class="p-img-box"><img src="zw04/zw04-1.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
             <div class="p-content">
-                <h2 class="p-name">Super Printed Kurta [ZW04]</h2>
+                <h2 class="p-name">Super Printed Kurta</h2>
+                <p class="p-code">Code: ZW04</p>
                 <p class="label">Color:</p>
                 <div class="row"><div class="box active" onclick="setOpt(this,'ZW04','c','Pink')">Pink</div></div>
                 <p class="label">Size:</p>
@@ -185,12 +195,13 @@
         <div class="p-wrapper">
             <div class="p-img-box"><img src="zw05/zw05-1.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
             <div class="p-content">
-                <h2 class="p-name">Designer Kurta Set [ZW05]</h2>
+                <h2 class="p-name">Designer Kurta Set</h2>
+                <p class="p-code">Code: ZW05</p>
                 <p class="label">Color:</p>
                 <div class="row">
                     <div class="box" onclick="setOpt(this,'ZW05','c','Purple')">Purple</div>
                     <div class="box" onclick="setOpt(this,'ZW05','c','Pink')">Pink</div>
-                    <div class="box" onclick="setOpt(this,'ZW05','c','Cyan Blue')">Cyan Blue</div>
+                    <div class="box" onclick="setOpt(this,'ZW05','c','Cyan')">Cyan</div>
                     <div class="box" onclick="setOpt(this,'ZW05','c','Black')">Black</div>
                 </div>
                 <p class="label">Size:</p>
@@ -219,14 +230,15 @@
                 </div>
             </div>
             <div class="p-content">
-                <h2 class="p-name">Dupatta Sharara Set [ZW06]</h2>
+                <h2 class="p-name">Dupatta Sharara Set</h2>
+                <p class="p-code">Code: ZW06</p>
                 <p class="label">Color:</p>
                 <div class="row">
-                    <div class="box" onclick="setOpt(this,'ZW06','c','Cyan Blue')">Cyan Blue</div>
+                    <div class="box" onclick="setOpt(this,'ZW06','c','Cyan')">Cyan</div>
                     <div class="box" onclick="setOpt(this,'ZW06','c','Purple')">Purple</div>
                     <div class="box" onclick="setOpt(this,'ZW06','c','Green')">Green</div>
                     <div class="box" onclick="setOpt(this,'ZW06','c','Yellow')">Yellow</div>
-                    <div class="box" onclick="setOpt(this,'ZW06','c','Navy Blue')">Navy Blue</div>
+                    <div class="box" onclick="setOpt(this,'ZW06','c','Navy')">Navy</div>
                 </div>
                 <p class="label">Size:</p>
                 <div class="row">
@@ -252,7 +264,8 @@
                 </div>
             </div>
             <div class="p-content">
-                <h2 class="p-name">Trendy Kurta Bottom [ZW07]</h2>
+                <h2 class="p-name">Trendy Kurta Bottom</h2>
+                <p class="p-code">Code: ZW07</p>
                 <p class="label">Color:</p>
                 <div class="row">
                     <div class="box" onclick="setOpt(this,'ZW07','c','Teal Blue')">Teal Blue</div>
@@ -268,7 +281,7 @@
                     <div class="box" onclick="setPrice(this,'ZW07','XXL',476)">XXL</div>
                 </div>
                 <span class="price-now" id="p-zw07">₹476</span>
-                <a href="#" onclick="buy(event,'ZW07','Trendy Kurta')" class="wa-btn">ORDER VIA WHATSAPP</a>
+                <a href="#" onclick="buy(event,'ZW07','Trendy Bottom')" class="wa-btn">ORDER VIA WHATSAPP</a>
             </div>
         </div>
     </section>
@@ -276,9 +289,9 @@
     <script>
         let cart = { 
             'ZW01': {s:'', p:'', c:''}, 'ZW02': {s:'', p:'', c:''}, 
-            'ZW03': {s:'', p:'558', c:'Maroon'}, 'ZW04': {s:'', p:'353', c:'Pink'},
+            'ZW03': {s:'M', p:'558', c:'Maroon'}, 'ZW04': {s:'M', p:'353', c:'Pink'},
             'ZW05': {s:'', p:'498', c:''}, 'ZW06': {s:'', p:'619', c:''},
-            'ZW07': {s:'', p:'476', c:'' }
+            'ZW07': {s:'M', p:'476', c:'' }
         };
         let pos = { 's-zw01': 0, 's-zw02': 0, 's-zw06': 0, 's-zw07': 0 };
 
@@ -307,7 +320,7 @@
             e.preventDefault();
             const item = cart[id];
             if(!item.s || !item.c) return alert("Select Color and Size!");
-            const text = `Order Request:\nProduct: ${name} [${id}]\nColor: ${item.c}\nSize: ${item.s}\nPrice: ₹${item.p}`;
+            const text = `Zaidify Order Request:\nProduct: ${name} [${id}]\nColor: ${item.c}\nSize: ${item.s}\nPrice: ₹${item.p}`;
             window.open(`https://wa.me/918655171445?text=${encodeURIComponent(text)}`, '_blank');
         }
     </script>
