@@ -18,7 +18,7 @@
         .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1.1rem; letter-spacing: 1px; }
         .shop-now-btn { background: var(--pink); padding: 8px 16px; border-radius: 5px; font-weight: 800; text-decoration: none; color: white; box-shadow: 0 0 15px var(--pink); }
         
-        /* Hero Section */
+        /* Hero */
         .hero { height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
         .hero-logo { width: 120px; margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--pink)); }
         .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3.5rem, 12vw, 7rem); letter-spacing: 10px; line-height: 1; }
@@ -27,58 +27,53 @@
         section { padding: 80px 6%; width: 100%; max-width: 1200px; margin: 0 auto; }
         .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 8vw, 4rem); margin-bottom: 40px; color: var(--pink); letter-spacing: 3px; }
 
-        /* Categories Section */
+        /* Categories */
         .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 80px; }
         .cat-card { height: 400px; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 30px; text-decoration: none; border: 1px solid rgba(255,255,255,0.1); transition: 0.4s; }
-        .cat-card:hover { transform: translateY(-10px); border-color: var(--pink); box-shadow: 0 10px 30px rgba(255,0,255,0.2); }
-        .cat-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.6; transition: 0.5s; }
-        .cat-card:hover img { scale: 1.1; opacity: 0.8; }
+        .cat-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.6; }
         .cat-card h3 { font-family: 'Bebas Neue'; font-size: 2.5rem; color: #fff; text-shadow: 0 2px 10px #000; }
+        .locked { filter: grayscale(1); cursor: not-allowed; opacity: 0.7; }
+        .lock-badge { position: absolute; top: 20px; right: 20px; background: #000; color: var(--pink); padding: 5px 12px; border-radius: 5px; font-weight: 800; border: 1px solid var(--pink); font-size: 0.8rem; }
 
-        /* Product Cards */
+        /* Product Layout */
         .p-wrapper { display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.02); border-radius: 25px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 60px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
         .p-img-box { flex: 1; min-width: 350px; height: 600px; position: relative; }
         .p-content { flex: 1.2; padding: 50px; min-width: 350px; display: flex; flex-direction: column; justify-content: center; }
         
-        /* Slider */
         .slider-container { position: relative; width: 100%; height: 100%; overflow: hidden; }
         .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; }
         .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
-        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
         .prev { left: 15px; } .next { right: 15px; }
 
-        /* Product Details */
         .rating-box { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
         .stars { color: var(--gold); font-size: 1.1rem; }
         .rev-count { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
-        .product-name { font-size: 2.5rem; margin-bottom: 15px; font-weight: 900; line-height: 1.1; }
+        .product-name { font-size: 2.2rem; margin-bottom: 15px; font-weight: 900; }
+        
         .label { font-size: 0.85rem; font-weight: 800; margin-top: 20px; color: var(--pink); text-transform: uppercase; letter-spacing: 2px; }
         .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
         .box { border: 1px solid rgba(255,255,255,0.2); padding: 10px 18px; border-radius: 10px; cursor: pointer; font-size: 0.9rem; transition: 0.3s; background: rgba(255,255,255,0.03); }
-        .box:hover { border-color: var(--pink); }
-        .box.active { background: var(--pink); border-color: var(--pink); color: white; font-weight: bold; transform: translateY(-3px); }
+        .box.active { background: var(--pink); border-color: var(--pink); color: white; font-weight: bold; }
 
         .price-area { margin-top: 30px; display: flex; align-items: baseline; gap: 15px; }
         .price-now { font-size: 3.5rem; font-weight: 900; color: #fff; }
         .price-old { text-decoration: line-through; opacity: 0.4; font-size: 1.5rem; }
+        
         .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 22px; border-radius: 18px; text-decoration: none; font-weight: 900; font-size: 1.3rem; margin-top: 30px; transition: 0.3s; border-bottom: 4px solid #128c7e; }
-        .wa-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
+        .wa-btn:hover { transform: scale(1.02); }
 
-        /* About Section */
+        /* About & Policy */
         .about-box { background: rgba(255,255,255,0.03); padding: 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
-        .about-box p { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.8); max-width: 800px; margin: 0 auto; }
-
-        /* Modal */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .modal-card { background: #08020f; border: 2px solid var(--pink); padding: 40px; border-radius: 25px; max-width: 550px; width: 100%; position: relative; box-shadow: 0 0 50px rgba(255,0,255,0.3); }
+        .modal-card { background: #08020f; border: 2px solid var(--pink); padding: 40px; border-radius: 25px; max-width: 550px; width: 100%; position: relative; }
         .close-modal { position: absolute; top: 20px; right: 25px; font-size: 2.5rem; cursor: pointer; color: var(--pink); }
-        .policy-btn { background: none; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px 35px; border-radius: 10px; cursor: pointer; font-family: 'Bebas Neue'; letter-spacing: 2px; margin: 50px auto; display: block; transition: 0.3s; }
-        .policy-btn:hover { background: var(--pink); border-color: var(--pink); }
+        .policy-btn { background: none; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px 35px; border-radius: 10px; cursor: pointer; margin: 50px auto; display: block; font-family: 'Bebas Neue'; letter-spacing: 2px; }
 
         @media (max-width: 768px) {
             .p-wrapper { flex-direction: column; }
             .p-img-box { height: 450px; }
-            .p-content { padding: 35px 25px; text-align: center; }
+            .p-content { padding: 30px; text-align: center; }
             .row { justify-content: center; }
             .price-area { justify-content: center; }
         }
@@ -91,7 +86,7 @@
         <div class="nav-links">
             <a href="#categories">COLLECTIONS</a>
             <a href="#about">ABOUT</a>
-            <a href="https://wa.me/918655171445" class="shop-now-btn">WHATSAPP ORDER</a>
+            <a href="https://wa.me/918655171445" class="shop-now-btn">ORDER NOW</a>
         </div>
     </nav>
 
@@ -105,14 +100,16 @@
         <h2 class="section-title">SHOP BY CATEGORY</h2>
         <div class="cat-grid">
             <div class="cat-card">
-                <img src="https://images.unsplash.com/photo-1583394838336-acd977730f8a?q=80&w=1000" alt="Women">
+                <img src="Product photos/zw01-1.jpg" alt="Women">
                 <h3>WOMEN</h3>
             </div>
-            <div class="cat-card">
+            <div class="cat-card locked">
+                <div class="lock-badge">COMING SOON</div>
                 <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=1000" alt="Men">
                 <h3>MEN</h3>
             </div>
-            <div class="cat-card">
+            <div class="cat-card locked">
+                <div class="lock-badge">COMING SOON</div>
                 <img src="https://images.unsplash.com/photo-1603912627214-6c56d93711d7?q=80&w=1000" alt="Kids">
                 <h3>KIDS</h3>
             </div>
@@ -120,21 +117,23 @@
     </section>
 
     <section id="women">
-        <h2 class="section-title">WOMEN'S COLLECTION</h2>
+        <h2 class="section-title">THE COLLECTION</h2>
 
         <div class="p-wrapper">
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw01">
                     <div class="slides">
                         <img src="Product photos/zw01-1.jpg"><img src="Product photos/zw01-2.jpg"><img src="Product photos/zw01-3.jpg">
+                        <img src="Product photos/zw01-4.jpg"><img src="Product photos/zw01-5.jpg"><img src="Product photos/zw01-6.jpg">
+                        <img src="Product photos/zw01-7.jpg"><img src="Product photos/zw01-8.jpg"><img src="Product photos/zw01-9.jpg">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw01', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw01', 1)">&#10095;</button>
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (6,800+ Reviews)</div></div>
-                <h2 class="product-name">Batik Print Suit Set</h2>
+                <div class="rating-box"><div class="stars">★★★★☆</div><div class="rev-count">4.1 (6,800+ Reviews)</div></div>
+                <h2 class="product-name">Batik Print Suit Set [ZW01]</h2>
                 <p class="label">Color:</p>
                 <div class="row">
                     <div class="box" onclick="selectOption(this,'ZW01','color','Grey')">Grey</div>
@@ -145,15 +144,12 @@
                 <p class="label">Size:</p>
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW01','XXS',294)">XXS</div>
-                    <div class="box" onclick="selectPrice(this,'ZW01','XS',359)">XS</div>
                     <div class="box" onclick="selectPrice(this,'ZW01','S',484)">S</div>
                     <div class="box" onclick="selectPrice(this,'ZW01','M',484)">M</div>
                     <div class="box" onclick="selectPrice(this,'ZW01','L',484)">L</div>
-                    <div class="box" onclick="selectPrice(this,'ZW01','XL',484)">XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW01','XXL',484)">XXL</div>
                 </div>
                 <div class="price-area"><span class="price-now" id="price-zw01">₹---</span><span class="price-old">₹899</span></div>
-                <a href="#" onclick="order(event,'ZW01','Batik Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <a href="#" onclick="order(event,'ZW01','Batik Print Set')" class="wa-btn">ORDER VIA WHATSAPP</a>
             </div>
         </div>
 
@@ -161,33 +157,24 @@
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw02">
                     <div class="slides">
-                        <img src="zw02/zw02-1.jpg"><img src="zw02/zw02-2.jpg"><img src="zw02/zw02-3.jpg">
+                        <img src="zw02/zw02-1.jpg"><img src="zw02/zw02-2.jpg"><img src="zw02/zw02-3.jpg"><img src="zw02/zw02-4.jpg">
+                        <img src="zw02/zw02-5.jpg"><img src="zw02/zw02-6.jpg"><img src="zw02/zw02-7.jpg"><img src="zw02/zw02-8.jpg">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw02', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw02', 1)">&#10095;</button>
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (19,000+ Reviews)</div></div>
-                <h2 class="product-name">Floral Kurta Set</h2>
-                <p class="label">Color:</p>
-                <div class="row">
-                    <div class="box" onclick="selectOption(this,'ZW02','color','Navy Blue')">Navy Blue</div>
-                    <div class="box" onclick="selectOption(this,'ZW02','color','White')">White</div>
-                    <div class="box" onclick="selectOption(this,'ZW02','color','Yellow')">Yellow</div>
-                    <div class="box" onclick="selectOption(this,'ZW02','color','Cyan Blue')">Cyan Blue</div>
-                </div>
+                <div class="rating-box"><div class="stars">★★★★☆</div><div class="rev-count">4.1 (19k+ Reviews)</div></div>
+                <h2 class="product-name">Floral Kurta Set [ZW02]</h2>
                 <p class="label">Size:</p>
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW02','XXS',312)">XXS</div>
                     <div class="box" onclick="selectPrice(this,'ZW02','S',394)">S</div>
                     <div class="box" onclick="selectPrice(this,'ZW02','M',396)">M</div>
-                    <div class="box" onclick="selectPrice(this,'ZW02','L',406)">L</div>
-                    <div class="box" onclick="selectPrice(this,'ZW02','XL',416)">XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW02','XXL',426)">XXL</div>
                 </div>
                 <div class="price-area"><span class="price-now" id="price-zw02">₹---</span><span class="price-old">₹799</span></div>
-                <a href="#" onclick="order(event,'ZW02','Floral Kurta')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <a href="#" onclick="order(event,'ZW02','Floral Kurta')" class="wa-btn">ORDER VIA WHATSAPP</a>
             </div>
         </div>
 
@@ -202,20 +189,9 @@
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (900+ Reviews)</div></div>
-                <h2 class="product-name">Cotton Floral Set</h2>
-                <p class="label">Color: Maroon</p>
-                <p class="label">Size:</p>
-                <div class="row">
-                    <div class="box" onclick="selectPrice(this,'ZW03','XXS',558)">XXS</div>
-                    <div class="box" onclick="selectPrice(this,'ZW03','S',558)">S</div>
-                    <div class="box" onclick="selectPrice(this,'ZW03','M',558)">M</div>
-                    <div class="box" onclick="selectPrice(this,'ZW03','L',558)">L</div>
-                    <div class="box" onclick="selectPrice(this,'ZW03','XL',558)">XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW03','XXL',558)">XXL</div>
-                </div>
-                <div class="price-area"><span class="price-now" id="price-zw03">₹558</span><span class="price-old">₹1,199</span></div>
-                <a href="#" onclick="order(event,'ZW03','Cotton Floral Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <h2 class="product-name">Cotton Floral Set [ZW03]</h2>
+                <div class="price-area"><span class="price-now">₹558</span></div>
+                <a href="#" onclick="order(event,'ZW03','Cotton Floral')" class="wa-btn">ORDER VIA WHATSAPP</a>
             </div>
         </div>
 
@@ -230,20 +206,9 @@
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (4,400+ 5-Stars)</div></div>
-                <h2 class="product-name">Super Printed Kurta Set</h2>
-                <p class="label">Color: Pink</p>
-                <p class="label">Size:</p>
-                <div class="row">
-                    <div class="box" onclick="selectPrice(this,'ZW04','XS',353)">XS</div>
-                    <div class="box" onclick="selectPrice(this,'ZW04','S',373)">S</div>
-                    <div class="box" onclick="selectPrice(this,'ZW04','M',400)">M</div>
-                    <div class="box" onclick="selectPrice(this,'ZW04','L',440)">L</div>
-                    <div class="box" onclick="selectPrice(this,'ZW04','XL',472)">XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW04','XXL',479)">XXL</div>
-                </div>
-                <div class="price-area"><span class="price-now" id="price-zw04">₹---</span><span class="price-old">₹699</span></div>
-                <a href="#" onclick="order(event,'ZW04','Super Printed Kurta')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <h2 class="product-name">Super Printed Kurta [ZW04]</h2>
+                <div class="price-area"><span class="price-now">₹353+</span></div>
+                <a href="#" onclick="order(event,'ZW04','Super Printed')" class="wa-btn">ORDER VIA WHATSAPP</a>
             </div>
         </div>
 
@@ -258,26 +223,9 @@
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.0 (2,000+ 5-Stars)</div></div>
-                <h2 class="product-name">Designer Kurta Set</h2>
-                <p class="label">Color:</p>
-                <div class="row">
-                    <div class="box" onclick="selectOption(this,'ZW05','color','Purple')">Purple</div>
-                    <div class="box" onclick="selectOption(this,'ZW05','color','Cyan Blue')">Cyan Blue</div>
-                    <div class="box" onclick="selectOption(this,'ZW05','color','Pink')">Pink</div>
-                    <div class="box" onclick="selectOption(this,'ZW05','color','Black')">Black</div>
-                </div>
-                <p class="label">Size:</p>
-                <div class="row">
-                    <div class="box" onclick="selectPrice(this,'ZW05','XXS',498)">XXS</div>
-                    <div class="box" onclick="selectPrice(this,'ZW05','S',502)">S</div>
-                    <div class="box" onclick="selectPrice(this,'ZW05','M',514)">M</div>
-                    <div class="box" onclick="selectPrice(this,'ZW05','L',514)">L</div>
-                    <div class="box" onclick="selectPrice(this,'ZW05','XL',514)">XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW05','XXL',514)">XXL</div>
-                </div>
-                <div class="price-area"><span class="price-now" id="price-zw05">₹---</span><span class="price-old">₹699</span></div>
-                <a href="#" onclick="order(event,'ZW05','Kurta Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <h2 class="product-name">Designer Kurta Set [ZW05]</h2>
+                <div class="price-area"><span class="price-now">₹498+</span></div>
+                <a href="#" onclick="order(event,'ZW05','Designer Kurta')" class="wa-btn">ORDER VIA WHATSAPP</a>
             </div>
         </div>
 
@@ -286,6 +234,8 @@
                 <div class="slider-container" id="slider-zw06">
                     <div class="slides">
                         <img src="zw06/zw06-1.jpg"><img src="zw06/zw06-2.jpg"><img src="zw06/zw06-3.jpg">
+                        <img src="zw06/zw06-4.jpg"><img src="zw06/zw06-5.jpg"><img src="zw06/zw06-6.jpg">
+                        <img src="zw06/zw06-7.jpg"><img src="zw06/zw06-8.jpg"><img src="zw06/zw06-9.jpg">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw06', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw06', 1)">&#10095;</button>
@@ -293,24 +243,14 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.0 (800+ 5-Stars)</div></div>
-                <h2 class="product-name">Dupatta Sharara Set</h2>
-                <p class="label">Color:</p>
-                <div class="row">
-                    <div class="box" onclick="selectOption(this,'ZW06','color','Aqua Blue')">Aqua Blue</div>
-                    <div class="box" onclick="selectOption(this,'ZW06','color','Purple')">Purple</div>
-                    <div class="box" onclick="selectOption(this,'ZW06','color','Green')">Green</div>
-                    <div class="box" onclick="selectOption(this,'ZW06','color','Navy Blue')">Navy Blue</div>
-                </div>
+                <h2 class="product-name">Dupatta Sharara Set [ZW06]</h2>
                 <p class="label">Size:</p>
                 <div class="row">
-                    <div class="box" onclick="selectPrice(this,'ZW06','S',619)">S</div>
-                    <div class="box" onclick="selectPrice(this,'ZW06','M',619)">M</div>
                     <div class="box" onclick="selectPrice(this,'ZW06','L',619)">L</div>
                     <div class="box" onclick="selectPrice(this,'ZW06','XL',619)">XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW06','2XL',619)">2XL</div>
                 </div>
-                <div class="price-area"><span class="price-now" id="price-zw06">₹619</span><span class="price-old">₹799</span></div>
-                <a href="#" onclick="order(event,'ZW06','Sharara Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <div class="price-area"><span class="price-now" id="price-zw06">₹619</span></div>
+                <a href="#" onclick="order(event,'ZW06','Sharara Set')" class="wa-btn">ORDER VIA WHATSAPP</a>
             </div>
         </div>
 
@@ -325,61 +265,46 @@
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.3 (2,000+ Reviews)</div></div>
-                <h2 class="product-name">Trendy Kurta with Bottomware</h2>
-                <p class="label">Color:</p>
-                <div class="row">
-                    <div class="box" onclick="selectOption(this,'ZW07','color','Teal Blue / Slate Blue')">Teal Blue / Slate Blue</div>
-                    <div class="box" onclick="selectOption(this,'ZW07','color','Aqua Blue & Beige')">Aqua Blue & Beige</div>
-                </div>
+                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.3 (2000+ Reviews)</div></div>
+                <h2 class="product-name">Trendy Kurta Bottomware [ZW07]</h2>
                 <p class="label">Size:</p>
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW07','XXS',446)">XXS</div>
                     <div class="box" onclick="selectPrice(this,'ZW07','XS',476)">XS</div>
                     <div class="box" onclick="selectPrice(this,'ZW07','S',476)">S</div>
                     <div class="box" onclick="selectPrice(this,'ZW07','M',476)">M</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','L',476)">L</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','XL',476)">XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','2XL',476)">2XL</div>
                 </div>
                 <div class="price-area"><span class="price-now" id="price-zw07">₹---</span><span class="price-old">₹699</span></div>
-                <a href="#" onclick="order(event,'ZW07','Trendy Kurta Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <a href="#" onclick="order(event,'ZW07','Trendy Kurta')" class="wa-btn">ORDER VIA WHATSAPP</a>
             </div>
         </div>
     </section>
 
     <section id="about">
-        <h2 class="section-title">ABOUT ZAIDIFY</h2>
+        <h2 class="section-title">ABOUT US</h2>
         <div class="about-box">
-            <p>Welcome to Zaidify Collections, your destination for premium ethnic wear. We are dedicated to providing high-quality garments that combine traditional elegance with contemporary trends. Each piece is crafted with care to ensure you look and feel your best for any occasion.</p>
+            <p>Zaidify Collections offers premium ethnic wear with a focus on quality fabrics and modern designs. We ensure every piece reflects elegance and comfort for your special occasions.</p>
         </div>
-        <button class="policy-btn" onclick="toggleModal(true)">RETURN & EXCHANGE POLICY</button>
+        <button class="policy-btn" onclick="toggleModal(true)">REFUND & EXCHANGE POLICY</button>
     </section>
 
     <div class="modal-overlay" id="policyModal">
         <div class="modal-card">
             <span class="close-modal" onclick="toggleModal(false)">&times;</span>
-            <h2 style="font-family:'Bebas Neue'; color:var(--pink); margin-bottom:20px; font-size:2.5rem;">OUR POLICY</h2>
-            <div style="line-height:1.6; font-size:1rem; color:rgba(255,255,255,0.9);">
-                <p style="margin-bottom:15px;">• We offer a <strong>7-Day Easy Return & Exchange</strong> policy.</p>
-                <p style="margin-bottom:15px;">• An <strong>unboxing video is mandatory</strong> to verify any return or exchange request.</p>
-                <p>• Products must be in original condition with tags intact for eligibility.</p>
-            </div>
+            <h2 style="color:var(--pink); margin-bottom:15px; font-family:'Bebas Neue';">OUR POLICY</h2>
+            <p>• 7-Day Easy Returns & Exchange.<br>• Mandatory: Unboxing video required to verify defects.<br>• Tags must be intact.</p>
         </div>
     </div>
 
     <script>
         let selections = { 
             'ZW01': { size: '', price: '', color: '' }, 'ZW02': { size: '', price: '', color: '' }, 
-            'ZW03': { size: '', price: '558', color: 'Maroon' }, 'ZW04': { size: '', price: '', color: 'Pink' },
-            'ZW05': { size: '', price: '', color: '' }, 'ZW06': { size: '', price: '619', color: '' },
+            'ZW03': { size: 'Free', price: '558', color: 'Maroon' }, 'ZW04': { size: 'Free', price: '353', color: 'Pink' },
+            'ZW05': { size: 'Free', price: '498', color: 'Multi' }, 'ZW06': { size: '', price: '619', color: '' },
             'ZW07': { size: '', price: '', color: '' }
         };
         
-        let sliderPos = { 
-            'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 
-            'slider-zw04': 0, 'slider-zw05': 0, 'slider-zw06': 0, 'slider-zw07': 0 
-        };
+        let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 'slider-zw04': 0, 'slider-zw05': 0, 'slider-zw06': 0, 'slider-zw07': 0 };
 
         function toggleModal(show) { document.getElementById('policyModal').style.display = show ? 'flex' : 'none'; }
         
@@ -399,7 +324,8 @@
         function selectPrice(el, id, size, price) {
             el.parentElement.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
-            document.getElementById('price-' + id.toLowerCase()).innerText = "₹" + price;
+            const priceTag = document.getElementById('price-' + id.toLowerCase());
+            if(priceTag) priceTag.innerText = "₹" + price;
             selections[id].size = size;
             selections[id].price = price;
         }
@@ -407,8 +333,8 @@
         function order(e, id, name) {
             e.preventDefault();
             const d = selections[id];
-            if(!d.size || !d.color) { alert("Please select both Color and Size!"); return; }
-            const msg = `Hi Zaidify! I'd like to order:\n\n*Product:* ${name} (${id})\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
+            if(!d.size && id !== 'ZW03') { alert("Select a size first!"); return; }
+            const msg = `Hi Zaidify! I want to order:\nProduct: ${name} [${id}]\nSize: ${d.size}\nPrice: ₹${d.price}`;
             window.open(`https://wa.me/918655171445?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
