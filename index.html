@@ -23,12 +23,9 @@
 
         section { padding: 60px 6%; width: 100%; max-width: 1200px; margin: 0 auto; }
         .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 8vw, 3.5rem); margin-bottom: 30px; color: var(--pink); letter-spacing: 2px; }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
-        .card { background: rgba(255,255,255,0.03); padding: 0; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: white; transition: 0.3s; overflow: hidden; position: relative; height: 350px; }
-        .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        .card-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.3); }
-        .card h3 { font-family: 'Bebas Neue'; font-size: 2.5rem; }
+
+        /* Hidden Reference Style */
+        .admin-ref { display: none; }
 
         .p-wrapper { display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.02); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 60px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
         .p-img-box { flex: 1; min-width: 350px; position: relative; height: 550px; }
@@ -54,8 +51,6 @@
         .price-old { text-decoration: line-through; opacity: 0.3; font-size: 1.3rem; margin-left: 12px; }
         .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 20px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-top: 20px; transition: 0.3s; }
 
-        .policy-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-family: 'Bebas Neue'; letter-spacing: 2px; margin: 40px auto; display: block; }
-
         @media (max-width: 768px) {
             .p-wrapper { flex-direction: column; }
             .p-img-box { height: 400px; }
@@ -69,7 +64,6 @@
     <nav>
         <a href="#" class="logo-box"><img src="logo.png" class="logo-img"><span>ZAIDIFY</span></a>
         <div class="nav-links">
-            <a href="#categories">EXPLORE</a>
             <a href="#women">WOMEN</a>
             <a href="https://wa.me/918655171445" class="shop-now-btn">WHATSAPP ORDER</a>
         </div>
@@ -81,25 +75,9 @@
         <p>PREMIUM ETHNIC COLLECTIONS</p>
     </header>
 
-    <section id="categories">
-        <h2 class="section-title">OUR CATEGORIES</h2>
-        <div class="grid">
-            <a href="#women" class="card">
-                <img src="Product photos/zw01-2.jpg">
-                <div class="card-overlay"><h3>WOMEN</h3><p>Premium Sets</p></div>
-            </a>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&q=80&w=800" style="opacity: 0.4;">
-                <div class="card-overlay"><h3>MEN</h3><p>Coming Soon</p></div>
-            </div>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1519702203157-ba791880948c?auto=format&fit=crop&q=80&w=800" style="opacity: 0.4;">
-                <div class="card-overlay"><h3>KIDS</h3><p>Coming Soon</p></div>
-            </div>
-        </div>
-    </section>
-
     <section id="women">
+        <h2 class="section-title">WOMEN'S ARRIVALS</h2>
+
         <div class="p-wrapper" id="zw01">
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw01">
@@ -112,7 +90,8 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (6k+ Reviews)</div></div>
-                <h2 class="product-name">Cotton Kurta Set (ZW01)</h2>
+                <h2 class="product-name">Batik Print Suit Set</h2>
+                <div class="admin-ref">ZW01</div>
                 <p class="label">Colors:</p>
                 <div class="row">
                     <div class="box active" onclick="selectOption(this,'ZW01','color','Grey')">Grey</div>
@@ -135,7 +114,7 @@
                     <div class="box" onclick="selectPrice(this,'ZW01','6XL',484)">6XL</div>
                 </div>
                 <div><span class="price-now" id="price-zw01">₹---</span><span class="price-old">₹899</span></div>
-                <a href="#" onclick="order(event,'ZW01','Cotton Kurta Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <a href="#" onclick="order(event,'ZW01','Batik Print Suit Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
 
@@ -143,7 +122,7 @@
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw02">
                     <div class="slides">
-                        <img src="zw02/zw02-1.jpg"><img src="zw02/zw02-2.jpg"><img src="zw02/zw02-3.jpg"><img src="zw02/zw02-4.jpg"><img src="zw02/zw02-5.jpg">
+                        <img src="zw02/zw02-2.jpg"><img src="zw02/zw02-3.jpg"><img src="zw02/zw02-4.jpg"><img src="zw02/zw02-5.jpg">
                     </div>
                     <button class="slider-btn prev" onclick="moveSlide('slider-zw02', -1)">&#10094;</button>
                     <button class="slider-btn next" onclick="moveSlide('slider-zw02', 1)">&#10095;</button>
@@ -151,7 +130,8 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (19k+ Reviews)</div></div>
-                <h2 class="product-name">Shree Harji Kurtis (ZW02)</h2>
+                <h2 class="product-name">Shree Harji Kurtis</h2>
+                <div class="admin-ref">ZW02</div>
                 <p class="label">Colors:</p>
                 <div class="row">
                     <div class="box active" onclick="selectOption(this,'ZW02','color','Navy Blue')">Navy Blue</div>
@@ -173,7 +153,7 @@
                     <div class="box" onclick="selectPrice(this,'ZW02','5XL',446)">5XL</div>
                 </div>
                 <div><span class="price-now" id="price-zw02">₹---</span><span class="price-old">₹799</span></div>
-                <a href="#" onclick="order(event,'ZW02','Shree Harji Kurti')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <a href="#" onclick="order(event,'ZW02','Shree Harji Kurtis')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
 
@@ -189,9 +169,9 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (900+ Reviews)</div></div>
-                <h2 class="product-name">Kurti Pant Set (ZW03)</h2>
-                <p class="label">Color:</p>
-                <div class="row"><div class="box active">Maroon</div></div>
+                <h2 class="product-name">Kurti Pant Set</h2>
+                <div class="admin-ref">ZW03</div>
+                <p class="label">Color: <span style="color:white; font-weight:400; text-transform:none;">Maroon</span></p>
                 <p class="label">Sizes:</p>
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW03','XXS',528)">XXS</div>
@@ -219,10 +199,10 @@
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (4k+ Reviews)</div></div>
-                <h2 class="product-name">Printed Kurta Set (ZW04)</h2>
-                <p class="label">Color:</p>
-                <div class="row"><div class="box active">Pink</div></div>
+                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (4.4k+ Reviews)</div></div>
+                <h2 class="product-name">Printed Kurta Set</h2>
+                <div class="admin-ref">ZW04</div>
+                <p class="label">Color: <span style="color:white; font-weight:400; text-transform:none;">Pink</span></p>
                 <p class="label">Sizes:</p>
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW04','XS',353)">XS</div>
@@ -250,12 +230,13 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.0 (2k+ Reviews)</div></div>
-                <h2 class="product-name">Designer Kurta Set (ZW05)</h2>
+                <h2 class="product-name">Designer Kurta Set</h2>
+                <div class="admin-ref">ZW05</div>
                 <p class="label">Colors:</p>
                 <div class="row">
                     <div class="box active" onclick="selectOption(this,'ZW05','color','Purple')">Purple</div>
                     <div class="box" onclick="selectOption(this,'ZW05','color','Pink')">Pink</div>
-                    <div class="box" onclick="selectOption(this,'ZW05','color','Aqua Blue')">Aqua Blue</div>
+                    <div class="box" onclick="selectOption(this,'ZW05','color','Cyan Blue')">Cyan Blue</div>
                     <div class="box" onclick="selectOption(this,'ZW05','color','Black')">Black</div>
                 </div>
                 <p class="label">Sizes:</p>
@@ -283,7 +264,8 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.0 (800+ Reviews)</div></div>
-                <h2 class="product-name">Trendy Designer Kurti (ZW06)</h2>
+                <h2 class="product-name">Trendy Designer Kurti</h2>
+                <div class="admin-ref">ZW06</div>
                 <p class="label">Colors:</p>
                 <div class="row">
                     <div class="box active" onclick="selectOption(this,'ZW06','color','Aqua Blue')">Aqua Blue</div>
@@ -316,7 +298,8 @@
             </div>
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.3 (2k+ Reviews)</div></div>
-                <h2 class="product-name">Kurta Bottomwear (ZW07)</h2>
+                <h2 class="product-name">Kurta Bottom Set</h2>
+                <div class="admin-ref">ZW07</div>
                 <p class="label">Colors:</p>
                 <div class="row">
                     <div class="box active" onclick="selectOption(this,'ZW07','color','Aqua Blue/White')">Aqua Blue/White</div>
@@ -332,7 +315,7 @@
                     <div class="box" onclick="selectPrice(this,'ZW07','XL',476)">XL</div>
                 </div>
                 <div><span class="price-now" id="price-zw07">₹---</span><span class="price-old">₹799</span></div>
-                <a href="#" onclick="order(event,'ZW07','Kurta Bottomwear Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <a href="#" onclick="order(event,'ZW07','Kurta Bottom Set')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
     </section>
