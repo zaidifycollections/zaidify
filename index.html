@@ -10,6 +10,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--white); font-family: 'Poppins', sans-serif; overflow-x: hidden; width: 100%; -webkit-font-smoothing: antialiased; }
         
+        /* Navigation */
         nav { width: 100%; padding: 12px 6%; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); position: fixed; top: 0; z-index: 9999; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .logo-box { display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; font-family: 'Bebas Neue'; font-size: 1.4rem; }
         .logo-img { height: 30px; }
@@ -17,30 +18,38 @@
         .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1rem; }
         .shop-now-btn { background: var(--pink); padding: 8px 16px; border-radius: 5px; font-weight: 800; text-decoration: none; color: white; }
         
+        /* Hero */
         .hero { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
         .hero-logo { width: 100px; margin-bottom: 15px; filter: drop-shadow(0 0 15px var(--pink)); }
         .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3rem, 12vw, 6rem); letter-spacing: 8px; }
 
+        /* General Sections */
         section { padding: 60px 6%; width: 100%; max-width: 1200px; margin: 0 auto; }
         .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 8vw, 3.5rem); margin-bottom: 30px; color: var(--pink); letter-spacing: 2px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .card { background: rgba(255,255,255,0.03); padding: 50px 20px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: white; transition: 0.3s; }
+        .card h3 { font-family: 'Bebas Neue'; font-size: 2.2rem; }
+        .card.inactive { opacity: 0.3; cursor: not-allowed; }
 
-        /* Hidden Reference Style */
-        .admin-ref { display: none; }
-
+        /* Product Layout */
         .p-wrapper { display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.02); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 60px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
         .p-img-box { flex: 1; min-width: 350px; position: relative; height: 550px; }
         .p-content { flex: 1.2; padding: 40px; min-width: 350px; display: flex; flex-direction: column; justify-content: center; }
         
+        /* Slider */
         .slider-container { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; }
         .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; }
         .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
         .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
         .prev { left: 15px; } .next { right: 15px; }
 
+        /* Product Details UI */
         .rating-box { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
         .stars { color: var(--gold); }
         .rev-count { color: rgba(255,255,255,0.4); font-size: 0.85rem; }
         .product-name { font-size: 2.2rem; margin: 5px 0; font-weight: 700; }
+        .admin-ref { display: none; }
         
         .label { font-size: 0.9rem; font-weight: 700; margin-top: 15px; color: var(--pink); text-transform: uppercase; letter-spacing: 1px; }
         .row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 15px 0; }
@@ -51,11 +60,18 @@
         .price-old { text-decoration: line-through; opacity: 0.3; font-size: 1.3rem; margin-left: 12px; }
         .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 20px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-top: 20px; transition: 0.3s; }
 
+        /* Modal Styles */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .modal-card { background: #08020f; border: 1px solid var(--pink); padding: 30px; border-radius: 20px; max-width: 500px; width: 100%; position: relative; box-shadow: 0 0 30px var(--pink); color: white; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: var(--pink); font-weight: bold; }
+        .policy-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-family: 'Bebas Neue'; letter-spacing: 2px; margin: 40px auto; display: block; }
+
         @media (max-width: 768px) {
             .p-wrapper { flex-direction: column; }
             .p-img-box { height: 400px; }
             .p-content { padding: 30px 20px; text-align: center; }
             .row { justify-content: center; }
+            .nav-links a:not(.shop-now-btn) { display: none; }
         }
     </style>
 </head>
@@ -64,8 +80,9 @@
     <nav>
         <a href="#" class="logo-box"><img src="logo.png" class="logo-img"><span>ZAIDIFY</span></a>
         <div class="nav-links">
+            <a href="#about-sec">ABOUT</a>
             <a href="#women">WOMEN</a>
-            <a href="https://wa.me/918655171445" class="shop-now-btn">WHATSAPP ORDER</a>
+            <a href="#women" class="shop-now-btn">SHOP NOW</a>
         </div>
     </nav>
 
@@ -75,7 +92,32 @@
         <p>PREMIUM ETHNIC COLLECTIONS</p>
     </header>
 
- <section id="women">
+    <section id="about-sec">
+        <h2 class="section-title">THE BRAND</h2>
+        <p style="text-align:center; opacity: 0.8; line-height: 1.8; font-size: 1.1rem;">
+            Zaidify Collections specialize in handcrafted ethnic wear, combining premium cotton fabrics with timeless Batik prints for the modern wardrobe.
+        </p>
+    </section>
+
+    <section id="categories">
+        <h2 class="section-title">OUR CATEGORIES</h2>
+        <div class="grid">
+            <a href="#women" class="card">
+                <h3>WOMEN</h3>
+                <p>Kurtas & premium sets</p>
+            </a>
+            <div class="card inactive">
+                <h3>MEN</h3>
+                <p>Coming Soon</p>
+            </div>
+            <div class="card inactive">
+                <h3>KIDS</h3>
+                <p>Coming Soon</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="women">
         <h2 class="section-title">WOMEN'S ARRIVALS</h2>
 
         <div class="p-wrapper" id="zw01">
@@ -218,125 +260,36 @@
             </div>
         </div>
 
-        <div class="p-wrapper" id="zw05">
-            <div class="p-img-box">
-                <div class="slider-container" id="slider-zw05">
-                    <div class="slides">
-                        <img src="zw05/zw05-1.jpg"><img src="zw05/zw05-2.jpg"><img src="zw05/zw05-3.jpg"><img src="zw05/zw05-4.jpg"><img src="zw05/zw05-5.jpg"><img src="zw05/zw05-6.jpg">
-                    </div>
-                    <button class="slider-btn prev" onclick="moveSlide('slider-zw05', -1)">&#10094;</button>
-                    <button class="slider-btn next" onclick="moveSlide('slider-zw05', 1)">&#10095;</button>
-                </div>
-            </div>
-            <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.0 (2k+ Reviews)</div></div>
-                <h2 class="product-name">Designer Kurta Set</h2>
-                <div class="admin-ref">ZW05</div>
-                <p class="label">Colors:</p>
-                <div class="row">
-                    <div class="box active" onclick="selectOption(this,'ZW05','color','Purple')">Purple</div>
-                    <div class="box" onclick="selectOption(this,'ZW05','color','Pink')">Pink</div>
-                    <div class="box" onclick="selectOption(this,'ZW05','color','Cyan Blue')">Cyan Blue</div>
-                    <div class="box" onclick="selectOption(this,'ZW05','color','Black')">Black</div>
-                </div>
-                <p class="label">Sizes:</p>
-                <div class="row">
-                    <div class="box" onclick="selectPrice(this,'ZW05','XXS',498)">XXS</div>
-                    <div class="box" onclick="selectPrice(this,'ZW05','S',502)">S</div>
-                    <div class="box" onclick="selectPrice(this,'ZW05','M',514)">M</div>
-                    <div class="box" onclick="selectPrice(this,'ZW05','L',514)">L</div>
-                    <div class="box" onclick="selectPrice(this,'ZW05','XL',514)">XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW05','XXL',514)">XXL</div>
-                </div>
-                <div><span class="price-now" id="price-zw05">₹---</span><span class="price-old">₹899</span></div>
-                <a href="#" onclick="order(event,'ZW05','Designer Kurta Set')" class="wa-btn">ORDER ON WHATSAPP</a>
-            </div>
-        </div>
-
-        <div class="p-wrapper" id="zw06">
-            <div class="p-img-box">
-                <div class="slider-container" id="slider-zw06">
-                    <div class="slides">
-                        <img src="zw06/zw06-1.jpg"><img src="zw06/zw06-2.jpg"><img src="zw06/zw06-3.jpg"><img src="zw06/zw06-4.jpg"><img src="zw06/zw06-5.jpg"><img src="zw06/zw06-6.jpg"><img src="zw06/zw06-7.jpg"><img src="zw06/zw06-8.jpg"><img src="zw06/zw06-9.jpg">
-                    </div>
-                    <button class="slider-btn prev" onclick="moveSlide('slider-zw06', -1)">&#10094;</button>
-                    <button class="slider-btn next" onclick="moveSlide('slider-zw06', 1)">&#10095;</button>
-                </div>
-            </div>
-            <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.0 (800+ Reviews)</div></div>
-                <h2 class="product-name">Trendy Designer Kurti</h2>
-                <div class="admin-ref">ZW06</div>
-                <p class="label">Colors:</p>
-                <div class="row">
-                    <div class="box active" onclick="selectOption(this,'ZW06','color','Aqua Blue')">Aqua Blue</div>
-                    <div class="box" onclick="selectOption(this,'ZW06','color','Purple')">Purple</div>
-                    <div class="box" onclick="selectOption(this,'ZW06','color','Green')">Green</div>
-                    <div class="box" onclick="selectOption(this,'ZW06','color','Yellow')">Yellow</div>
-                    <div class="box" onclick="selectOption(this,'ZW06','color','Navy Blue')">Navy Blue</div>
-                </div>
-                <p class="label">Sizes:</p>
-                <div class="row">
-                    <div class="box" onclick="selectPrice(this,'ZW06','S',619)">S</div>
-                    <div class="box" onclick="selectPrice(this,'ZW06','M',619)">M</div>
-                    <div class="box" onclick="selectPrice(this,'ZW06','L',619)">L</div>
-                    <div class="box" onclick="selectPrice(this,'ZW06','XL',619)">XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW06','XXL',619)">XXL</div>
-                </div>
-                <div><span class="price-now" id="price-zw06">₹---</span><span class="price-old">₹999</span></div>
-                <a href="#" onclick="order(event,'ZW06','Trendy Designer Kurti')" class="wa-btn">ORDER ON WHATSAPP</a>
-            </div>
-        </div>
-
-        <div class="p-wrapper" id="zw07">
-            <div class="p-img-box">
-                <div class="slider-container" id="slider-zw07">
-                    <div class="slides">
-                        <img src="zw07/zw07-1.jpg"><img src="zw07/zw07-2.jpg"><img src="zw07/zw07-3.jpg"><img src="zw07/zw07-4.jpg">
-                    </div>
-                    <button class="slider-btn prev" onclick="moveSlide('slider-zw07', -1)">&#10094;</button>
-                    <button class="slider-btn next" onclick="moveSlide('slider-zw07', 1)">&#10095;</button>
-                </div>
-            </div>
-            <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.3 (2k+ Reviews)</div></div>
-                <h2 class="product-name">Kurta Bottomwear</h2>
-                <div class="admin-ref">ZW07</div>
-                <p class="label">Colors:</p>
-                <div class="row">
-                    <div class="box active" onclick="selectOption(this,'ZW07','color','Aqua Blue/White')">Aqua Blue/White</div>
-                    <div class="box" onclick="selectOption(this,'ZW07','color','Yellow/Blue')">Yellow/Blue</div>
-                </div>
-                <p class="label">Sizes:</p>
-                <div class="row">
-                    <div class="box" onclick="selectPrice(this,'ZW07','XXS',446)">XXS</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','XS',476)">XS</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','S',476)">S</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','M',476)">M</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','L',476)">L</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','XL',476)">XL</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','XXL',476)">XXL</div>
-                </div>
-                <div><span class="price-now" id="price-zw07">₹---</span><span class="price-old">₹799</span></div>
-                <a href="#" onclick="order(event,'ZW07','Kurta Bottomwear')" class="wa-btn">ORDER ON WHATSAPP</a>
-            </div>
-        </div>
-
         <button class="policy-btn" onclick="toggleModal(true)">Return & Exchange Policy</button>
     </section>
-    </section>
+
+    <div class="modal-overlay" id="policyModal">
+        <div class="modal-card">
+            <span class="close-modal" onclick="toggleModal(false)">&times;</span>
+            <h2 style="font-family:'Bebas Neue'; color:var(--pink); margin-bottom:15px; font-size:2rem;">Return & Exchange Policy</h2>
+            <div style="font-size:0.85rem; line-height:1.6; opacity:0.9; font-family:'Poppins', sans-serif;">
+                <p>We want you to be completely satisfied with your purchase! If something isn't right, here is how we can help:</p><br>
+                <p><b>7-Day Easy Returns:</b> You have 7 days from the date of delivery to initiate a return or exchange.</p>
+                <p><b>Unboxing Video (Required):</b> To ensure a smooth process, please record a continuous unboxing video when you first open your package. This helps us verify the condition of the item as it arrived.</p>
+                <p><b>Defect Reporting:</b> If you notice a defect, take clear photos and videos of the specific issue.</p><br>
+                <p><b>📲 How to Request a Return:</b> Simply send your unboxing video and photos of the defect to us via WhatsApp. Our team will review your request and guide you through the next steps immediately!</p>
+            </div>
+        </div>
+    </div>
 
     <script>
         let selections = { 
             'ZW01': { size: '', price: '', color: 'Grey' }, 
             'ZW02': { size: '', price: '', color: 'Navy Blue' }, 
             'ZW03': { size: '', price: '', color: 'Maroon' },
-            'ZW04': { size: '', price: '', color: 'Pink' },
-            'ZW05': { size: '', price: '', color: 'Purple' },
-            'ZW06': { size: '', price: '', color: 'Aqua Blue' },
-            'ZW07': { size: '', price: '', color: 'Aqua Blue/White' }
+            'ZW04': { size: '', price: '', color: 'Pink' }
         };
-        let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 'slider-zw04': 0, 'slider-zw05': 0, 'slider-zw06': 0, 'slider-zw07': 0 };
+        let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 'slider-zw04': 0 };
+
+        // Corrected Modal Toggle Function
+        function toggleModal(show) { 
+            document.getElementById('policyModal').style.display = show ? 'flex' : 'none'; 
+        }
 
         function moveSlide(id, step) {
             const slides = document.getElementById(id).querySelector('.slides');
@@ -362,7 +315,7 @@
         function order(e, id, name) {
             e.preventDefault();
             const d = selections[id];
-            if(!d.size) { alert("Please select a Size!"); return; }
+            if(!d.size || !d.color || !d.price) { alert("Please select both Color and Size!"); return; }
             const msg = `Hi Zaidify! I want to order:\n\n*Product:* ${name} (${id})\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
             window.open(`https://wa.me/918655171445?text=${encodeURIComponent(msg)}`, '_blank');
         }
