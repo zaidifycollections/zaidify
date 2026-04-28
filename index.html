@@ -6,15 +6,15 @@
     <title>Zaidify | Premium Ethnic Wear</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --pink: #ff00ff; --bg: #08020f; --nav-bg: #000; --gold: #ffd700; --white: #ffffff; }
+        :root { --pink: #ff00ff; --bg: #08020f; --nav-bg: #000; --white: #ffffff; }
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--white); font-family: 'Poppins', sans-serif; overflow-x: hidden; }
         
         nav { width: 100%; padding: 15px 6%; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); position: fixed; top: 0; z-index: 9999; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .logo-img { height: 40px; }
-        .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1.2rem; margin-left: 25px; letter-spacing: 1px; }
+        .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1.2rem; margin-left: 25px; }
 
-        .hero { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
+        .hero { height: 35vh; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
         .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3rem, 10vw, 5rem); letter-spacing: 8px; }
 
         section { padding: 40px 6%; max-width: 1200px; margin: 0 auto; }
@@ -40,7 +40,7 @@
         .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
         .box { border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.05); font-size: 0.85rem; }
         .box.active { background: var(--pink); border-color: var(--pink); font-weight: bold; }
-        .box.disabled { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
+        .box.disabled { opacity: 0.2; cursor: not-allowed; text-decoration: line-through; border: 1px dashed rgba(255,255,255,0.2); }
 
         .price-now { font-size: 3rem; font-weight: 900; margin-top: 20px; display: block; }
         .price-old { text-decoration: line-through; opacity: 0.4; font-size: 1.2rem; margin-left: 10px; }
@@ -105,8 +105,8 @@
                     <div class="box" onclick="setPrice(this,'ZW01','5XL',484)">5XL</div>
                     <div class="box" onclick="setPrice(this,'ZW01','6XL',484)">6XL</div>
                 </div>
-                <span class="price-now" id="p-zw01">₹--- <small class="price-old">₹899</small></span>
-                <a href="#" onclick="buy(event,'ZW01','Batik Print Set')" class="wa-btn">ORDER VIA WHATSAPP</a>
+                <span class="price-now" id="p-zw01">₹---</span>
+                <a href="#" onclick="buy(event,'ZW01','Batik Set')" class="wa-btn">ORDER VIA WHATSAPP</a>
             </div>
         </div>
 
@@ -139,8 +139,8 @@
                     <div class="box" onclick="setPrice(this,'ZW02','XL',396)">XL</div>
                     <div class="box" onclick="setPrice(this,'ZW02','5XL',396)">5XL</div>
                 </div>
-                <span class="price-now" id="p-zw02">₹--- <small class="price-old">₹799</small></span>
-                <a href="#" onclick="buy(event,'ZW02','Floral Kurta')" class="wa-btn">ORDER VIA WHATSAPP</a>
+                <span class="price-now" id="p-zw02">₹---</span>
+                <a href="#" onclick="buy(event,'ZW02','Floral Set')" class="wa-btn">ORDER VIA WHATSAPP</a>
             </div>
         </div>
 
@@ -257,18 +257,17 @@
                 <div class="row">
                     <div class="box" onclick="setOpt(this,'ZW07','c','Teal Blue')">Teal Blue</div>
                     <div class="box" onclick="setOpt(this,'ZW07','c','Aqua Blue')">Aqua Blue</div>
-                    <div class="box" onclick="setOpt(this,'ZW07','c','Beige')">Beige</div>
                 </div>
                 <p class="label">Size:</p>
                 <div class="row">
-                    <div class="box" onclick="setPrice(this,'ZW07','XXS',446)">XXS</div>
+                    <div class="box" onclick="setPrice(this,'ZW07','XS',476)">XS</div>
                     <div class="box" onclick="setPrice(this,'ZW07','S',476)">S</div>
                     <div class="box" onclick="setPrice(this,'ZW07','M',476)">M</div>
                     <div class="box" onclick="setPrice(this,'ZW07','L',476)">L</div>
                     <div class="box" onclick="setPrice(this,'ZW07','XL',476)">XL</div>
                     <div class="box" onclick="setPrice(this,'ZW07','XXL',476)">XXL</div>
                 </div>
-                <span class="price-now" id="p-zw07">₹--- <small class="price-old">₹699</small></span>
+                <span class="price-now" id="p-zw07">₹476</span>
                 <a href="#" onclick="buy(event,'ZW07','Trendy Kurta')" class="wa-btn">ORDER VIA WHATSAPP</a>
             </div>
         </div>
@@ -279,7 +278,7 @@
             'ZW01': {s:'', p:'', c:''}, 'ZW02': {s:'', p:'', c:''}, 
             'ZW03': {s:'', p:'558', c:'Maroon'}, 'ZW04': {s:'', p:'353', c:'Pink'},
             'ZW05': {s:'', p:'498', c:''}, 'ZW06': {s:'', p:'619', c:''},
-            'ZW07': {s:'', p:'', c:'' }
+            'ZW07': {s:'', p:'476', c:'' }
         };
         let pos = { 's-zw01': 0, 's-zw02': 0, 's-zw06': 0, 's-zw07': 0 };
 
