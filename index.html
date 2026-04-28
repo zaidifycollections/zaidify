@@ -12,63 +12,62 @@
         
         /* Navigation */
         nav { width: 100%; padding: 10px 6%; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); position: fixed; top: 0; z-index: 9999; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .logo-box { display: flex; align-items: center; gap: 8px; text-decoration: none; color: white; font-family: 'Bebas Neue'; font-size: 1.3rem; }
-        .logo-img { height: 30px; }
+        .logo-box { display: flex; align-items: center; gap: 8px; text-decoration: none; color: white; font-family: 'Bebas Neue'; font-size: 1.2rem; }
+        .logo-img { height: 28px; }
         .nav-links { display: flex; gap: 15px; align-items: center; }
-        .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 0.9rem; letter-spacing: 1px; }
-        .shop-now-btn { background: var(--pink); padding: 6px 14px; border-radius: 4px; font-weight: 800; text-decoration: none; color: white; }
+        .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 0.85rem; letter-spacing: 1px; }
+        .shop-now-btn { background: var(--pink); padding: 6px 12px; border-radius: 4px; font-weight: 800; text-decoration: none; color: white; }
         
-        /* Hero */
-        .hero { height: 35vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 50px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
-        .hero-logo { width: 100px; margin-bottom: 10px; filter: drop-shadow(0 0 15px var(--pink)); }
-        .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3rem, 10vw, 5.5rem); letter-spacing: 8px; line-height: 1; }
-        .hero p { font-size: 0.8rem; letter-spacing: 3px; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+        /* Hero - 17 Scale Height */
+        .hero { height: 30vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 50px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
+        .hero-logo { width: 85px; margin-bottom: 10px; filter: drop-shadow(0 0 15px var(--pink)); }
+        .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 8vw, 4.5rem); letter-spacing: 6px; line-height: 1; }
+        .hero p { font-size: 0.75rem; letter-spacing: 3px; color: rgba(255,255,255,0.5); text-transform: uppercase; }
 
-        section { padding: 40px 6%; width: 100%; max-width: 1100px; margin: 0 auto; }
-        .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: 2.8rem; margin-bottom: 30px; color: var(--pink); letter-spacing: 2px; }
+        section { padding: 30px 6%; width: 100%; max-width: 1050px; margin: 0 auto; }
+        .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: 2.5rem; margin-bottom: 25px; color: var(--pink); letter-spacing: 2px; }
         
-        /* Products - Reduced size settings */
-        .p-wrapper { display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.03); border-radius: 25px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 60px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-        .p-img-box { flex: 1; min-width: 350px; position: relative; height: 550px; background: #000; }
-        .p-content { flex: 1.2; padding: 35px; min-width: 350px; display: flex; flex-direction: column; justify-content: center; }
+        /* Categories */
+        .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 50px; }
+        .cat-card { height: 230px; border-radius: 15px; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 20px; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; transition: 0.4s; }
+        .cat-card:hover { transform: translateY(-5px); border-color: var(--pink); }
+        .cat-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.5; }
+        .cat-card h3 { font-family: 'Bebas Neue'; font-size: 1.8rem; color: #fff; text-shadow: 0 4px 10px #000; }
+
+        /* Products - Compacted */
+        .p-wrapper { display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.03); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 50px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        .p-img-box { flex: 1; min-width: 320px; position: relative; height: 500px; background: #000; }
+        .p-content { flex: 1.2; padding: 30px; min-width: 320px; display: flex; flex-direction: column; justify-content: center; }
         
-        /* Slider */
+        /* Sliders */
         .slider-container { position: relative; width: 100%; height: 100%; overflow: hidden; }
         .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; }
         .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
-        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .prev { left: 15px; } .next { right: 15px; }
+        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .prev { left: 10px; } .next { right: 10px; }
 
-        /* Typography */
-        .rating-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-        .stars { color: var(--gold); font-size: 0.9rem; }
-        .rev-text { color: rgba(255,255,255,0.4); font-size: 0.75rem; }
-        .p-title { font-size: 2.2rem; font-weight: 900; line-height: 1.1; }
-        .p-code { font-family: 'Bebas Neue'; color: rgba(255,255,255,0.25); font-size: 1rem; letter-spacing: 1.5px; margin-bottom: 20px; display: block; }
+        .rating-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+        .stars { color: var(--gold); font-size: 0.8rem; }
+        .rev-text { color: rgba(255,255,255,0.4); font-size: 0.7rem; }
+        .p-title { font-size: 2rem; font-weight: 900; line-height: 1.1; }
+        .p-code { font-family: 'Bebas Neue'; color: rgba(255,255,255,0.2); font-size: 0.9rem; letter-spacing: 1.5px; margin-bottom: 15px; display: block; }
         
-        /* Options */
-        .opt-label { font-size: 0.75rem; font-weight: 800; color: var(--pink); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; display: block; }
-        .opt-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 25px; }
-        .opt-box { border: 1px solid rgba(255,255,255,0.15); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; background: rgba(255,255,255,0.02); min-width: 48px; text-align: center; }
+        .opt-label { font-size: 0.7rem; font-weight: 800; color: var(--pink); text-transform: uppercase; letter-spacing: 1.5px; margin: 10px 0 8px 0; display: block; }
+        .opt-grid { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 15px; }
+        .opt-box { border: 1px solid rgba(255,255,255,0.15); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600; background: rgba(255,255,255,0.02); min-width: 44px; text-align: center; }
         .opt-box.active { background: var(--pink); border-color: var(--pink); color: white; }
         .opt-box.na { opacity: 0.2; cursor: not-allowed; text-decoration: line-through; }
 
-        /* Price */
-        .price-wrap { margin: 15px 0 25px 0; display: flex; align-items: baseline; gap: 12px; }
-        .p-now { font-size: 2.8rem; font-weight: 900; }
-        .p-old { font-size: 1.3rem; text-decoration: line-through; opacity: 0.2; }
+        .price-wrap { margin: 10px 0 20px 0; display: flex; align-items: baseline; gap: 10px; }
+        .p-now { font-size: 2.5rem; font-weight: 900; }
+        .p-old { font-size: 1.2rem; text-decoration: line-through; opacity: 0.15; }
         
-        .order-btn { display: block; background: #25d366; color: white; text-align: center; padding: 18px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.1rem; border-bottom: 4px solid #128c7e; transition: 0.2s; }
-        .order-btn:active { transform: translateY(2px); border-bottom-width: 2px; }
-
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .modal-inner { background: #0b0414; border: 1px solid var(--pink); padding: 30px; border-radius: 20px; max-width: 450px; text-align: center; }
-        .policy-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: 'Bebas Neue'; margin: 40px auto; display: block; }
+        .order-btn { display: block; background: #25d366; color: white; text-align: center; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 900; font-size: 1rem; border-bottom: 4px solid #128c7e; }
 
         @media (max-width: 850px) {
             .p-wrapper { flex-direction: column; }
-            .p-img-box { height: 420px; min-width: 100%; }
-            .p-content { padding: 30px 20px; text-align: center; }
+            .p-img-box { height: 380px; min-width: 100%; }
+            .p-content { padding: 25px 15px; text-align: center; }
             .opt-grid, .price-wrap { justify-content: center; }
         }
     </style>
@@ -78,21 +77,29 @@
     <nav>
         <a href="#" class="logo-box"><img src="logo.png" class="logo-img"><span>ZAIDIFY</span></a>
         <div class="nav-links">
+            <a href="#categories">EXPLORE</a>
             <a href="#women">SHOP</a>
-            <a href="https://wa.me/918655171445" class="shop-now-btn">WHATSAPP ORDER</a>
+            <a href="https://wa.me/918655171445" class="shop-now-btn">WHATSAPP</a>
         </div>
     </nav>
 
     <header class="hero">
         <img src="logo.png" class="hero-logo">
         <h1>ZAIDIFY</h1>
-        <p>Boutique Collection</p>
+        <p>Premium Boutique</p>
     </header>
 
-    <section id="women">
-        <h2 class="section-title">LATEST ARRIVALS</h2>
+    <section id="categories">
+        <h2 class="section-title">CATEGORIES</h2>
+        <div class="cat-grid">
+            <a href="#women" class="cat-card"><img src="Product photos/zw01-1.jpg"><h3>KURTA SETS</h3></a>
+            <a href="#women" class="cat-card"><img src="zw07/zw07-1.jpg"><h3>BOTTOMWEAR</h3></a>
+            <div class="cat-card" style="filter: grayscale(1); opacity: 0.4;"><img src="zw06/zw06-2.jpg"><h3>COMING SOON</h3></div>
+        </div>
+    </section>
 
-        <div class="p-wrapper">
+    <section id="women">
+        <div class="p-wrapper" id="zw01">
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw01">
                     <div class="slides">
@@ -104,29 +111,29 @@
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-row"><div class="stars">★★★★★</div><div class="rev-text">4.1 (6.8k+ Reviews)</div></div>
-                <h1 class="p-title">Batik Print Suit Set</h1>
-                <span class="p-code">Item Ref: ZW01</span>
+                <div class="rating-row"><div class="stars">★★★★★</div><div class="rev-text">4.1 (6k+ Reviews)</div></div>
+                <h1 class="p-title">Cotton Kurta Set</h1>
+                <span class="p-code">Item: ZW01</span>
+                <span class="opt-label">Style:</span>
+                <div class="opt-grid"><div class="opt-box active" onclick="selectOpt(this)">Batik Print</div><div class="opt-box" onclick="selectOpt(this)">Navy Indigo</div></div>
                 <span class="opt-label">Select Size:</span>
                 <div class="opt-grid">
                     <div class="opt-box" onclick="setPrice('ZW01','XXS',294,this)">XXS</div>
-                    <div class="opt-box na">XS</div>
+                    <div class="opt-box" onclick="setPrice('ZW01','XS',359,this)">XS</div>
                     <div class="opt-box" onclick="setPrice('ZW01','S',484,this)">S</div>
                     <div class="opt-box" onclick="setPrice('ZW01','M',484,this)">M</div>
                     <div class="opt-box" onclick="setPrice('ZW01','L',484,this)">L</div>
                     <div class="opt-box" onclick="setPrice('ZW01','XL',484,this)">XL</div>
                     <div class="opt-box" onclick="setPrice('ZW01','XXL',484,this)">XXL</div>
-                    <div class="opt-box" onclick="setPrice('ZW01','3XL',510,this)">3XL</div>
-                    <div class="opt-box" onclick="setPrice('ZW01','4XL',510,this)">4XL</div>
-                    <div class="opt-box" onclick="setPrice('ZW01','5XL',510,this)">5XL</div>
-                    <div class="opt-box" onclick="setPrice('ZW01','6XL',510,this)">6XL</div>
+                    <div class="opt-box" onclick="setPrice('ZW01','3XL',484,this)">3XL</div>
+                    <div class="opt-box" onclick="setPrice('ZW01','6XL',484,this)">6XL</div>
                 </div>
                 <div class="price-wrap"><span class="p-now" id="price-zw01">₹---</span><span class="p-old">₹899</span></div>
-                <a href="#" onclick="buy('ZW01','Batik Set',event)" class="order-btn">ORDER VIA WHATSAPP</a>
+                <a href="#" onclick="buy('ZW01','Cotton Set',event)" class="order-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
 
-        <div class="p-wrapper">
+        <div class="p-wrapper" id="zw02">
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw02">
                     <div class="slides">
@@ -138,58 +145,68 @@
             </div>
             <div class="p-content">
                 <div class="rating-row"><div class="stars">★★★★★</div><div class="rev-text">4.1 (19k+ Reviews)</div></div>
-                <h1 class="p-title">Floral Kurta Set</h1>
-                <span class="p-code">Item Ref: ZW02</span>
+                <h1 class="p-title">Shree Harji Kurti</h1>
+                <span class="p-code">Item: ZW02</span>
+                <span class="opt-label">Color:</span>
+                <div class="opt-grid"><div class="opt-box active" onclick="selectOpt(this)">Floral Pink</div><div class="opt-box" onclick="selectOpt(this)">Sky Blue</div></div>
                 <span class="opt-label">Select Size:</span>
                 <div class="opt-grid">
+                    <div class="opt-box" onclick="setPrice('ZW02','XXS',312,this)">XXS</div>
+                    <div class="opt-box" onclick="setPrice('ZW02','XS',387,this)">XS</div>
                     <div class="opt-box" onclick="setPrice('ZW02','S',394,this)">S</div>
                     <div class="opt-box" onclick="setPrice('ZW02','M',396,this)">M</div>
                     <div class="opt-box" onclick="setPrice('ZW02','L',406,this)">L</div>
                     <div class="opt-box" onclick="setPrice('ZW02','XL',416,this)">XL</div>
                     <div class="opt-box" onclick="setPrice('ZW02','XXL',426,this)">XXL</div>
+                    <div class="opt-box" onclick="setPrice('ZW02','3XL',436,this)">3XL</div>
+                    <div class="opt-box" onclick="setPrice('ZW02','5XL',446,this)">5XL</div>
                 </div>
                 <div class="price-wrap"><span class="p-now" id="price-zw02">₹---</span><span class="p-old">₹799</span></div>
-                <a href="#" onclick="buy('ZW02','Floral Kurta',event)" class="order-btn">ORDER VIA WHATSAPP</a>
+                <a href="#" onclick="buy('ZW02','Shree Harji',event)" class="order-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
 
-        <div class="p-wrapper">
+        <div class="p-wrapper" id="zw03">
             <div class="p-img-box"><img src="zw03-1.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
             <div class="p-content">
                 <div class="rating-row"><div class="stars">★★★★★</div><div class="rev-text">4.1 (900+ Reviews)</div></div>
-                <h1 class="p-title">Cotton Floral Set</h1>
-                <span class="p-code">Item Ref: ZW03</span>
+                <h1 class="p-title">Kurti Pant Set</h1>
+                <span class="p-code">Item: ZW03</span>
+                <span class="opt-label">Color:</span>
+                <div class="opt-grid"><div class="opt-box active">Ivory Floral</div></div>
                 <span class="opt-label">Select Size:</span>
                 <div class="opt-grid">
-                    <div class="opt-box" onclick="setPrice('ZW03','S',558,this)">S</div>
-                    <div class="opt-box" onclick="setPrice('ZW03','M',558,this)">M</div>
-                    <div class="opt-box" onclick="setPrice('ZW03','L',558,this)">L</div>
-                    <div class="opt-box na">XXL</div>
+                    <div class="opt-box" onclick="setPrice('ZW03','XXS-3XL',528,this)">XXS-3XL</div>
+                    <div class="opt-box na">4XL-6XL</div>
                 </div>
-                <div class="price-wrap"><span class="p-now" id="price-zw03">₹558</span><span class="p-old">₹1,199</span></div>
-                <a href="#" onclick="buy('ZW03','Cotton Floral',event)" class="order-btn">ORDER VIA WHATSAPP</a>
+                <div class="price-wrap"><span class="p-now" id="price-zw03">₹528</span><span class="p-old">₹1,199</span></div>
+                <a href="#" onclick="buy('ZW03','Pant Set',event)" class="order-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
 
-        <div class="p-wrapper">
+        <div class="p-wrapper" id="zw04">
             <div class="p-img-box"><img src="zw04/zw04-1.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
             <div class="p-content">
-                <div class="rating-row"><div class="stars">★★★★★</div><div class="rev-text">4.1 (4.4k+ Reviews)</div></div>
-                <h1 class="p-title">Super Printed Kurta</h1>
-                <span class="p-code">Item Ref: ZW04</span>
+                <div class="rating-row"><div class="stars">★★★★★</div><div class="rev-text">4.1 (4k+ Reviews)</div></div>
+                <h1 class="p-title">Super Printed Set</h1>
+                <span class="p-code">Item: ZW04</span>
+                <span class="opt-label">Style:</span>
+                <div class="opt-grid"><div class="opt-box active" onclick="selectOpt(this)">Pattern A</div><div class="opt-box" onclick="selectOpt(this)">Pattern B</div></div>
                 <span class="opt-label">Select Size:</span>
                 <div class="opt-grid">
+                    <div class="opt-box" onclick="setPrice('ZW04','XS',353,this)">XS</div>
+                    <div class="opt-box" onclick="setPrice('ZW04','S',373,this)">S</div>
                     <div class="opt-box" onclick="setPrice('ZW04','M',400,this)">M</div>
                     <div class="opt-box" onclick="setPrice('ZW04','L',440,this)">L</div>
                     <div class="opt-box" onclick="setPrice('ZW04','XL',472,this)">XL</div>
-                    <div class="opt-box" onclick="setPrice('ZW04','XXL',479,this)">XXL</div>
+                    <div class="opt-box" onclick="setPrice('ZW04','XXL+',479,this)">XXL-3XL</div>
                 </div>
-                <div class="price-wrap"><span class="p-now" id="price-zw04">₹---</span><span class="p-old">₹699</span></div>
-                <a href="#" onclick="buy('ZW04','Printed Kurta',event)" class="order-btn">ORDER VIA WHATSAPP</a>
+                <div class="price-wrap"><span class="p-now" id="price-zw04">₹---</span><span class="p-old">₹799</span></div>
+                <a href="#" onclick="buy('ZW04','Super Printed',event)" class="order-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
 
-        <div class="p-wrapper">
+        <div class="p-wrapper" id="zw05">
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw05">
                     <div class="slides">
@@ -201,22 +218,22 @@
             </div>
             <div class="p-content">
                 <div class="rating-row"><div class="stars">★★★★★</div><div class="rev-text">4.0 (2k+ Reviews)</div></div>
-                <h1 class="p-title">Designer Kurta Set</h1>
-                <span class="p-code">Item Ref: ZW05</span>
+                <h1 class="p-title">Kurta Set Z5</h1>
+                <span class="p-code">Item: ZW05</span>
+                <span class="opt-label">Color:</span>
+                <div class="opt-grid"><div class="opt-box active" onclick="selectOpt(this)">Earthy Brown</div><div class="opt-box" onclick="selectOpt(this)">Teal</div></div>
                 <span class="opt-label">Select Size:</span>
                 <div class="opt-grid">
                     <div class="opt-box" onclick="setPrice('ZW05','XXS',498,this)">XXS</div>
-                    <div class="opt-box na">XS</div>
                     <div class="opt-box" onclick="setPrice('ZW05','S',502,this)">S</div>
-                    <div class="opt-box" onclick="setPrice('ZW05','M',514,this)">M</div>
-                    <div class="opt-box" onclick="setPrice('ZW05','L',514,this)">L</div>
+                    <div class="opt-box" onclick="setPrice('ZW05','M-XL',514,this)">M-XL</div>
                 </div>
-                <div class="price-wrap"><span class="p-now" id="price-zw05">₹---</span><span class="p-old">₹699</span></div>
-                <a href="#" onclick="buy('ZW05','Designer Set',event)" class="order-btn">ORDER VIA WHATSAPP</a>
+                <div class="price-wrap"><span class="p-now" id="price-zw05">₹---</span><span class="p-old">₹899</span></div>
+                <a href="#" onclick="buy('ZW05','Kurta Set',event)" class="order-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
 
-        <div class="p-wrapper">
+        <div class="p-wrapper" id="zw06">
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw06">
                     <div class="slides">
@@ -228,14 +245,16 @@
             </div>
             <div class="p-content">
                 <div class="rating-row"><div class="stars">★★★★★</div><div class="rev-text">4.0 (800+ Reviews)</div></div>
-                <h1 class="p-title">Dupatta Sharara Set</h1>
-                <span class="p-code">Item Ref: ZW06</span>
-                <div class="price-wrap"><span class="p-now">₹619</span><span class="p-old">₹799</span></div>
-                <a href="https://wa.me/918655171445?text=Order ZW06" class="order-btn">ORDER VIA WHATSAPP</a>
+                <h1 class="p-title">Trendy Design Kurti</h1>
+                <span class="p-code">Item: ZW06</span>
+                <span class="opt-label">Size:</span>
+                <div class="opt-grid"><div class="opt-box active">S-XL</div></div>
+                <div class="price-wrap"><span class="p-now">₹619</span><span class="p-old">₹999</span></div>
+                <a href="https://wa.me/918655171445?text=Order ZW06" class="order-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
 
-        <div class="p-wrapper">
+        <div class="p-wrapper" id="zw07">
             <div class="p-img-box">
                 <div class="slider-container" id="slider-zw07">
                     <div class="slides">
@@ -247,51 +266,44 @@
             </div>
             <div class="p-content">
                 <div class="rating-row"><div class="stars">★★★★★</div><div class="rev-text">4.3 (2k+ Reviews)</div></div>
-                <h1 class="p-title">Trendy Kurta Bottom</h1>
-                <span class="p-code">Item Ref: ZW07</span>
+                <h1 class="p-title">Kurta Bottomwear</h1>
+                <span class="p-code">Item: ZW07</span>
+                <span class="opt-label">Color:</span>
+                <div class="opt-grid"><div class="opt-box active" onclick="selectOpt(this)">White/Black</div><div class="opt-box" onclick="selectOpt(this)">Beige</div></div>
                 <span class="opt-label">Select Size:</span>
                 <div class="opt-grid">
                     <div class="opt-box" onclick="setPrice('ZW07','XXS',446,this)">XXS</div>
-                    <div class="opt-box" onclick="setPrice('ZW07','S',476,this)">S</div>
-                    <div class="opt-box" onclick="setPrice('ZW07','M',476,this)">M</div>
-                    <div class="opt-box" onclick="setPrice('ZW07','L',476,this)">L</div>
-                    <div class="opt-box" onclick="setPrice('ZW07','XL',476,this)">XL</div>
+                    <div class="opt-box" onclick="setPrice('ZW07','XS-XL',476,this)">XS-XL</div>
                 </div>
-                <div class="price-wrap"><span class="p-now" id="price-zw07">₹---</span><span class="p-old">₹699</span></div>
-                <a href="#" onclick="buy('ZW07','Trendy Bottom',event)" class="order-btn">ORDER VIA WHATSAPP</a>
+                <div class="price-wrap"><span class="p-now" id="price-zw07">₹---</span><span class="p-old">₹799</span></div>
+                <a href="#" onclick="buy('ZW07','Trendy Bottom',event)" class="order-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
-
     </section>
 
-    <section id="about" style="text-align:center;">
-        <button class="policy-btn" onclick="toggleM(true)">VIEW STORE POLICY</button>
-    </section>
-
-    <div class="modal" id="pModal">
-        <div class="modal-inner">
-            <span style="float:right; cursor:pointer; color:var(--pink);" onclick="toggleM(false)">CLOSE ×</span>
-            <h2 style="font-family:'Bebas Neue'; color:var(--pink); font-size:2rem; margin-top:20px;">STORE POLICY</h2>
-            <p style="line-height:1.6; font-size:0.85rem; margin-top:15px; opacity:0.8;">7-Day Easy Returns. Unboxing video required for verification of issues.</p>
-        </div>
-    </div>
+    <footer style="text-align:center; padding: 40px 0; opacity: 0.3; font-size: 0.7rem;">
+        <p>&copy; 2026 ZAIDIFY COLLECTIONS</p>
+    </footer>
 
     <script>
         let cart = { 
             'ZW01': { size: '', price: '' }, 'ZW02': { size: '', price: '' }, 
-            'ZW03': { size: 'S', price: '558' }, 'ZW04': { size: '', price: '' },
-            'ZW05': { size: '', price: '' }, 'ZW06': { size: 'L', price: '619' },
+            'ZW03': { size: 'XXS-3XL', price: '528' }, 'ZW04': { size: '', price: '' },
+            'ZW05': { size: '', price: '' }, 'ZW06': { size: 'S-XL', price: '619' },
             'ZW07': { size: '', price: '' }
         };
         let sliders = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw05': 0, 'slider-zw06': 0, 'slider-zw07': 0 };
 
-        function toggleM(s) { document.getElementById('pModal').style.display = s ? 'flex' : 'none'; }
-        
         function moveSlide(id, d) {
             const wrap = document.getElementById(id).querySelector('.slides');
             const total = wrap.querySelectorAll('img').length;
             sliders[id] = (sliders[id] + d + total) % total;
             wrap.style.transform = `translateX(-${sliders[id] * 100}%)`;
+        }
+
+        function selectOpt(el) {
+            el.parentElement.querySelectorAll('.opt-box').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
         }
 
         function setPrice(id, size, pr, el) {
@@ -305,7 +317,8 @@
         function buy(id, name, e) {
             e.preventDefault();
             if(!cart[id].size) return alert("Please select a size first!");
-            const msg = `Order Request:\nItem: ${name} [${id}]\nSize: ${cart[id].size}\nPrice: ₹${cart[id].price}`;
+            const color = document.querySelector(`#${id.toLowerCase()} .opt-grid .active`)?.innerText || '';
+            const msg = `Order: ${name} [${id}]\nSize: ${cart[id].size}\nPrice: ₹${cart[id].price}\nColor: ${color}`;
             window.open(`https://wa.me/918655171445?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
