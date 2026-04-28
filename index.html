@@ -38,7 +38,7 @@
         .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
         .prev { left: 15px; } .next { right: 15px; }
 
-        /* Product Details UI */
+        /* UI Elements */
         .rating-box { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
         .stars { color: var(--gold); }
         .rev-count { color: rgba(255,255,255,0.4); font-size: 0.85rem; }
@@ -46,14 +46,13 @@
         
         .label { font-size: 0.9rem; font-weight: 700; margin-top: 15px; color: var(--pink); text-transform: uppercase; letter-spacing: 1px; }
         .row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 15px 0; }
-        .box { border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.75rem; text-align: center; min-width: 45px; transition: 0.2s; }
+        .box { border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; text-align: center; min-width: 50px; transition: 0.2s; }
         .box.active { background: var(--pink); border-color: var(--pink); color: white; transform: scale(1.05); }
 
         .price-now { font-size: 2.8rem; font-weight: 900; }
         .price-old { text-decoration: line-through; opacity: 0.3; font-size: 1.3rem; margin-left: 12px; }
         .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 20px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-top: 20px; transition: 0.3s; }
 
-        /* Modal Styles */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
         .modal-card { background: #08020f; border: 1px solid var(--pink); padding: 30px; border-radius: 20px; max-width: 500px; width: 100%; position: relative; box-shadow: 0 0 30px var(--pink); }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: var(--pink); font-weight: bold; }
@@ -64,7 +63,6 @@
             .p-img-box { height: 400px; }
             .p-content { padding: 30px 20px; text-align: center; }
             .row { justify-content: center; }
-            .nav-links a:not(.shop-now-btn) { display: none; }
         }
     </style>
 </head>
@@ -169,7 +167,7 @@
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (900+ Reviews)</div></div>
                 <h2 class="product-name">Cotton Floral Set</h2>
-                <p class="label">Color: <span style="color:white; text-transform:none;">Maroon</span></p>
+                <p class="label">Color: Maroon</p>
                 <p class="label">Size:</p>
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW03','XXS',558)">XXS</div>
@@ -197,7 +195,7 @@
             <div class="p-content">
                 <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (4,400+ 5-Stars)</div></div>
                 <h2 class="product-name">Super Printed Kurta Set</h2>
-                <p class="label">Color: <span style="color:white; text-transform:none;">Pink</span></p>
+                <p class="label">Color: Pink</p>
                 <p class="label">Size:</p>
                 <div class="row">
                     <div class="box" onclick="selectPrice(this,'ZW04','XS',353)">XS</div>
@@ -290,7 +288,7 @@
                 </div>
             </div>
             <div class="p-content">
-                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.3 (2000+ 5-Stars)</div></div>
+                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.3 (2000+ Reviews)</div></div>
                 <h2 class="product-name">Trendy Kurta with Bottomware</h2>
                 <p class="label">Color:</p>
                 <div class="row">
@@ -299,16 +297,16 @@
                 </div>
                 <p class="label">Size:</p>
                 <div class="row">
-                    <div class="box" onclick="selectPrice(this,'ZW07','XXS',446)">XXS (₹446)</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','XS',476)">XS (₹476)</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','S',476)">S (₹476)</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','M',476)">M (₹476)</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','L',476)">L (₹476)</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','XL',476)">XL (₹476)</div>
-                    <div class="box" onclick="selectPrice(this,'ZW07','2XL',476)">2XL (₹476)</div>
+                    <div class="box" onclick="selectPrice(this,'ZW07','XXS',446)">XXS</div>
+                    <div class="box" onclick="selectPrice(this,'ZW07','XS',476)">XS</div>
+                    <div class="box" onclick="selectPrice(this,'ZW07','S',476)">S</div>
+                    <div class="box" onclick="selectPrice(this,'ZW07','M',476)">M</div>
+                    <div class="box" onclick="selectPrice(this,'ZW07','L',476)">L</div>
+                    <div class="box" onclick="selectPrice(this,'ZW07','XL',476)">XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW07','2XL',476)">2XL</div>
                 </div>
                 <div><span class="price-now" id="price-zw07">₹---</span><span class="price-old">₹699</span></div>
-                <a href="#" onclick="order(event,'ZW07','Kurta with Bottomware')" class="wa-btn">ORDER ON WHATSAPP</a>
+                <a href="#" onclick="order(event,'ZW07','Trendy Kurta with Bottomware')" class="wa-btn">ORDER ON WHATSAPP</a>
             </div>
         </div>
 
@@ -333,17 +331,20 @@
         let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 'slider-zw04': 0, 'slider-zw05': 0, 'slider-zw06': 0, 'slider-zw07': 0 };
 
         function toggleModal(show) { document.getElementById('policyModal').style.display = show ? 'flex' : 'none'; }
+        
         function moveSlide(id, step) {
             const slides = document.getElementById(id).querySelector('.slides');
             const total = slides.querySelectorAll('img').length;
             sliderPos[id] = (sliderPos[id] + step + total) % total;
             slides.style.transform = `translateX(-${sliderPos[id] * 100}%)`;
         }
+
         function selectOption(el, id, type, value) {
             el.parentElement.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
             selections[id][type] = value;
         }
+
         function selectPrice(el, id, size, price) {
             el.parentElement.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
@@ -351,11 +352,12 @@
             selections[id].size = size;
             selections[id].price = price;
         }
+
         function order(e, id, name) {
             e.preventDefault();
             const d = selections[id];
-            if(!d.size || !d.color) { alert("Select Color and Size!"); return; }
-            const msg = `Hi Zaidify! Order:\n*Item:* ${name} (${id})\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
+            if(!d.size || !d.color) { alert("Please select both Color and Size!"); return; }
+            const msg = `Hi Zaidify! I want to order:\n\n*Product:* ${name} (${id})\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
             window.open(`https://wa.me/918655171445?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
