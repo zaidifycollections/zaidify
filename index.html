@@ -250,6 +250,42 @@
             </div>
         </div>
 
+        <div class="p-wrapper">
+            <div class="p-img-box">
+                <div class="slider-container" id="slider-zw05">
+                    <div class="slides">
+                        <img src="zw05/zw05-1.jpg"><img src="zw05/zw05-2.jpg"><img src="zw05/zw05-3.jpg"><img src="zw05/zw05-4.jpg"><img src="zw05/zw05-5.jpg"><img src="zw05/zw05-6.jpg">
+                    </div>
+                    <button class="slider-btn prev" onclick="moveSlide('slider-zw05', -1)">&#10094;</button>
+                    <button class="slider-btn next" onclick="moveSlide('slider-zw05', 1)">&#10095;</button>
+                </div>
+            </div>
+            <div class="p-content">
+                <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.0 (5star 2000+)</div></div>
+                <span style="color:var(--pink); font-weight:900;">CODE: ZW05</span>
+                <h2 class="product-name">Kurta Set</h2>
+                <p class="label">Fabric: <span style="color:white; font-weight:400; text-transform:none;">Cotton</span></p>
+                <p class="label">Select Color:</p>
+                <div class="row">
+                    <div class="box" onclick="selectOption(this,'ZW05','color','Purple')">Purple</div>
+                    <div class="box" onclick="selectOption(this,'ZW05','color','Cyan Blue')">Cyan Blue</div>
+                    <div class="box" onclick="selectOption(this,'ZW05','color','Pink')">Pink</div>
+                    <div class="box" onclick="selectOption(this,'ZW05','color','Black')">Black</div>
+                </div>
+                <p class="label">Select Size:</p>
+                <div class="row">
+                    <div class="box" onclick="selectPrice(this,'ZW05','XXS',498)">XXS</div>
+                    <div class="box" onclick="selectPrice(this,'ZW05','S',502)">S</div>
+                    <div class="box" onclick="selectPrice(this,'ZW05','M',514)">M</div>
+                    <div class="box" onclick="selectPrice(this,'ZW05','L',514)">L</div>
+                    <div class="box" onclick="selectPrice(this,'ZW05','XL',514)">XL</div>
+                    <div class="box" onclick="selectPrice(this,'ZW05','XXL',514)">XXL</div>
+                </div>
+                <div><span class="price-now" id="price-zw05">₹---</span><span class="price-old">₹699</span></div>
+                <a href="#" onclick="order(event,'ZW05','Kurta Set')" class="wa-btn">ORDER ON WHATSAPP</a>
+            </div>
+        </div>
+
         <button class="policy-btn" onclick="toggleModal(true)">Return & Exchange Policy</button>
     </section>
 
@@ -272,9 +308,10 @@
             'ZW01': { size: '', price: '', color: '' }, 
             'ZW02': { size: '', price: '', color: '' }, 
             'ZW03': { size: '', price: '', color: 'Maroon' },
-            'ZW04': { size: '', price: '', color: 'Pink' }
+            'ZW04': { size: '', price: '', color: 'Pink' },
+            'ZW05': { size: '', price: '', color: '' }
         };
-        let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 'slider-zw04': 0 };
+        let sliderPos = { 'slider-zw01': 0, 'slider-zw02': 0, 'slider-zw03': 0, 'slider-zw04': 0, 'slider-zw05': 0 };
 
         function toggleModal(show) { document.getElementById('policyModal').style.display = show ? 'flex' : 'none'; }
 
