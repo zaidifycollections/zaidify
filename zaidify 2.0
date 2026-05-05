@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zaidify Collections | Premium Ethnic Wear</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* ═══════════════════════════════════════════
+           BASE / STORE STYLES
+        ═══════════════════════════════════════════ */
+        :root {
+            --pink: #ff00ff; --bg: #08020f; --nav-bg: #000;
+            --gold: #ffd700; --white: #ffffff;
+            --card: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--white); font-family: 'Poppins', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+        /* ── NAV ── */
+        nav { width: 100%; padding: 12px 6%; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); position: fixed; top: 0; z-index: 9999; border-bottom: 1px solid var(--border); }
+        .logo-box { display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; font-family: 'Bebas Neue'; font-size: 1.4rem; }
+        .logo-img { height: 30px; }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1rem; }
+        .shop-now-btn { background: var(--pink); padding: 8px 16px; border-radius: 5px; font-weight: 800; color: white !important; }
+        .nav-user-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: white; padding: 6px 16px; border-radius: 5px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 1px; transition: 0.2s; }
+        .nav-user-btn:hover { background: var(--pink); border-color: var(--pink); }
+        .nav-admin-btn { background: rgba(255,0,255,0.15); border: 1px solid var(--pink); color: var(--pink); padding: 6px 16px; border-radius: 5px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 1px; margin-left: 6px; transition: 0.2s; }
+        .nav-admin-btn:hover { background: var(--pink); color: white; }
+
+        /* ── HERO ── */
+        .hero { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
+        .hero-logo { width: 100px; margin-bottom: 15px; filter: drop-shadow(0 0 15px var(--pink)); }
+        .hero h1 { font-family: 'Bebas Neue'; font-size: clamp(3rem, 12vw, 6rem); letter-spacing: 8px; }
+
+        /* ── STORE SECTIONS ── */
+        section { padding: 60px 6%; width: 100%; max-width: 1200px; margin: 0 auto; }
+        .section-title { text-align: center; font-family: 'Bebas Neue'; font-size: clamp(2.5rem, 8vw, 3.5rem); margin-bottom: 30px; color: var(--pink); letter-spacing: 2px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .card { background: rgba(255,255,255,0.03); padding: 50px 20px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: white; transition: 0.3s; }
+        .card h3 { font-family: 'Bebas Neue'; font-size: 2.2rem; }
+        .card.inactive { opacity: 0.3; cursor: not-allowed; }
+
+        /* ── PRODUCT CARDS ── */
+        .p-wrapper { display: flex; flex-wrap: wrap; background: rgba(255,255,255,0.02); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 60px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .p-img-box { flex: 1; min-width: 350px; position: relative; height: 550px; }
+        .p-content { flex: 1.2; padding: 40px; min-width: 350px; display: flex; flex-direction: column; justify-content: center; }
+        .slider-container { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; }
+        .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; }
+        .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
+        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .prev { left: 15px; } .next { right: 15px; }
+        .rating-box { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+        .stars { color: var(--gold); }
+        .rev-count { color: rgba(255,255,255,0.4); font-size: 0.85rem; }
+        .product-name { font-size: 2.2rem; margin: 5px 0; font-weight: 700; }
+        .admin-ref { display: none; }
+        .label { font-size: 0.9rem; font-weight: 700; margin-top: 15px; color: var(--pink); text-transform: uppercase; letter-spacing: 1px; }
+        .row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 15px 0; }
+        .box { border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.75rem; text-align: center; min-width: 45px; transition: 0.2s; }
+        .box:hover { border-color: var(--pink); }
+        .box.active { background: var(--pink); border-color: var(--pink); color: white; transform: scale(1.05); }
+        .price-now { font-size: 2.8rem; font-weight: 900; }
+        .price-old { text-decoration: line-through; opacity: 0.3; font-size: 1.3rem; margin-left: 12px; }
+        .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 20px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-top: 20px; transition: 0.3s; }
+        .wa-btn:hover { background: #1ebe5d; transform: translateY(-2px); }
+        .policy-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-family: 'Bebas Neue'; letter-spacing: 2px; margin: 40px auto; display: block; transition: 0.2s; }
+        .policy-btn:hover { border-color: var(--pink); color: var(--pink); }
+        .loading-products { text-align: center; padding: 60px 0; color: rgba(255,255,255,0.4); font-family: 'Bebas Neue'; font-size: 1.5rem; letter-spacing: 2px; }
+        .loading-products::after { content: ''; display: inline-block; animation: dots 1.2s infinite; }
+        @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} }
+
+        /* ═══════════════════════════════════════════
+           OVERLAY SYSTEM
+        ═══════════════════════════════════════════ */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; }
+        .overlay.open { display: flex; }
+        .overlay-center { align-items: center; }
+
+        /* ═══════════════════════════════════════════
+           POLICY MODAL
+        ═══════════════════════════════════════════ */
+        .policy-modal { background: #08020f; border: 1px solid var(--pink); padding: 30px; border-radius: 20px; max-width: 500px; width: 100%; position: relative; box-shadow: 0 0 30px var(--pink); color: white; margin: auto; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: var(--pink); font-weight: bold; line-height: 1; }
+        .close-modal:hover { opacity: 0.7; }
+
+        /* ═══════════════════════════════════════════
+           LOGIN MODAL
+        ═══════════════════════════════════════════ */
+        .login-box { background: #0d0416; border: 1px solid rgba(255,0,255,0.4); border-radius: 24px; padding: 40px 36px; width: 100%; max-width: 420px; box-shadow: 0 0 60px rgba(255,0,255,0.15); position: relative; margin: auto; }
+        .login-close { position: absolute; top: 16px; right: 20px; font-size: 1.8rem; cursor: pointer; color: var(--pink); font-weight: bold; line-height: 1; }
+        .login-logo { text-align: center; margin-bottom: 24px; }
+        .login-logo img { height: 44px; filter: drop-shadow(0 0 10px var(--pink)); margin-bottom: 6px; display: block; margin-inline: auto; }
+        .login-logo h2 { font-family: 'Bebas Neue'; font-size: 1.5rem; letter-spacing: 5px; }
+        .login-logo p { font-size: 0.72rem; color: rgba(255,255,255,0.35); letter-spacing: 2px; text-transform: uppercase; }
+        .tab-row { display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 22px; }
+        .tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; font-family: 'Bebas Neue'; letter-spacing: 2px; font-size: 1rem; color: rgba(255,255,255,0.4); transition: 0.2s; }
+        .tab.active { background: var(--pink); color: #fff; }
+        .lfield { margin-bottom: 14px; }
+        .lfield label { display: block; font-size: 0.72rem; color: rgba(255,255,255,0.45); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+        .lfield input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; padding: 13px 15px; color: #fff; font-size: 0.9rem; font-family: 'Poppins'; outline: none; transition: 0.2s; }
+        .lfield input:focus { border-color: var(--pink); box-shadow: 0 0 0 2px rgba(255,0,255,0.1); }
+        .forgot-link { text-align: right; margin-bottom: 15px; }
+        .forgot-link a { color: var(--pink); font-size: 0.75rem; text-decoration: none; font-weight: 600; cursor: pointer; }
+        .forgot-link a:hover { text-decoration: underline; }
+        .btn-main { width: 100%; background: var(--pink); color: #fff; border: none; border-radius: 12px; padding: 15px; font-family: 'Bebas Neue'; font-size: 1.2rem; letter-spacing: 3px; cursor: pointer; margin-top: 6px; transition: 0.2s; }
+        .btn-main:hover { opacity: 0.85; }
+        .divider { display: flex; align-items: center; gap: 12px; margin: 18px 0; color: rgba(255,255,255,0.2); font-size: 0.8rem; }
+        .divider::before,.divider::after { content:''; flex:1; height:1px; background: rgba(255,255,255,0.1); }
+        .btn-google { width: 100%; background: #fff; color: #1a1a1a; border: none; border-radius: 12px; padding: 13px; font-family: 'Poppins'; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
+        .btn-google:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-google svg { width: 18px; height: 18px; }
+        .lmsg { text-align: center; font-size: 0.82rem; margin-top: 14px; padding: 10px; border-radius: 8px; display: none; }
+        .lmsg.ok { background: rgba(37,211,102,0.15); color: #25d366; display: block; }
+        .lmsg.err { background: rgba(255,0,0,0.1); color: #ff6b6b; display: block; }
+
+        /* ═══════════════════════════════════════════
+           ADMIN PANEL
+        ═══════════════════════════════════════════ */
+        .admin-panel { background: #08020f; width: 100%; min-height: 100vh; display: flex; flex-direction: column; margin: auto; max-width: 100%; border-radius: 0; }
+        .admin-topbar { background: #000; border-bottom: 1px solid rgba(255,0,255,0.3); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
+        .admin-topbar-title { font-family: 'Bebas Neue'; font-size: 1.5rem; letter-spacing: 4px; color: var(--pink); }
+        .admin-topbar-right { display: flex; align-items: center; gap: 12px; }
+        .admin-topbar-right span { font-size: 0.75rem; color: rgba(255,255,255,0.35); }
+        .abtn { background: rgba(255,255,255,0.07); border: 1px solid var(--border); color: #fff; padding: 7px 14px; border-radius: 8px; cursor: pointer; font-family: 'Bebas Neue'; letter-spacing: 1px; font-size: 0.9rem; transition: 0.2s; }
+        .abtn:hover { border-color: var(--pink); color: var(--pink); }
+        .admin-layout { display: flex; flex: 1; min-height: calc(100vh - 57px); }
+        .admin-sidebar { width: 210px; background: rgba(255,255,255,0.02); border-right: 1px solid var(--border); padding: 20px 0; flex-shrink: 0; }
+        .aside-item { padding: 13px 22px; cursor: pointer; font-family: 'Bebas Neue'; letter-spacing: 2px; font-size: 0.95rem; color: rgba(255,255,255,0.4); transition: 0.2s; display: flex; align-items: center; gap: 10px; border-left: 3px solid transparent; }
+        .aside-item:hover { color: #fff; background: rgba(255,255,255,0.03); }
+        .aside-item.active { color: var(--pink); border-left-color: var(--pink); background: rgba(255,0,255,0.05); }
+        .admin-content { flex: 1; padding: 28px; overflow-y: auto; }
+        .apage { display: none; }
+        .apage.active { display: block; }
+
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 18px; margin-bottom: 28px; }
+        .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; text-align: center; }
+        .stat-card .num { font-family: 'Bebas Neue'; font-size: 2.6rem; color: var(--pink); }
+        .stat-card .lbl { font-size: 0.72rem; color: rgba(255,255,255,0.35); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+        .sec-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .sec-head h2 { font-family: 'Bebas Neue'; font-size: 1.7rem; letter-spacing: 3px; color: var(--pink); }
+        .tbl-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: rgba(255,0,255,0.08); color: var(--pink); font-family: 'Bebas Neue'; letter-spacing: 2px; font-size: 0.82rem; padding: 13px 15px; text-align: left; border-bottom: 1px solid var(--border); }
+        td { padding: 13px 15px; font-size: 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+        .prod-thumb { width: 46px; height: 46px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
+        .pid-badge { background: rgba(255,0,255,0.15); color: var(--pink); padding: 3px 8px; border-radius: 5px; font-size: 0.72rem; font-family: 'Bebas Neue'; letter-spacing: 1px; }
+        .btn-edit { background: none; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 5px 11px; border-radius: 6px; cursor: pointer; font-size: 0.72rem; transition: 0.2s; }
+        .btn-edit:hover { border-color: var(--pink); color: var(--pink); }
+        .btn-del { background: none; border: 1px solid rgba(255,0,0,0.3); color: rgba(255,80,80,0.8); padding: 5px 11px; border-radius: 6px; cursor: pointer; font-size: 0.72rem; margin-left: 5px; transition: 0.2s; }
+        .btn-del:hover { background: rgba(255,0,0,0.1); }
+
+        .edit-modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 20000; display: none; justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; }
+        .edit-modal-bg.open { display: flex; }
+        .edit-modal { background: #0d0416; border: 1px solid var(--pink); border-radius: 20px; padding: 34px; width: 100%; max-width: 660px; box-shadow: 0 0 50px rgba(255,0,255,0.2); position: relative; margin: auto; }
+        .edit-modal-title { font-family: 'Bebas Neue'; font-size: 1.7rem; color: var(--pink); letter-spacing: 3px; margin-bottom: 22px; }
+        .edit-close { position: absolute; top: 16px; right: 18px; font-size: 1.8rem; cursor: pointer; color: var(--pink); font-weight: bold; line-height: 1; }
+        .fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .ffield { display: flex; flex-direction: column; gap: 5px; }
+        .ffield.full { grid-column: 1 / -1; }
+        .ffield label { font-size: 0.7rem; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; }
+        .ffield input, .ffield textarea { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 9px; padding: 10px 13px; color: #fff; font-size: 0.85rem; font-family: 'Poppins'; outline: none; transition: 0.2s; width: 100%; }
+        .ffield input:focus, .ffield textarea:focus { border-color: var(--pink); }
+        .save-btn { width: 100%; background: var(--pink); color: #fff; border: none; border-radius: 11px; padding: 15px; font-family: 'Bebas Neue'; font-size: 1.15rem; letter-spacing: 3px; cursor: pointer; margin-top: 18px; transition: 0.2s; }
+        .save-btn:hover { opacity: 0.85; }
+        .img-preview { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+        .img-preview img { width: 56px; height: 56px; object-fit: cover; border-radius: 7px; border: 1px solid var(--border); }
+
+        .toast { position: fixed; bottom: 28px; right: 28px; background: #25d366; color: #fff; padding: 13px 22px; border-radius: 11px; font-family: 'Bebas Neue'; letter-spacing: 2px; font-size: 1rem; z-index: 99999; opacity: 0; pointer-events: none; transition: opacity 0.3s; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+        .toast.show { opacity: 1; pointer-events: auto; }
+        .toast.err { background: #e53935; }
+
+        @media (max-width: 768px) {
+            .p-wrapper { flex-direction: column; }
+            .p-img-box { height: 400px; min-width: unset; }
+            .p-content { padding: 30px 20px; text-align: center; min-width: unset; }
+            .row { justify-content: center; }
+            .nav-links a:not(.shop-now-btn):not(.nav-user-btn):not(.nav-admin-btn) { display: none; }
+            .admin-sidebar { width: 160px; }
+            .fgrid { grid-template-columns: 1fr; }
+            .ffield.full { grid-column: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="store-page">
+    <nav>
+        <a href="#" class="logo-box"><img src="logo.png" class="logo-img" onerror="this.style.display='none'"><span>ZAIDIFY</span></a>
+        <div class="nav-links">
+            <a href="#categories">ABOUT</a>
+            <a href="#women">WOMEN</a>
+            <a href="#women" class="shop-now-btn">SHOP NOW</a>
+            <button class="nav-user-btn" id="navLoginBtn" onclick="openLogin()">LOGIN</button>
+            <button class="nav-admin-btn" id="navAdminBtn" onclick="openAdmin()" style="display:none;">⚡ ADMIN</button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <img src="logo.png" class="hero-logo" onerror="this.style.display='none'">
+        <h1>ZAIDIFY</h1>
+        <p>PREMIUM ETHNIC COLLECTIONS</p>
+    </header>
+
+    <section id="categories">
+        <h2 class="section-title">OUR CATEGORIES</h2>
+        <div class="grid">
+            <a href="#women" class="card"><h3>WOMEN</h3><p>Kurtas & premium sets</p></a>
+            <div class="card inactive"><h3>MEN</h3><p>Coming Soon</p></div>
+            <div class="card inactive"><h3>KIDS</h3><p>Coming Soon</p></div>
+        </div>
+    </section>
+
+    <section id="women">
+        <h2 class="section-title">WOMEN'S ARRIVALS</h2>
+        <div id="products-container">
+            <div class="loading-products">Loading Products</div>
+        </div>
+        <button class="policy-btn" onclick="openPolicy()">Return & Exchange Policy</button>
+    </section>
+</div>
+
+<!-- POLICY MODAL -->
+<div class="overlay overlay-center" id="policyOverlay" onclick="closePolicyOutside(event)">
+    <div class="policy-modal">
+        <span class="close-modal" onclick="closePolicy()">×</span>
+        <h2 style="font-family:'Bebas Neue';color:var(--pink);margin-bottom:15px;font-size:2rem;">Return & Exchange Policy</h2>
+        <div style="font-size:0.85rem;line-height:1.8;opacity:0.9;">
+            <p><b>7-Day Easy Returns:</b> Initiate returns within 7 days of delivery.</p><br>
+            <p><b>Unboxing Video Required:</b> Continuous video of package opening is mandatory for verification.</p><br>
+            <p><b>📲 To Request:</b> Send video and defect photos via WhatsApp.</p>
+        </div>
+    </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="overlay overlay-center" id="loginOverlay" onclick="closeLoginOutside(event)">
+    <div class="login-box">
+        <span class="login-close" onclick="closeLogin()">×</span>
+        <div class="login-logo">
+            <img src="logo.png" onerror="this.style.display='none'">
+            <h2>ZAIDIFY</h2>
+            <p>Premium Ethnic Collections</p>
+        </div>
+        <div class="tab-row">
+            <div class="tab active" id="tab-login" onclick="switchLoginTab('login')">LOGIN</div>
+            <div class="tab" id="tab-signup" onclick="switchLoginTab('signup')">SIGN UP</div>
+        </div>
+
+        <div id="login-form-wrap">
+            <div class="lfield"><label>Email</label><input type="email" id="li-email" placeholder="you@email.com"></div>
+            <div class="lfield"><label>Password</label><input type="password" id="li-pass" placeholder="••••••••"></div>
+            <div class="forgot-link">
+                <a onclick="doForgotPassword()">Forgot Password?</a>
+            </div>
+            <button class="btn-main" onclick="doLogin()">LOGIN</button>
+        </div>
+
+        <div id="signup-form-wrap" style="display:none;">
+            <div class="lfield"><label>Email</label><input type="email" id="su-email" placeholder="you@email.com"></div>
+            <div class="lfield"><label>Password</label><input type="password" id="su-pass" placeholder="Min 6 characters"></div>
+            <button class="btn-main" onclick="doSignup()">CREATE ACCOUNT</button>
+        </div>
+
+        <div class="divider">OR</div>
+        <button class="btn-google" onclick="doGoogle()">
+            <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.615 24 12.255 24z"/><path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09z"/><path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.64 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+            Continue with Google
+        </button>
+        <div id="lmsg" class="lmsg"></div>
+    </div>
+</div>
+
+<!-- ADMIN OVERLAY -->
+<div class="overlay" id="adminOverlay">
+    <div class="admin-panel">
+        <div class="admin-topbar">
+            <div class="admin-topbar-title">⚡ ZAIDIFY ADMIN</div>
+            <div class="admin-topbar-right">
+                <span id="admin-email-lbl"></span>
+                <button class="abtn" onclick="closeAdmin()">← BACK TO STORE</button>
+                <button class="abtn" onclick="doLogout()">LOGOUT</button>
+            </div>
+        </div>
+        <div class="admin-layout">
+            <div class="admin-sidebar">
+                <div class="aside-item active" onclick="showAPage('dashboard')">📊 Dashboard</div>
+                <div class="aside-item" onclick="showAPage('products')">👗 Products</div>
+                <div class="aside-item" onclick="showAPage('add')">➕ Add Product</div>
+            </div>
+            <div class="admin-content">
+
+                <div class="apage active" id="apage-dashboard">
+                    <div class="stats-row">
+                        <div class="stat-card"><div class="num" id="stat-total">—</div><div class="lbl">Total Products</div></div>
+                        <div class="stat-card"><div class="num" id="stat-cats">—</div><div class="lbl">Categories</div></div>
+                        <div class="stat-card"><div class="num" id="stat-imgs">—</div><div class="lbl">Avg Images</div></div>
+                    </div>
+                    <div class="tbl-wrap">
+                        <div style="padding:18px 22px;border-bottom:1px solid var(--border);">
+                            <span style="font-family:'Bebas Neue';letter-spacing:2px;color:var(--pink);font-size:1.1rem;">ALL PRODUCTS</span>
+                        </div>
+                        <table>
+                            <thead><tr><th>IMG</th><th>ID</th><th>NAME</th><th>STD PRICE</th><th>SIZES</th></tr></thead>
+                            <tbody id="dash-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="apage" id="apage-products">
+                    <div class="sec-head">
+                        <h2>MANAGE PRODUCTS</h2>
+                        <button class="abtn" style="border-color:var(--pink);color:var(--pink);" onclick="showAPage('add')">+ ADD NEW</button>
+                    </div>
+                    <div class="tbl-wrap">
+                        <table>
+                            <thead><tr><th>IMG</th><th>ID</th><th>NAME</th><th>CAT</th><th>XXS</th><th>XS</th><th>STD</th><th>ACTIONS</th></tr></thead>
+                            <tbody id="prod-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="apage" id="apage-add">
+                    <div class="sec-head"><h2>ADD NEW PRODUCT</h2></div>
+                    <div class="add-section">
+                        <div class="fgrid">
+                            <div class="ffield"><label>Product ID (e.g. ZW11)</label><input id="a-pid" placeholder="ZW11"></div>
+                            <div class="ffield"><label>Category</label><input id="a-cat" value="Women"></div>
+                            <div class="ffield full"><label>Product Name</label><input id="a-name" placeholder="e.g. Floral Kurta Set"></div>
+                            <div class="ffield"><label>Price XXS (₹)</label><input id="a-pxxs" type="number" placeholder="0"></div>
+                            <div class="ffield"><label>Price XS (₹)</label><input id="a-pxs" type="number" placeholder="0"></div>
+                            <div class="ffield"><label>Price Standard S–6XL (₹)</label><input id="a-pstd" type="number" placeholder="499"></div>
+                            <div class="ffield full"><label>Sizes (comma separated)</label><input id="a-sizes" placeholder="XS, S, M, L, XL, XXL"></div>
+                            <div class="ffield full"><label>Colors (comma separated)</label><input id="a-colors" placeholder="Grey, Pink, Blue"></div>
+                            <div class="ffield full"><label>WhatsApp Link</label><input id="a-wa" value="https://wa.me/918655171445"></div>
+                            <!-- 10 Image Inputs -->
+                            <div class="ffield full"><label>Image 1 URL</label><input id="a-img1" placeholder="https://..."></div>
+                            <div class="ffield full"><label>Image 2 URL</label><input id="a-img2" placeholder="https://..."></div>
+                            <div class="ffield full"><label>Image 3 URL</label><input id="a-img3" placeholder="https://..."></div>
+                            <div class="ffield full"><label>Image 4 URL</label><input id="a-img4" placeholder="https://..."></div>
+                            <div class="ffield full"><label>Image 5 URL</label><input id="a-img5" placeholder="https://..."></div>
+                            <div class="ffield full"><label>Image 6 URL</label><input id="a-img6" placeholder="https://..."></div>
+                            <div class="ffield full"><label>Image 7 URL</label><input id="a-img7" placeholder="https://..."></div>
+                            <div class="ffield full"><label>Image 8 URL</label><input id="a-img8" placeholder="https://..."></div>
+                            <div class="ffield full"><label>Image 9 URL</label><input id="a-img9" placeholder="https://..."></div>
+                            <div class="ffield full"><label>Image 10 URL</label><input id="a-img10" placeholder="https://..."></div>
+                            <!-- Review Section -->
+<div class="ffield full" style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;">
+    <label style="color: var(--pink); font-weight: bold;">Review Section (Optional)</label>
+</div>
+<div class="ffield"><label>Reviewer Name</label><input id="a-rev-name" placeholder="e.g. Ananya S."></div>
+<div class="ffield"><label>Rating (1-5)</label><input id="a-rev-star" type="number" min="1" max="5" placeholder="5"></div>
+<div class="ffield full"><label>Review Comment</label><textarea id="a-rev-text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 9px; padding: 10px 13px; color: #fff; width: 100%; font-family: 'Poppins';" placeholder="e.g. Quality is amazing!"></textarea></div>
+                        </div>
+                        <button class="save-btn" onclick="addProduct()">ADD PRODUCT TO STORE</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- EDIT PRODUCT MODAL -->
+<div class="edit-modal-bg" id="editModalBg">
+    <div class="edit-modal">
+        <span class="edit-close" onclick="closeEdit()">×</span>
+        <div class="edit-modal-title">EDIT PRODUCT</div>
+        <input type="hidden" id="e-dbid">
+        <div class="fgrid">
+            <div class="ffield"><label>Product ID</label><input id="e-pid" readonly></div>
+            <div class="ffield"><label>Category</label><input id="e-cat"></div>
+            <div class="ffield full"><label>Product Name</label><input id="e-name"></div>
+            <div class="ffield"><label>Price XXS (₹)</label><input id="e-pxxs" type="number"></div>
+            <div class="ffield"><label>Price XS (₹)</label><input id="e-pxs" type="number"></div>
+            <div class="ffield"><label>Price Standard (₹)</label><input id="e-pstd" type="number"></div>
+            <div class="ffield full"><label>Sizes (comma separated)</label><input id="e-sizes"></div>
+            <div class="ffield full"><label>Colors (comma separated)</label><input id="e-colors"></div>
+            <div class="ffield full"><label>WhatsApp Link</label><input id="e-wa"></div>
+            <div class="ffield full"><label>Image 1 URL</label><input id="e-img1"></div>
+            <div class="ffield full"><label>Image 2 URL</label><input id="e-img2"></div>
+            <div class="ffield full"><label>Image 3 URL</label><input id="e-img3"></div>
+            <div class="ffield full"><label>Image 4 URL</label><input id="e-img4"></div>
+            <div class="ffield full"><label>Image 5 URL</label><input id="e-img5"></div>
+            <div class="ffield full"><label>Image 6 URL</label><input id="e-img6"></div>
+            <div class="ffield full"><label>Image 7 URL</label><input id="e-img7"></div>
+            <div class="ffield full"><label>Image 8 URL</label><input id="e-img8"></div>
+            <div class="ffield full"><label>Image 9 URL</label><input id="e-img9"></div>
+            <div class="ffield full"><label>Image 10 URL</label><input id="e-img10"></div>
+        </div>
+        <div class="img-preview" id="e-preview"></div>
+        <button class="save-btn" onclick="saveEdit()">SAVE CHANGES → UPDATES STORE LIVE</button>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONFIG ───────────────────────────────────────────────────────────────
+const SUPABASE_URL  = 'https://ipwlhlsxtlfqioysyzlc.supabase.co';
+const SUPABASE_KEY  = 'sb_publishable__u9RyOYFvdQ3A-kPQPPO3A_BLjsOHds';
+const ADMIN_EMAIL   = 'zaidifycollections@gmail.com';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── STATE ────────────────────────────────────────────────────────────────
+let currentUser = null;
+let allProducts  = [];
+let selections   = {};
+let sliderPos    = {};
+
+// ══════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════
+async function initAuth() {
+    const { data: { session } } = await sb.auth.getSession();
+    currentUser = session?.user ?? null;
+    refreshNavAuth();
+
+    sb.auth.onAuthStateChange((_ev, session) => {
+        currentUser = session?.user ?? null;
+        refreshNavAuth();
+    });
+}
+
+function refreshNavAuth() {
+    const loginBtn = document.getElementById('navLoginBtn');
+    const adminBtn = document.getElementById('navAdminBtn');
+    if (currentUser) {
+        loginBtn.textContent = 'LOGOUT';
+        loginBtn.onclick = doLogout;
+        if (currentUser.email === ADMIN_EMAIL) {
+            adminBtn.style.display = 'inline-block';
+            document.getElementById('admin-email-lbl').textContent = currentUser.email;
+        } else {
+            adminBtn.style.display = 'none';
+        }
+    } else {
+        loginBtn.textContent = 'LOGIN';
+        loginBtn.onclick = openLogin;
+        adminBtn.style.display = 'none';
+    }
+}
+
+async function doLogout() {
+    await sb.auth.signOut();
+    closeAdmin();
+    showToast('Logged out.');
+}
+
+function openLogin()  { document.getElementById('loginOverlay').classList.add('open'); }
+function closeLogin() { document.getElementById('loginOverlay').classList.remove('open'); clearLMsg(); }
+function closeLoginOutside(e) { if (e.target === document.getElementById('loginOverlay')) closeLogin(); }
+
+function switchLoginTab(tab) {
+    document.getElementById('tab-login').classList.toggle('active', tab==='login');
+    document.getElementById('tab-signup').classList.toggle('active', tab==='signup');
+    document.getElementById('login-form-wrap').style.display  = tab==='login'  ? 'block' : 'none';
+    document.getElementById('signup-form-wrap').style.display = tab==='signup' ? 'block' : 'none';
+    clearLMsg();
+}
+
+function showLMsg(txt, type) {
+    const el = document.getElementById('lmsg');
+    el.textContent = txt;
+    el.className = `lmsg ${type}`;
+}
+function clearLMsg() {
+    const el = document.getElementById('lmsg');
+    el.className = 'lmsg'; el.textContent = '';
+}
+
+async function doLogin() {
+    const email = document.getElementById('li-email').value.trim();
+    const pass  = document.getElementById('li-pass').value;
+    if (!email || !pass) { showLMsg('Fill in all fields.', 'err'); return; }
+    const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+    if (error) { showLMsg(error.message, 'err'); return; }
+    closeLogin();
+    if (data.user.email === ADMIN_EMAIL) openAdmin();
+    else showToast('Welcome back!');
+}
+
+async function doSignup() {
+    const email = document.getElementById('su-email').value.trim();
+    const pass  = document.getElementById('su-pass').value;
+    if (!email || !pass) { showLMsg('Fill in all fields.', 'err'); return; }
+    const { error } = await sb.auth.signUp({ email, password: pass });
+    if (error) { showLMsg(error.message, 'err'); return; }
+    showLMsg('✓ Check your email to confirm!', 'ok');
+}
+
+async function doGoogle() {
+    await sb.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: 'https://zaidify-collections.vercel.app' } 
+    });
+}
+
+async function doForgotPassword() {
+    const email = document.getElementById('li-email').value.trim();
+    if (!email) { showLMsg('Please enter your email address.', 'err'); return; }
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin
+    });
+    if (error) { showLMsg(error.message, 'err'); return; }
+    showLMsg('✓ Reset link sent to your email!', 'ok');
+}
+
+// ══════════════════════════════════════════════
+// STORE — PRODUCTS
+// ══════════════════════════════════════════════
+function parseSizes(raw)  { return (raw||'').replace(/[{}"'\[\]]/g,'').split(',').map(s=>s.trim()).filter(Boolean); }
+function parseColors(raw) { return (raw||'').replace(/[{}"'\[\]]/g,'').split(',').map(c=>c.trim()).filter(Boolean); }
+
+function getImages(p) {
+    const imgs = [];
+    for (let i=1;i<=10;i++) { const u=p[`image_${i}`]; if(u&&u!=='NULL'&&u.trim()) imgs.push(u.trim()); }
+    return imgs;
+}
+
+function getPriceForSize(p, size) {
+    const s = size.toUpperCase();
+    if (s==='XXS') return p.price_xxs || p.price_standard || 0;
+    if (s==='XS')  return p.price_xs  || p.price_standard || 0;
+    return p.price_standard || 0;
+}
+
+function buildProduct(p) {
+    const pid    = p.product_id.toUpperCase();
+    const pidLow = pid.toLowerCase();
+    const images = getImages(p);
+    const sizes  = parseSizes(p.sizes);
+    const colors = parseColors(p.colors);
+
+    selections[pid]              = { size:'', price:'', color: colors[0]||'' };
+    sliderPos[`slider-${pidLow}`] = 0;
+
+    const slideImgs = images.length
+        ? images.map(u=>`<img src="${u}" loading="lazy">`).join('')
+        : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,0.15);font-family:'Bebas Neue';font-size:1.4rem;">NO IMAGE</div>`;
+
+    let colorHTML = '';
+    if (colors.length > 1) {
+        colorHTML = `<p class="label">Colors:</p><div class="row">${
+            colors.map((c,i)=>`<div class="box${i===0?' active':''}" onclick="selectOption(this,'${pid}','color','${c}')">${c}</div>`).join('')
+        }</div>`;
+    } else if (colors.length===1) {
+        colorHTML = `<p class="label">Color: <span style="color:white;font-weight:400;">${colors[0]}</span></p>`;
+    }
+
+    const sizeBoxes = sizes.map(sz=>{
+        const pr = getPriceForSize(p,sz);
+        return `<div class="box" onclick="selectPrice(this,'${pid}','${sz}',${pr})">${sz}</div>`;
+    }).join('');
+
+    const mrp = p.price_standard ? `<span class="price-old">₹${Math.round(p.price_standard*1.8)}</span>` : '';
+
+    return `
+    <div class="p-wrapper" id="${pidLow}">
+        <div class="p-img-box">
+            <div class="slider-container" id="slider-${pidLow}">
+                <div class="slides">${slideImgs}</div>
+                <button class="slider-btn prev" onclick="moveSlide('slider-${pidLow}',-1)">&#10094;</button>
+                <button class="slider-btn next" onclick="moveSlide('slider-${pidLow}',1)">&#10095;</button>
+            </div>
+        </div>
+        <div class="p-content">
+            <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (Reviews)</div></div>
+            <h2 class="product-name">${p.name}</h2>
+            <div class="admin-ref">${pid}</div>
+            ${colorHTML}
+            <p class="label">Sizes:</p>
+            <div class="row">${sizeBoxes}</div>
+            <div><span class="price-now" id="price-${pidLow}">₹---</span>${mrp}</div>
+            <a href="#" onclick="order(event,'${pid}','${p.name}')" class="wa-btn">🛒 ORDER ON WHATSAPP</a>
+        </div>
+    </div>`;
+}
+
+async function loadProducts() {
+    const container = document.getElementById('products-container');
+    let { data, error } = await sb.from('products').select('*').order('id',{ascending:true});
+    if (error || !data) {
+        container.innerHTML = '<div class="loading-products" style="animation:none;">Could not load products</div>';
+        return;
+    }
+    allProducts = data;
+    if (!data.length) {
+        container.innerHTML = '<div class="loading-products" style="animation:none;">No products yet</div>';
+        return;
+    }
+    container.innerHTML = data.map(buildProduct).join('');
+}
+
+function moveSlide(id, step) {
+    const slides = document.getElementById(id)?.querySelector('.slides');
+    if (!slides) return;
+    const total = slides.querySelectorAll('img').length;
+    if (!total) return;
+    sliderPos[id] = ((sliderPos[id]||0) + step + total) % total;
+    slides.style.transform = `translateX(-${sliderPos[id]*100}%)`;
+}
+
+function selectOption(el, id, type, value) {
+    el.parentElement.querySelectorAll('.box').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+    if (!selections[id]) selections[id]={size:'',price:'',color:''};
+    selections[id][type] = value;
+}
+
+function selectPrice(el, id, size, price) {
+    el.parentElement.querySelectorAll('.box').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('price-'+id.toLowerCase()).innerText = '₹'+price;
+    if (!selections[id]) selections[id]={size:'',price:'',color:''};
+    selections[id].size  = size;
+    selections[id].price = price;
+}
+
+function order(e, id, name) {
+    e.preventDefault();
+    const d = selections[id]||{};
+    if (!d.size||!d.price) { alert('Please select a Size first!'); return; }
+    const msg = `Hi Zaidify! I want to order:\n\n*Product:* ${name} (${id})\n*Color:* ${d.color}\n*Size:* ${d.size}\n*Price:* ₹${d.price}`;
+    window.open(`https://wa.me/918655171445?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ══════════════════════════════════════════════
+// ADMIN
+// ══════════════════════════════════════════════
+function openAdmin() {
+    if (!currentUser || currentUser.email !== ADMIN_EMAIL) {
+        openLogin(); return;
+    }
+    document.getElementById('adminOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    loadAdminData();
+}
+
+function closeAdmin() {
+    document.getElementById('adminOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function showAPage(name) {
+    document.querySelectorAll('.apage').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.aside-item').forEach(s=>s.classList.remove('active'));
+    document.getElementById(`apage-${name}`).classList.add('active');
+    const map = {dashboard:0,products:1,add:2};
+    document.querySelectorAll('.aside-item')[map[name]]?.classList.add('active');
+}
+
+async function loadAdminData() {
+    const { data } = await sb.from('products').select('*').order('id',{ascending:true});
+    allProducts = data||[];
+    renderDashboard();
+    renderProductsTable();
+}
+
+function renderDashboard() {
+    document.getElementById('stat-total').textContent = allProducts.length;
+    const cats = new Set(allProducts.map(p=>(p.category||'').toLowerCase()));
+    document.getElementById('stat-cats').textContent = cats.size;
+    const avgImgs = allProducts.length
+        ? Math.round(allProducts.reduce((s,p)=>s+getImages(p).length,0)/allProducts.length)
+        : 0;
+    document.getElementById('stat-imgs').textContent = avgImgs;
+
+    document.getElementById('dash-tbody').innerHTML = allProducts.map(p=>{
+        const imgs = getImages(p);
+        const thumb = imgs[0]
+            ? `<img class="prod-thumb" src="${imgs[0]}" onerror="this.style.display='none'">`
+            : `<div style="width:46px;height:46px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:rgba(255,255,255,0.2);">NO IMG</div>`;
+        return `<tr>
+            <td>${thumb}</td>
+            <td><span class="pid-badge">${p.product_id}</span></td>
+            <td style="font-weight:600;">${p.name}</td>
+            <td>₹${p.price_standard||0}</td>
+            <td style="font-size:0.72rem;color:rgba(255,255,255,0.4);">${(p.sizes||'').replace(/[{}"]/g,'').substring(0,45)}</td>
+        </tr>`;
+    }).join('');
+}
+
+function renderProductsTable() {
+    document.getElementById('prod-tbody').innerHTML = allProducts.map(p=>{
+        const imgs = getImages(p);
+        const thumb = imgs[0]
+            ? `<img class="prod-thumb" src="${imgs[0]}" onerror="this.style.display='none'">`
+            : `<div style="width:46px;height:46px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:rgba(255,255,255,0.2);">NO IMG</div>`;
+        return `<tr>
+            <td>${thumb}</td>
+            <td><span class="pid-badge">${p.product_id}</span></td>
+            <td style="font-weight:600;">${p.name}</td>
+            <td style="color:rgba(255,255,255,0.45);">${p.category}</td>
+            <td>₹${p.price_xxs||0}</td>
+            <td>₹${p.price_xs||0}</td>
+            <td>₹${p.price_standard||0}</td>
+            <td>
+                <button class="btn-edit" onclick="openEdit(${p.id})">EDIT</button>
+                <button class="btn-del" onclick="deleteProduct(${p.id},'${p.name.replace(/'/g,"\\'")}')">DEL</button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function openEdit(id) {
+    const p = allProducts.find(x=>x.id===id);
+    if (!p) return;
+    document.getElementById('e-dbid').value = p.id;
+    document.getElementById('e-pid').value   = p.product_id;
+    document.getElementById('e-cat').value   = p.category;
+    document.getElementById('e-name').value  = p.name;
+    document.getElementById('e-pxxs').value  = p.price_xxs||0;
+    document.getElementById('e-pxs').value   = p.price_xs||0;
+    document.getElementById('e-pstd').value  = p.price_standard||0;
+    document.getElementById('e-sizes').value = (p.sizes||'').replace(/[{}"]/g,'');
+    document.getElementById('e-colors').value= p.colors||'';
+    document.getElementById('e-wa').value    = p.whatsapp_link||'https://wa.me/918655171445';
+    for (let i=1;i<=10;i++) {
+        const el = document.getElementById(`e-img${i}`);
+        if (el) el.value = (p[`image_${i}`]&&p[`image_${i}`]!=='NULL') ? p[`image_${i}`] : '';
+    }
+    const imgs = getImages(p);
+    document.getElementById('e-preview').innerHTML = imgs.map(u=>`<img src="${u}" onerror="this.style.display='none'">`).join('');
+    document.getElementById('editModalBg').classList.add('open');
+}
+
+function closeEdit() { document.getElementById('editModalBg').classList.remove('open'); }
+
+async function saveEdit() {
+    const id = parseInt(document.getElementById('e-dbid').value);
+    const updates = {
+        category:       document.getElementById('e-cat').value.trim(),
+        name:           document.getElementById('e-name').value.trim(),
+        price_xxs:      parseFloat(document.getElementById('e-pxxs').value)||0,
+        price_xs:       parseFloat(document.getElementById('e-pxs').value)||0,
+        price_standard: parseFloat(document.getElementById('e-pstd').value)||0,
+        sizes:          document.getElementById('e-sizes').value.trim(),
+        colors:         document.getElementById('e-colors').value.trim(),
+        whatsapp_link:  document.getElementById('e-wa').value.trim(),
+    };
+    for (let i=1;i<=10;i++) {
+        const v = document.getElementById(`e-img${i}`)?.value.trim()||'';
+        updates[`image_${i}`] = v||null;
+    }
+    const { error } = await sb.from('products').update(updates).eq('id',id);
+    if (error) { showToast('Error: '+error.message, true); return; }
+    showToast('✓ Product updated!');
+    closeEdit();
+    loadAdminData();
+    loadProducts();
+}
+
+async function deleteProduct(id, name) {
+    if (!confirm(`Delete "${name}"?\nThis cannot be undone.`)) return;
+    const { error } = await sb.from('products').delete().eq('id',id);
+    if (error) { showToast('Error: '+error.message, true); return; }
+    showToast('Product deleted.');
+    loadAdminData();
+    loadProducts();
+}
+
+async function addProduct() {
+    const pid  = document.getElementById('a-pid').value.trim();
+    const name = document.getElementById('a-name').value.trim();
+    if (!pid||!name) { showToast('Product ID and Name are required!', true); return; }
+
+    const newProd = {
+        product_id:     pid,
+        category:       document.getElementById('a-cat').value.trim()||'Women',
+        name,
+        price_xxs:      parseFloat(document.getElementById('a-pxxs').value)||0,
+        price_xs:       parseFloat(document.getElementById('a-pxs').value)||0,
+        price_standard: parseFloat(document.getElementById('a-pstd').value)||0,
+        sizes:          document.getElementById('a-sizes').value.trim(),
+        colors:         document.getElementById('a-colors').value.trim(),
+        whatsapp_link:  document.getElementById('a-wa').value.trim()||'https://wa.me/918655171445',
+rev_name: document.getElementById('a-rev-name').value.trim(),
+rev_star: parseInt(document.getElementById('a-rev-star').value) || 5,
+rev_text: document.getElementById('a-rev-text').value.trim(),
+    };
+
+    for (let i = 1; i <= 10; i++) {
+        const input = document.getElementById(`a-img${i}`);
+        newProd[`image_${i}`] = input ? input.value.trim() || null : null;
+    }
+
+    const { error } = await sb.from('products').insert([newProd]);
+    if (error) { showToast('Error: '+error.message, true); return; }
+    showToast('✓ Product added!');
+    
+    // Reset all 10 image fields + other fields
+    const resetFields = ['a-pid','a-name','a-pxxs','a-pxs','a-pstd','a-sizes','a-colors','a-wa','a-rev-name','a-rev-star','a-rev-text'];
+    for(let i=1; i<=10; i++) resetFields.push(`a-img${i}`);
+    resetFields.forEach(id => { if(document.getElementById(id)) document.getElementById(id).value=''; });
+    
+    loadAdminData();
+    loadProducts();
+    showAPage('products');
+}
+
+function showToast(msg, isErr=false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast show ${isErr?'err':''}`;
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(()=>t.classList.remove('show'), 3200);
+}
+
+function openPolicy()  { document.getElementById('policyOverlay').classList.add('open'); }
+function closePolicy() { document.getElementById('policyOverlay').classList.remove('open'); }
+function closePolicyOutside(e) { if (e.target === document.getElementById('policyOverlay')) closePolicy(); }
+
+initAuth();
+loadProducts();
+</script>
+</body>
+</html>
