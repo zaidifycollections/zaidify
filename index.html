@@ -7,9 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* ═══════════════════════════════════════════
+        /* -------------------------------------------
            CSS VARIABLES & RESET
-        ═══════════════════════════════════════════ */
+        ------------------------------------------- */
         :root {
             --pink: #ff00ff; --bg: #08020f; --nav-bg: #000;
             --gold: #ffd700; --white: #ffffff;
@@ -83,23 +83,23 @@
         .loading-products::after { content: ''; display: inline-block; animation: dots 1.2s infinite; }
         @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} }
 
-        /* ═══════════════════════════════════════════
+        /* -------------------------------------------
            OVERLAY SYSTEM
-        ═══════════════════════════════════════════ */
+        ------------------------------------------- */
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; }
         .overlay.open { display: flex; }
         .overlay-center { align-items: center; }
 
-        /* ═══════════════════════════════════════════
+        /* -------------------------------------------
            POLICY MODAL
-        ═══════════════════════════════════════════ */
+        ------------------------------------------- */
         .policy-modal { background: #08020f; border: 1px solid var(--pink); padding: 30px; border-radius: 20px; max-width: 500px; width: 100%; position: relative; box-shadow: 0 0 30px var(--pink); color: white; margin: auto; }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: var(--pink); font-weight: bold; line-height: 1; }
         .close-modal:hover { opacity: 0.7; }
 
-        /* ═══════════════════════════════════════════
+        /* -------------------------------------------
            LOGIN MODAL
-        ═══════════════════════════════════════════ */
+        ------------------------------------------- */
         .login-box { background: #0d0416; border: 1px solid rgba(255,0,255,0.4); border-radius: 24px; padding: 40px 36px; width: 100%; max-width: 420px; box-shadow: 0 0 60px rgba(255,0,255,0.15); position: relative; margin: auto; }
         .login-close { position: absolute; top: 16px; right: 20px; font-size: 1.8rem; cursor: pointer; color: var(--pink); font-weight: bold; line-height: 1; }
         .login-logo { text-align: center; margin-bottom: 24px; }
@@ -127,9 +127,9 @@
         .lmsg.ok { background: rgba(37,211,102,0.15); color: #25d366; display: block; }
         .lmsg.err { background: rgba(255,0,0,0.1); color: #ff6b6b; display: block; }
 
-        /* ═══════════════════════════════════════════
+        /* -------------------------------------------
            ADMIN PANEL
-        ═══════════════════════════════════════════ */
+        ------------------------------------------- */
         .admin-panel { background: #08020f; width: 100%; min-height: 100vh; display: flex; flex-direction: column; margin: auto; max-width: 100%; border-radius: 0; }
         .admin-topbar { background: #000; border-bottom: 1px solid rgba(255,0,255,0.3); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
         .admin-topbar-title { font-family: 'Bebas Neue'; font-size: 1.5rem; letter-spacing: 4px; color: var(--pink); }
@@ -196,9 +196,9 @@
         .order-detail-row { background: rgba(255,0,255,0.03); border: 1px solid rgba(255,0,255,0.1); border-radius: 10px; padding: 14px 18px; margin-bottom: 8px; }
         .order-card-mini { font-size: 0.8rem; line-height: 1.7; }
 
-        /* ═══════════════════════════════════════════
+        /* -------------------------------------------
            CART PANEL
-        ═══════════════════════════════════════════ */
+        ------------------------------------------- */
         .cart-panel { background: #0d0416; width: 100%; max-width: 540px; min-height: 100vh; position: relative; margin-left: auto; border-left: 1px solid rgba(255,0,255,0.2); }
         .cart-overlay { justify-content: flex-end; }
         .cart-header { padding: 24px 28px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
@@ -229,9 +229,9 @@
         .checkout-btn:hover { opacity: 0.85; transform: translateY(-2px); }
         .checkout-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
 
-        /* ═══════════════════════════════════════════
+        /* -------------------------------------------
            PURCHASE / CHECKOUT PAGE
-        ═══════════════════════════════════════════ */
+        ------------------------------------------- */
         .purchase-panel { background: #08020f; width: 100%; min-height: 100vh; }
         .purchase-header { padding: 20px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; background: #000; }
         .purchase-back { background: none; border: 1px solid var(--border); color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 0.9rem; letter-spacing: 1px; transition: 0.2s; }
@@ -273,9 +273,9 @@
         .place-order-btn:hover { opacity: 0.85; transform: translateY(-2px); }
         .place-order-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        /* ═══════════════════════════════════════════
+        /* -------------------------------------------
            ACCOUNT PANEL
-        ═══════════════════════════════════════════ */
+        ------------------------------------------- */
         .account-panel { background: #08020f; width: 100%; min-height: 100vh; }
         .account-header { padding: 20px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; background: #000; }
         .account-title { font-family: 'Bebas Neue'; font-size: 1.6rem; letter-spacing: 4px; color: var(--pink); }
@@ -320,9 +320,9 @@
         .no-orders .no-icon { font-size: 3rem; margin-bottom: 12px; }
         .no-orders p { font-family: 'Bebas Neue'; font-size: 1.2rem; letter-spacing: 2px; }
 
-        /* ═══════════════════════════════════════════
+        /* -------------------------------------------
            HELP CENTRE
-        ═══════════════════════════════════════════ */
+        ------------------------------------------- */
         .help-panel { background: #08020f; width: 100%; min-height: 100vh; }
         .help-overlay-wrap { background: #0d0416; border: 1px solid rgba(255,0,255,0.3); border-radius: 20px; padding: 40px; width: 100%; max-width: 540px; box-shadow: 0 0 50px rgba(255,0,255,0.1); position: relative; margin: auto; }
         .help-title { font-family: 'Bebas Neue'; font-size: 2rem; letter-spacing: 4px; color: var(--pink); margin-bottom: 8px; }
@@ -338,9 +338,9 @@
         .help-email-note { text-align: center; margin-top: 18px; font-size: 0.78rem; color: rgba(255,255,255,0.35); }
         .help-email-note a { color: var(--pink); text-decoration: none; }
 
-        /* ═══════════════════════════════════════════
+        /* -------------------------------------------
            ORDER SUCCESS PAGE
-        ═══════════════════════════════════════════ */
+        ------------------------------------------- */
         .success-box { background: #0d0416; border: 1px solid rgba(37,211,102,0.4); border-radius: 24px; padding: 50px 40px; max-width: 480px; width: 100%; text-align: center; margin: auto; box-shadow: 0 0 50px rgba(37,211,102,0.1); }
         .success-icon { font-size: 4rem; margin-bottom: 16px; }
         .success-title { font-family: 'Bebas Neue'; font-size: 2.2rem; letter-spacing: 4px; color: var(--green); margin-bottom: 10px; }
@@ -372,7 +372,7 @@
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════ STORE PAGE ═══ -->
+<!-- --------------------------------------- STORE PAGE --- -->
 <div id="store-page">
     <nav>
         <a href="#" class="logo-box"><img src="logo.png" class="logo-img" onerror="this.style.display='none'"><span>ZAIDIFY</span></a>
@@ -411,7 +411,7 @@
     </section>
 </div>
 
-<!-- ═══════════ POLICY MODAL ═══════════ -->
+<!-- ----------- POLICY MODAL ----------- -->
 <div class="overlay overlay-center" id="policyOverlay" onclick="closePolicyOutside(event)">
     <div class="policy-modal">
         <span class="close-modal" onclick="closePolicy()">×</span>
@@ -424,7 +424,7 @@
     </div>
 </div>
 
-<!-- ═══════════ LOGIN MODAL ═══════════ -->
+<!-- ----------- LOGIN MODAL ----------- -->
 <div class="overlay overlay-center" id="loginOverlay" onclick="closeLoginOutside(event)">
     <div class="login-box">
         <span class="login-close" onclick="closeLogin()">×</span>
@@ -459,7 +459,7 @@
     </div>
 </div>
 
-<!-- ═══════════ CART OVERLAY ═══════════ -->
+<!-- ----------- CART OVERLAY ----------- -->
 <div class="overlay cart-overlay" id="cartOverlay">
     <div class="cart-panel">
         <div class="cart-header">
@@ -479,7 +479,7 @@
     </div>
 </div>
 
-<!-- ═══════════ PURCHASE / CHECKOUT PAGE ═══════════ -->
+<!-- ----------- PURCHASE / CHECKOUT PAGE ----------- -->
 <div class="overlay" id="purchaseOverlay" style="padding:0;">
     <div class="purchase-panel">
         <div class="purchase-header">
@@ -561,7 +561,7 @@
     </div>
 </div>
 
-<!-- ═══════════ ORDER SUCCESS ═══════════ -->
+<!-- ----------- ORDER SUCCESS ----------- -->
 <div class="overlay overlay-center" id="successOverlay">
     <div class="success-box">
         <div class="success-icon">🎉</div>
@@ -572,7 +572,7 @@
     </div>
 </div>
 
-<!-- ═══════════ ACCOUNT OVERLAY ═══════════ -->
+<!-- ----------- ACCOUNT OVERLAY ----------- -->
 <div class="overlay" id="accountOverlay" style="padding:0;">
     <div class="account-panel">
         <div class="account-header">
@@ -708,7 +708,7 @@
     </div>
 </div>
 
-<!-- ═══════════ ADMIN OVERLAY ═══════════ -->
+<!-- ----------- ADMIN OVERLAY ----------- -->
 <div class="overlay" id="adminOverlay">
     <div class="admin-panel">
         <div class="admin-topbar">
@@ -861,18 +861,18 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // CONFIG
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 const SUPABASE_URL  = 'https://ipwlhlsxtlfqioysyzlc.supabase.co';
 const SUPABASE_KEY  = 'sb_publishable__u9RyOYFvdQ3A-kPQPPO3A_BLjsOHds';
 const ADMIN_EMAIL   = 'zaidifycollections@gmail.com';
 const HELP_EMAIL = 'zaidifycollections@gmail.com';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // STATE
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 let currentUser  = null;
 let userProfile  = null;
 let allProducts  = [];
@@ -882,9 +882,9 @@ let sliderPos    = {};
 let cart         = [];
 let selectedAddressIndex = -1;
 
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // AUTH
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 async function initAuth() {
     const { data: { session } } = await sb.auth.getSession();
     currentUser = session?.user ?? null;
@@ -956,6 +956,7 @@ async function doGoogle() {
     await sb.auth.signInWithOAuth({
         provider: 'google',
         redirectTo: 'https://www.zaidifycollections.in'
+    });
 }
 
 async function doForgotPassword() {
@@ -987,9 +988,9 @@ function switchLoginTab(tab) {
 function showLMsg(txt, type) { const el=document.getElementById('lmsg'); el.textContent=txt; el.className=`lmsg ${type}`; }
 function clearLMsg()         { const el=document.getElementById('lmsg'); el.className='lmsg'; el.textContent=''; }
 
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // PROFILE (ACCOUNT SETTINGS)
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 async function saveProfile() {
     if (!currentUser) return;
     const name  = document.getElementById('settings-name').value.trim();
@@ -1031,9 +1032,9 @@ function refreshProfileUI() {
     el('help-email').value = userProfile?.email || currentUser?.email || '';
 }
 
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // ADDRESSES
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 async function loadUserAddresses(target='checkout') {
     if (!currentUser) return [];
     const { data } = await sb.from('user_addresses').select('*').eq('user_id', currentUser.id).order('id',{ascending:true});
@@ -1140,9 +1141,9 @@ function toggleAccAddressForm() {
     document.getElementById('accAddressForm').classList.toggle('open');
 }
 
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // CART
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 function addToCart(pid, name, size, price, color, imageUrl) {
     const existIdx = cart.findIndex(i => i.pid===pid && i.size===size && i.color===color);
     if (existIdx >= 0) {
@@ -1210,9 +1211,9 @@ function openCart() {
 }
 function closeCart() { document.getElementById('cartOverlay').classList.remove('open'); }
 
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // CHECKOUT / PURCHASE PAGE
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 async function goToCheckout() {
     if (!currentUser) {
         closeCart();
@@ -1281,9 +1282,9 @@ async function placeOrder() {
 
 function closeSuccess() { document.getElementById('successOverlay').classList.remove('open'); }
 
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // ACCOUNT PANEL
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 async function openAccount() {
     if (!currentUser) { openLogin(); return; }
     await loadUserProfile();
@@ -1352,9 +1353,9 @@ async function loadMyOrders() {
     }).join('');
 }
 
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // HELP CENTRE
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 function renderFAQ() {
     const faqs = [
         { q: 'How long does delivery take?', a: 'Standard delivery takes 5–7 business days across India.' },
@@ -1395,9 +1396,9 @@ function sendHelpEmail() {
     document.getElementById('help-message').value = '';
 }
 
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // STORE — PRODUCTS
-// ════════════════════════════════════════════════
+// ------------------------------------------------
     function generateStars(rating) {
     const full  = Math.floor(rating);
     const half  = rating % 1 >= 0.5 ? 1 : 0;
@@ -1534,16 +1535,15 @@ function order(e, id, name) {
     window.open(`https://wa.me/918655171445?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // ADMIN
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 function openAdmin() {
     if (!currentUser || currentUser.email !== ADMIN_EMAIL) { openLogin(); return; }
     document.getElementById('adminOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';
     loadAdminData();
 }
-
 function closeAdmin() {
     document.getElementById('adminOverlay').classList.remove('open');
     document.body.style.overflow = '';
@@ -1788,9 +1788,9 @@ rev_count:  document.getElementById('a-rev-count').value.trim()||'0+',
     showAPage('products');
 }
 
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // UTILS
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 function showToast(msg, isErr=false) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -1803,14 +1803,14 @@ function openPolicy()  { document.getElementById('policyOverlay').classList.add(
 function closePolicy() { document.getElementById('policyOverlay').classList.remove('open'); }
 function closePolicyOutside(e) { if (e.target === document.getElementById('policyOverlay')) closePolicy(); }
 
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 // INIT
-// ════════════════════════════════════════════════
+// ------------------------------------------------
 initAuth();
 loadProducts();
 </script>
 
-<!-- ═══════════════════════════════════════
+<!-- ---------------------------------------
      SUPABASE SQL — run these in your Supabase SQL editor
      to create the required tables:
 
@@ -1862,6 +1862,6 @@ CREATE POLICY "Admin can manage all orders" ON orders FOR ALL USING (
     (SELECT email FROM auth.users WHERE id = auth.uid()) = 'zaidifycollections@gmail.com'
 );
 
-═══════════════════════════════════════ -->
+--------------------------------------- -->
 </body>
 </html>
