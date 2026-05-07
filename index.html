@@ -1046,10 +1046,11 @@ async function saveAddress() {
     if (!addr.name || !addr.flat || !addr.area || !addr.city || !addr.pin) {
         showToast('Fill all required fields!', true); return;
     }
-    await sb.from('user_addresses').insert([{ user_id: currentUser.id, ...addr }]);
-    showToast('✓ Address saved!');
-    document.getElementById('addressForm').classList.remove('open');
-    await renderCheckoutAddresses();
+    const { error } = await sb.from('user_addresses').insert([{ user_id: currentUser.id, ...addr }]);
+if (error) { showToast('Error: ' + error.message, true); return; }
+showToast('✓ Address saved!');
+document.getElementById('addressForm').classList.remove('open');
+await renderCheckoutAddresses();
 }
 
 async function saveAddressFromAccount() {
@@ -1057,9 +1058,10 @@ async function saveAddressFromAccount() {
     const addr = collectAddressForm('acc-af');
     if (!addr.name || !addr.flat || !addr.area || !addr.city || !addr.pin) {
         showToast('Fill all required fields!', true); return;
-    }
-    await sb.from('user_addresses').insert([{ user_id: currentUser.id, ...addr }]);
-    showToast('✓ Address saved!');
+   const { error } = await sb.from('user_addresses').insert([{ user_id: currentUser.id, ...addr }]);
+if (error) { showToast('Error: ' + error.message, true); return; }
+showToast('✓ Address saved!');
+document.getElementById('accAddressForm').classList.remove('open');
     document.getElementById('accAddressForm').classList.remove('open');
     renderAccountAddresses();
 }
