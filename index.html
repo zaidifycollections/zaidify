@@ -1056,12 +1056,13 @@ await renderCheckoutAddresses();
 async function saveAddressFromAccount() {
     if (!currentUser) { showToast('Login to save addresses.', true); return; }
     const addr = collectAddressForm('acc-af');
-    if (!addr.name || !addr.flat || !addr.area || !addr.city || !addr.pin) {
-        showToast('Fill all required fields!', true); return;
-   const { error } = await sb.from('user_addresses').insert([{ user_id: currentUser.id, ...addr }]);
+   if (!addr.name || !addr.flat || !addr.area || !addr.city || !addr.pin) {
+    showToast('Fill all required fields!', true); return;
+}
+const { error } = await sb.from('user_addresses').insert([{ user_id: currentUser.id, ...addr }]);
 if (error) { showToast('Error: ' + error.message, true); return; }
 showToast('✓ Address saved!');
-document.getElementById('accAddressForm').classList.remove('open');
+
     document.getElementById('accAddressForm').classList.remove('open');
     renderAccountAddresses();
 }
