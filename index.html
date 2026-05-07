@@ -758,13 +758,15 @@
                     <div class="sec-head">
                         <h2>ALL ORDERS</h2>
                         <div style="display:flex;gap:8px;">
+    <input id="orderSearchInput" oninput="filterOrders()" placeholder="Search order ID, name, email..." style="background:rgba(255,255,255,0.07);border:1px solid var(--border);color:white;padding:7px 12px;border-radius:8px;font-family:'Poppins';font-size:0.8rem;outline:none;width:260px;">
                             <select id="orderStatusFilter" onchange="filterOrders()" style="background:rgba(255,255,255,0.07);border:1px solid var(--border);color:white;padding:7px 12px;border-radius:8px;font-family:'Poppins';font-size:0.8rem;outline:none;cursor:pointer;">
                                 <option value="">All Statuses</option>
-                                <option value="new">New</option>
-                                <option value="confirmed">Confirmed</option>
-                                <option value="shipped">Shipped</option>
-                                <option value="delivered">Delivered</option>
-                                <option value="cancelled">Cancelled</option>
+<option value="new">New</option>
+<option value="received">Received</option>
+<option value="confirmed">Confirmed</option>
+<option value="shipped">Shipped</option>
+<option value="delivered">Delivered</option>
+<option value="cancelled">Cancelled</option>
                             </select>
                         </div>
                     </div>
@@ -1645,8 +1647,19 @@ function renderAdminOrders(filterStatus='') {
     }).join('');
 }
 
-function filterOrders() { renderAdminOrders(); }
-
+function filterOrders() {
+    const status = document.getElementById('orderStatusFilter').value;
+    const search = document.getElementById('orderSearchInput').value.toLowerCase();
+    const filtered = allOrders.filter(o => {
+        const matchStatus = !status || o.status === status;
+        const matchSearch = !search ||
+            (o.order_id||'').toLowerCase().includes(search) ||
+            (o.user_name||'').toLowerCase().includes(search) ||
+            (o.user_email||'').toLowerCase().includes(search);
+        return matchStatus && matchSearch;
+    });
+    renderAdminOrders(filtered);
+}
 async function updateOrderStatus(orderId, newStatus) {
     const { error } = await sb.from('orders').update({ status: newStatus }).eq('order_id', orderId);
     if (error) { showToast('Error: '+error.message, true); return; }
