@@ -814,9 +814,8 @@
                             <div class="ffield full" style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;">
                                 <label style="color: var(--pink); font-weight: bold;">Review Section (Optional)</label>
                             </div>
-                            <div class="ffield"><label>Reviewer Name</label><input id="a-rev-name" placeholder="e.g. Ananya S."></div>
-                            <div class="ffield"><label>Rating (1-5)</label><input id="a-rev-star" type="number" min="1" max="5" placeholder="5"></div>
-                            <div class="ffield full"><label>Review Comment</label><textarea id="a-rev-text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 9px; padding: 10px 13px; color: #fff; width: 100%; font-family: 'Poppins';" placeholder="e.g. Quality is amazing!"></textarea></div>
+                            <div class="ffield"><label>Rating (e.g. 4.1)</label><input id="a-rev-star" type="number" step="0.1" min="1" max="5" placeholder="4.1"></div>
+<div class="ffield"><label>Review Count (e.g. 14700+)</label><input id="a-rev-count" placeholder="14700+"></div>
                         </div>
                         <button class="save-btn" onclick="addProduct()">ADD PRODUCT TO STORE</button>
                     </div>
@@ -1770,9 +1769,8 @@ async function addProduct() {
         sizes:          document.getElementById('a-sizes').value.trim(),
         colors:         document.getElementById('a-colors').value.trim(),
         whatsapp_link:  document.getElementById('a-wa').value.trim()||'https://wa.me/918655171445',
-        rev_name:       document.getElementById('a-rev-name').value.trim(),
-        rev_star:       parseInt(document.getElementById('a-rev-star').value)||5,
-        rev_text:       document.getElementById('a-rev-text').value.trim(),
+       rev_star:   parseFloat(document.getElementById('a-rev-star').value)||4.1,
+rev_count:  document.getElementById('a-rev-count').value.trim()||'0+',
     };
 
     for (let i=1;i<=10;i++) {
@@ -1783,7 +1781,7 @@ async function addProduct() {
     const { error } = await sb.from('products').insert([newProd]);
     if (error) { showToast('Error: '+error.message, true); return; }
     showToast('✓ Product added!');
-    const resetFields = ['a-pid','a-name','a-pxxs','a-pxs','a-pstd','a-sizes','a-colors','a-wa','a-rev-name','a-rev-star','a-rev-text'];
+   const resetFields = ['a-pid','a-name','a-pxxs','a-pxs','a-pstd','a-sizes','a-colors','a-wa','a-rev-star','a-rev-count'];
     for(let i=1;i<=10;i++) resetFields.push(`a-img${i}`);
     resetFields.forEach(id => { if(document.getElementById(id)) document.getElementById(id).value=''; });
     loadAdminData();
