@@ -189,7 +189,7 @@
         .status-shipped { background: rgba(0,150,255,0.15); color: #4db8ff; border: 1px solid rgba(0,150,255,0.3); }
         .status-delivered { background: rgba(37,211,102,0.15); color: var(--green); border: 1px solid rgba(37,211,102,0.3); }
         .status-cancelled { background: rgba(255,0,0,0.1); color: #ff6b6b; border: 1px solid rgba(255,0,0,0.2); }
-
+#orderStatusFilter option, #orderStatusFilter { background: #0d0416; color: white; }
         /* ── ORDER ACTION BUTTONS ── */
         .order-action-btn { background: none; border: 1px solid var(--border); color: rgba(255,255,255,0.6); padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 0.72rem; transition: 0.2s; }
         .order-action-btn:hover { border-color: var(--pink); color: var(--pink); }
@@ -1603,9 +1603,8 @@ function orderTableRow(o) {
     </tr>`;
 }
 
-function renderAdminOrders(filterStatus='') {
-    const filter = filterStatus || document.getElementById('orderStatusFilter')?.value || '';
-    const filtered = filter ? allOrders.filter(o=>o.status===filter) : allOrders;
+function renderAdminOrders(orders) {
+    const filtered = orders !== undefined ? orders : allOrders;
     const container = document.getElementById('adminOrdersContainer');
     if (!filtered.length) {
         container.innerHTML = '<div style="text-align:center;padding:60px;color:rgba(255,255,255,0.3);font-family:\'Bebas Neue\';font-size:1.2rem;letter-spacing:2px;">NO ORDERS FOUND</div>';
