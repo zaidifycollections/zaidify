@@ -1400,6 +1400,12 @@ function sendHelpEmail() {
 // ════════════════════════════════════════════════
 // STORE — PRODUCTS
 // ════════════════════════════════════════════════
+    function generateStars(rating) {
+    const full  = Math.floor(rating);
+    const half  = rating % 1 >= 0.5 ? 1 : 0;
+    const empty = 5 - full - half;
+    return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(empty);
+}
 function parseSizes(raw)  { return (raw||'').replace(/[{}"'\[\]]/g,'').split(',').map(s=>s.trim()).filter(Boolean); }
 function parseColors(raw) { return (raw||'').replace(/[{}"'\[\]]/g,'').split(',').map(c=>c.trim()).filter(Boolean); }
 
@@ -1457,7 +1463,7 @@ function buildProduct(p) {
             </div>
         </div>
         <div class="p-content">
-            <div class="rating-box"><div class="stars">★★★★★</div><div class="rev-count">4.1 (Reviews)</div></div>
+            <div class="rating-box"><div class="stars" style="color:var(--gold);">${generateStars(p.rev_star||4.1)}</div><div class="rev-count">${p.rev_star||4.1} (${p.rev_count||'0+'} reviews)</div></div>
             <h2 class="product-name">${p.name}</h2>
             <div class="admin-ref">${pid}</div>
             ${colorHTML}
