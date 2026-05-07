@@ -1,4 +1,4 @@
-          <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,12 +8,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* ═══════════════════════════════════════════
-           BASE / STORE STYLES
+           CSS VARIABLES & RESET
         ═══════════════════════════════════════════ */
         :root {
             --pink: #ff00ff; --bg: #08020f; --nav-bg: #000;
             --gold: #ffd700; --white: #ffffff;
             --card: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.1);
+            --green: #25d366; --red: #e53935;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--white); font-family: 'Poppins', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
@@ -22,13 +23,18 @@
         nav { width: 100%; padding: 12px 6%; display: flex; justify-content: space-between; align-items: center; background: var(--nav-bg); position: fixed; top: 0; z-index: 9999; border-bottom: 1px solid var(--border); }
         .logo-box { display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; font-family: 'Bebas Neue'; font-size: 1.4rem; }
         .logo-img { height: 30px; }
-        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-links { display: flex; gap: 16px; align-items: center; }
         .nav-links a { color: white; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1rem; }
         .shop-now-btn { background: var(--pink); padding: 8px 16px; border-radius: 5px; font-weight: 800; color: white !important; }
         .nav-user-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: white; padding: 6px 16px; border-radius: 5px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 1px; transition: 0.2s; }
         .nav-user-btn:hover { background: var(--pink); border-color: var(--pink); }
         .nav-admin-btn { background: rgba(255,0,255,0.15); border: 1px solid var(--pink); color: var(--pink); padding: 6px 16px; border-radius: 5px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 1px; margin-left: 6px; transition: 0.2s; }
         .nav-admin-btn:hover { background: var(--pink); color: white; }
+        .nav-cart-btn { position: relative; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px 14px; border-radius: 5px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 1rem; transition: 0.2s; }
+        .nav-cart-btn:hover { border-color: var(--pink); color: var(--pink); }
+        .cart-badge { position: absolute; top: -6px; right: -6px; background: var(--pink); color: white; font-size: 0.6rem; font-family: 'Poppins'; font-weight: 700; width: 17px; height: 17px; border-radius: 50%; display: flex; align-items: center; justify-content: center; display: none; }
+        .nav-account-btn { background: rgba(255,0,255,0.08); border: 1px solid rgba(255,0,255,0.3); color: var(--pink); padding: 6px 14px; border-radius: 5px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 1rem; transition: 0.2s; display: none; }
+        .nav-account-btn:hover { background: var(--pink); color: white; }
 
         /* ── HERO ── */
         .hero { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 60px; background: radial-gradient(circle at center, #1a052e 0%, #08020f 100%); }
@@ -64,8 +70,13 @@
         .box.active { background: var(--pink); border-color: var(--pink); color: white; transform: scale(1.05); }
         .price-now { font-size: 2.8rem; font-weight: 900; }
         .price-old { text-decoration: line-through; opacity: 0.3; font-size: 1.3rem; margin-left: 12px; }
-        .wa-btn { display: block; background: #25d366; color: white; text-align: center; padding: 20px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-top: 20px; transition: 0.3s; }
+        .product-btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        .wa-btn { flex: 1; min-width: 140px; display: block; background: #25d366; color: white; text-align: center; padding: 16px 20px; border-radius: 15px; text-decoration: none; font-weight: 900; font-size: 1rem; transition: 0.3s; border: none; cursor: pointer; }
         .wa-btn:hover { background: #1ebe5d; transform: translateY(-2px); }
+        .cart-add-btn { flex: 1; min-width: 140px; background: rgba(255,0,255,0.15); border: 2px solid var(--pink); color: var(--pink); padding: 16px 20px; border-radius: 15px; font-weight: 900; font-size: 1rem; cursor: pointer; transition: 0.3s; font-family: 'Poppins'; }
+        .cart-add-btn:hover { background: var(--pink); color: white; transform: translateY(-2px); }
+        .buy-now-btn { flex: 1; min-width: 140px; background: var(--gold); border: none; color: #000; padding: 16px 20px; border-radius: 15px; font-weight: 900; font-size: 1rem; cursor: pointer; transition: 0.3s; font-family: 'Poppins'; }
+        .buy-now-btn:hover { opacity: 0.9; transform: translateY(-2px); }
         .policy-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-family: 'Bebas Neue'; letter-spacing: 2px; margin: 40px auto; display: block; transition: 0.2s; }
         .policy-btn:hover { border-color: var(--pink); color: var(--pink); }
         .loading-products { text-align: center; padding: 60px 0; color: rgba(255,255,255,0.4); font-family: 'Bebas Neue'; font-size: 1.5rem; letter-spacing: 2px; }
@@ -171,10 +182,179 @@
         .img-preview { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
         .img-preview img { width: 56px; height: 56px; object-fit: cover; border-radius: 7px; border: 1px solid var(--border); }
 
+        /* ── ORDER STATUS BADGES ── */
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .status-new { background: rgba(255,0,255,0.2); color: var(--pink); border: 1px solid rgba(255,0,255,0.4); }
+        .status-confirmed { background: rgba(255,215,0,0.15); color: var(--gold); border: 1px solid rgba(255,215,0,0.3); }
+        .status-shipped { background: rgba(0,150,255,0.15); color: #4db8ff; border: 1px solid rgba(0,150,255,0.3); }
+        .status-delivered { background: rgba(37,211,102,0.15); color: var(--green); border: 1px solid rgba(37,211,102,0.3); }
+        .status-cancelled { background: rgba(255,0,0,0.1); color: #ff6b6b; border: 1px solid rgba(255,0,0,0.2); }
+
+        /* ── ORDER ACTION BUTTONS ── */
+        .order-action-btn { background: none; border: 1px solid var(--border); color: rgba(255,255,255,0.6); padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 0.72rem; transition: 0.2s; }
+        .order-action-btn:hover { border-color: var(--pink); color: var(--pink); }
+        .order-detail-row { background: rgba(255,0,255,0.03); border: 1px solid rgba(255,0,255,0.1); border-radius: 10px; padding: 14px 18px; margin-bottom: 8px; }
+        .order-card-mini { font-size: 0.8rem; line-height: 1.7; }
+
+        /* ═══════════════════════════════════════════
+           CART PANEL
+        ═══════════════════════════════════════════ */
+        .cart-panel { background: #0d0416; width: 100%; max-width: 540px; min-height: 100vh; position: relative; margin-left: auto; border-left: 1px solid rgba(255,0,255,0.2); }
+        .cart-overlay { justify-content: flex-end; }
+        .cart-header { padding: 24px 28px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .cart-title { font-family: 'Bebas Neue'; font-size: 1.8rem; letter-spacing: 4px; color: var(--pink); }
+        .cart-close-btn { background: none; border: 1px solid var(--border); color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; transition: 0.2s; }
+        .cart-close-btn:hover { border-color: var(--pink); color: var(--pink); }
+        .cart-items { padding: 20px 28px; flex: 1; overflow-y: auto; min-height: 300px; }
+        .cart-item { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--border); align-items: center; }
+        .cart-item-img { width: 70px; height: 70px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); flex-shrink: 0; }
+        .cart-item-info { flex: 1; }
+        .cart-item-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+        .cart-item-sub { font-size: 0.75rem; color: rgba(255,255,255,0.45); }
+        .cart-item-price { font-weight: 900; color: var(--pink); font-size: 1rem; }
+        .cart-item-remove { background: none; border: none; color: rgba(255,255,255,0.3); cursor: pointer; font-size: 1.2rem; transition: 0.2s; padding: 4px; }
+        .cart-item-remove:hover { color: #ff6b6b; }
+        .cart-item-qty { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+        .qty-btn { background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: white; width: 24px; height: 24px; border-radius: 5px; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
+        .qty-btn:hover { border-color: var(--pink); }
+        .qty-num { font-size: 0.85rem; min-width: 20px; text-align: center; }
+        .cart-empty { text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.25); }
+        .cart-empty .empty-icon { font-size: 3rem; margin-bottom: 10px; }
+        .cart-empty p { font-family: 'Bebas Neue'; font-size: 1.2rem; letter-spacing: 2px; }
+        .cart-footer { padding: 20px 28px; border-top: 1px solid var(--border); }
+        .cart-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .cart-total-label { font-family: 'Bebas Neue'; letter-spacing: 2px; font-size: 1.1rem; color: rgba(255,255,255,0.5); }
+        .cart-total-amount { font-family: 'Bebas Neue'; font-size: 2rem; color: var(--pink); }
+        .checkout-btn { width: 100%; background: var(--pink); color: white; border: none; border-radius: 14px; padding: 18px; font-family: 'Bebas Neue'; font-size: 1.3rem; letter-spacing: 3px; cursor: pointer; transition: 0.3s; }
+        .checkout-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+        .checkout-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+        /* ═══════════════════════════════════════════
+           PURCHASE / CHECKOUT PAGE
+        ═══════════════════════════════════════════ */
+        .purchase-panel { background: #08020f; width: 100%; min-height: 100vh; }
+        .purchase-header { padding: 20px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; background: #000; }
+        .purchase-back { background: none; border: 1px solid var(--border); color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 0.9rem; letter-spacing: 1px; transition: 0.2s; }
+        .purchase-back:hover { border-color: var(--pink); color: var(--pink); }
+        .purchase-title { font-family: 'Bebas Neue'; font-size: 1.6rem; letter-spacing: 4px; color: var(--pink); }
+        .purchase-body { display: flex; gap: 30px; padding: 30px 6%; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; }
+        .purchase-left { flex: 1.4; min-width: 320px; }
+        .purchase-right { flex: 1; min-width: 300px; }
+        .purchase-section { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+        .purchase-section-title { font-family: 'Bebas Neue'; font-size: 1.2rem; letter-spacing: 3px; color: var(--pink); margin-bottom: 18px; }
+        .address-card { border: 1px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: 0.2s; margin-bottom: 10px; position: relative; }
+        .address-card:hover { border-color: rgba(255,0,255,0.4); }
+        .address-card.selected { border-color: var(--pink); background: rgba(255,0,255,0.05); }
+        .address-card-name { font-weight: 700; font-size: 0.9rem; }
+        .address-card-detail { font-size: 0.78rem; color: rgba(255,255,255,0.5); line-height: 1.6; margin-top: 4px; }
+        .address-radio { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; accent-color: var(--pink); }
+        .add-address-btn { width: 100%; background: none; border: 1px dashed rgba(255,0,255,0.4); color: var(--pink); border-radius: 12px; padding: 14px; cursor: pointer; font-family: 'Bebas Neue'; letter-spacing: 2px; font-size: 0.95rem; transition: 0.2s; margin-top: 4px; }
+        .add-address-btn:hover { background: rgba(255,0,255,0.05); }
+        .addr-form { display: none; margin-top: 16px; }
+        .addr-form.open { display: block; }
+        .addr-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .afinput { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 9px; padding: 11px 13px; color: #fff; font-size: 0.85rem; font-family: 'Poppins'; outline: none; transition: 0.2s; width: 100%; }
+        .afinput:focus { border-color: var(--pink); }
+        .af-full { grid-column: 1 / -1; }
+        .af-label { font-size: 0.68rem; color: rgba(255,255,255,0.35); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+        .save-addr-btn { width: 100%; background: var(--pink); border: none; color: white; border-radius: 10px; padding: 13px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 2px; margin-top: 12px; transition: 0.2s; }
+        .save-addr-btn:hover { opacity: 0.85; }
+        .order-summary-item { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .order-summary-item:last-of-type { border-bottom: none; }
+        .osi-img { width: 54px; height: 54px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); flex-shrink: 0; }
+        .osi-info { flex: 1; }
+        .osi-name { font-size: 0.85rem; font-weight: 700; }
+        .osi-sub { font-size: 0.72rem; color: rgba(255,255,255,0.4); }
+        .osi-price { font-weight: 900; color: var(--pink); }
+        .summary-total { display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+        .summary-total-label { font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 2px; color: rgba(255,255,255,0.5); }
+        .summary-total-amt { font-family: 'Bebas Neue'; font-size: 1.5rem; color: var(--pink); }
+        .place-order-btn { width: 100%; background: var(--pink); border: none; color: white; border-radius: 14px; padding: 18px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 1.3rem; letter-spacing: 3px; margin-top: 16px; transition: 0.3s; }
+        .place-order-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+        .place-order-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* ═══════════════════════════════════════════
+           ACCOUNT PANEL
+        ═══════════════════════════════════════════ */
+        .account-panel { background: #08020f; width: 100%; min-height: 100vh; }
+        .account-header { padding: 20px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; background: #000; }
+        .account-title { font-family: 'Bebas Neue'; font-size: 1.6rem; letter-spacing: 4px; color: var(--pink); }
+        .account-body { display: flex; max-width: 1000px; margin: 0 auto; padding: 30px 6%; gap: 24px; flex-wrap: wrap; }
+        .account-sidebar { width: 220px; flex-shrink: 0; }
+        .account-content { flex: 1; min-width: 280px; }
+        .acc-nav-item { padding: 13px 18px; border-radius: 10px; cursor: pointer; font-family: 'Bebas Neue'; letter-spacing: 2px; font-size: 0.95rem; color: rgba(255,255,255,0.4); transition: 0.2s; display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+        .acc-nav-item:hover { color: white; background: rgba(255,255,255,0.04); }
+        .acc-nav-item.active { color: var(--pink); background: rgba(255,0,255,0.07); }
+        .acc-page { display: none; }
+        .acc-page.active { display: block; }
+        .acc-section { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+        .acc-section-title { font-family: 'Bebas Neue'; font-size: 1.2rem; letter-spacing: 3px; color: var(--pink); margin-bottom: 18px; }
+        .profile-avatar { width: 72px; height: 72px; background: rgba(255,0,255,0.2); border: 2px solid var(--pink); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 12px; }
+        .profile-name-big { font-family: 'Bebas Neue'; font-size: 1.8rem; letter-spacing: 2px; }
+        .profile-email-small { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+        .settings-field { margin-bottom: 16px; }
+        .settings-field label { display: block; font-size: 0.68rem; color: rgba(255,255,255,0.35); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+        .settings-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; padding: 12px 15px; color: white; font-size: 0.9rem; font-family: 'Poppins'; outline: none; transition: 0.2s; }
+        .settings-input:focus { border-color: var(--pink); }
+        .settings-save-btn { background: var(--pink); border: none; color: white; padding: 12px 28px; border-radius: 10px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 2px; transition: 0.2s; }
+        .settings-save-btn:hover { opacity: 0.85; }
+        .order-history-card { border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; transition: 0.2s; }
+        .order-history-card:hover { border-color: rgba(255,0,255,0.3); background: rgba(255,0,255,0.02); }
+        .ohc-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .ohc-id { font-family: 'Bebas Neue'; letter-spacing: 2px; font-size: 0.9rem; color: rgba(255,255,255,0.5); }
+        .ohc-date { font-size: 0.72rem; color: rgba(255,255,255,0.3); }
+        .ohc-items { font-size: 0.8rem; margin-bottom: 10px; color: rgba(255,255,255,0.7); }
+        .ohc-bottom { display: flex; justify-content: space-between; align-items: center; }
+        .ohc-total { font-weight: 700; color: var(--pink); }
+        .track-timeline { margin-top: 18px; }
+        .track-step { display: flex; gap: 14px; margin-bottom: 0; position: relative; }
+        .track-step:not(:last-child) .track-line { height: 30px; }
+        .track-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; position: relative; z-index: 1; }
+        .track-dot.done { background: var(--pink); box-shadow: 0 0 8px var(--pink); }
+        .track-dot.pending { background: rgba(255,255,255,0.15); border: 1px solid var(--border); }
+        .track-line { width: 2px; background: rgba(255,0,255,0.2); position: absolute; left: 6px; top: 17px; bottom: -30px; }
+        .track-info { flex: 1; padding-bottom: 26px; }
+        .track-info-label { font-size: 0.85rem; font-weight: 600; }
+        .track-info-sub { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+        .no-orders { text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.25); }
+        .no-orders .no-icon { font-size: 3rem; margin-bottom: 12px; }
+        .no-orders p { font-family: 'Bebas Neue'; font-size: 1.2rem; letter-spacing: 2px; }
+
+        /* ═══════════════════════════════════════════
+           HELP CENTRE
+        ═══════════════════════════════════════════ */
+        .help-panel { background: #08020f; width: 100%; min-height: 100vh; }
+        .help-overlay-wrap { background: #0d0416; border: 1px solid rgba(255,0,255,0.3); border-radius: 20px; padding: 40px; width: 100%; max-width: 540px; box-shadow: 0 0 50px rgba(255,0,255,0.1); position: relative; margin: auto; }
+        .help-title { font-family: 'Bebas Neue'; font-size: 2rem; letter-spacing: 4px; color: var(--pink); margin-bottom: 8px; }
+        .help-sub { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-bottom: 24px; }
+        .help-field { margin-bottom: 14px; }
+        .help-field label { display: block; font-size: 0.68rem; color: rgba(255,255,255,0.35); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+        .help-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; padding: 12px 15px; color: white; font-size: 0.9rem; font-family: 'Poppins'; outline: none; transition: 0.2s; }
+        .help-input:focus { border-color: var(--pink); }
+        .help-textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; padding: 12px 15px; color: white; font-size: 0.9rem; font-family: 'Poppins'; outline: none; transition: 0.2s; resize: vertical; min-height: 120px; }
+        .help-textarea:focus { border-color: var(--pink); }
+        .help-send-btn { width: 100%; background: var(--pink); border: none; color: white; border-radius: 12px; padding: 16px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 1.2rem; letter-spacing: 3px; margin-top: 6px; transition: 0.2s; }
+        .help-send-btn:hover { opacity: 0.85; }
+        .help-email-note { text-align: center; margin-top: 18px; font-size: 0.78rem; color: rgba(255,255,255,0.35); }
+        .help-email-note a { color: var(--pink); text-decoration: none; }
+
+        /* ═══════════════════════════════════════════
+           ORDER SUCCESS PAGE
+        ═══════════════════════════════════════════ */
+        .success-box { background: #0d0416; border: 1px solid rgba(37,211,102,0.4); border-radius: 24px; padding: 50px 40px; max-width: 480px; width: 100%; text-align: center; margin: auto; box-shadow: 0 0 50px rgba(37,211,102,0.1); }
+        .success-icon { font-size: 4rem; margin-bottom: 16px; }
+        .success-title { font-family: 'Bebas Neue'; font-size: 2.2rem; letter-spacing: 4px; color: var(--green); margin-bottom: 10px; }
+        .success-sub { color: rgba(255,255,255,0.5); font-size: 0.9rem; line-height: 1.6; margin-bottom: 24px; }
+        .success-order-id { background: rgba(37,211,102,0.1); border: 1px solid rgba(37,211,102,0.2); border-radius: 10px; padding: 12px 20px; font-family: 'Bebas Neue'; letter-spacing: 3px; font-size: 1.1rem; color: var(--green); margin-bottom: 24px; }
+        .success-back-btn { background: var(--pink); border: none; color: white; padding: 15px 30px; border-radius: 12px; cursor: pointer; font-family: 'Bebas Neue'; font-size: 1.1rem; letter-spacing: 2px; transition: 0.2s; }
+        .success-back-btn:hover { opacity: 0.85; }
+
+        /* ── TOAST ── */
         .toast { position: fixed; bottom: 28px; right: 28px; background: #25d366; color: #fff; padding: 13px 22px; border-radius: 11px; font-family: 'Bebas Neue'; letter-spacing: 2px; font-size: 1rem; z-index: 99999; opacity: 0; pointer-events: none; transition: opacity 0.3s; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
         .toast.show { opacity: 1; pointer-events: auto; }
         .toast.err { background: #e53935; }
 
+        /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
             .p-wrapper { flex-direction: column; }
             .p-img-box { height: 400px; min-width: unset; }
@@ -184,11 +364,15 @@
             .admin-sidebar { width: 160px; }
             .fgrid { grid-template-columns: 1fr; }
             .ffield.full { grid-column: 1; }
+            .purchase-body { flex-direction: column; }
+            .account-sidebar { width: 100%; }
+            .addr-form-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
+<!-- ═══════════════════════════════════════ STORE PAGE ═══ -->
 <div id="store-page">
     <nav>
         <a href="#" class="logo-box"><img src="logo.png" class="logo-img" onerror="this.style.display='none'"><span>ZAIDIFY</span></a>
@@ -196,6 +380,8 @@
             <a href="#categories">ABOUT</a>
             <a href="#women">WOMEN</a>
             <a href="#women" class="shop-now-btn">SHOP NOW</a>
+            <button class="nav-cart-btn" id="navCartBtn" onclick="openCart()">🛒 CART <span class="cart-badge" id="cartBadge">0</span></button>
+            <button class="nav-account-btn" id="navAccountBtn" onclick="openAccount()">👤 ACCOUNT</button>
             <button class="nav-user-btn" id="navLoginBtn" onclick="openLogin()">LOGIN</button>
             <button class="nav-admin-btn" id="navAdminBtn" onclick="openAdmin()" style="display:none;">⚡ ADMIN</button>
         </div>
@@ -225,7 +411,7 @@
     </section>
 </div>
 
-<!-- POLICY MODAL -->
+<!-- ═══════════ POLICY MODAL ═══════════ -->
 <div class="overlay overlay-center" id="policyOverlay" onclick="closePolicyOutside(event)">
     <div class="policy-modal">
         <span class="close-modal" onclick="closePolicy()">×</span>
@@ -238,7 +424,7 @@
     </div>
 </div>
 
-<!-- LOGIN MODAL -->
+<!-- ═══════════ LOGIN MODAL ═══════════ -->
 <div class="overlay overlay-center" id="loginOverlay" onclick="closeLoginOutside(event)">
     <div class="login-box">
         <span class="login-close" onclick="closeLogin()">×</span>
@@ -251,22 +437,19 @@
             <div class="tab active" id="tab-login" onclick="switchLoginTab('login')">LOGIN</div>
             <div class="tab" id="tab-signup" onclick="switchLoginTab('signup')">SIGN UP</div>
         </div>
-
         <div id="login-form-wrap">
             <div class="lfield"><label>Email</label><input type="email" id="li-email" placeholder="you@email.com"></div>
             <div class="lfield"><label>Password</label><input type="password" id="li-pass" placeholder="••••••••"></div>
-            <div class="forgot-link">
-                <a onclick="doForgotPassword()">Forgot Password?</a>
-            </div>
+            <div class="forgot-link"><a onclick="doForgotPassword()">Forgot Password?</a></div>
             <button class="btn-main" onclick="doLogin()">LOGIN</button>
         </div>
-
         <div id="signup-form-wrap" style="display:none;">
+            <div class="lfield"><label>Full Name</label><input type="text" id="su-name" placeholder="Your name"></div>
             <div class="lfield"><label>Email</label><input type="email" id="su-email" placeholder="you@email.com"></div>
+            <div class="lfield"><label>Phone</label><input type="tel" id="su-phone" placeholder="+91 9999999999"></div>
             <div class="lfield"><label>Password</label><input type="password" id="su-pass" placeholder="Min 6 characters"></div>
             <button class="btn-main" onclick="doSignup()">CREATE ACCOUNT</button>
         </div>
-
         <div class="divider">OR</div>
         <button class="btn-google" onclick="doGoogle()">
             <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.615 24 12.255 24z"/><path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09z"/><path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.64 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
@@ -276,7 +459,256 @@
     </div>
 </div>
 
-<!-- ADMIN OVERLAY -->
+<!-- ═══════════ CART OVERLAY ═══════════ -->
+<div class="overlay cart-overlay" id="cartOverlay">
+    <div class="cart-panel">
+        <div class="cart-header">
+            <div class="cart-title">🛒 MY CART</div>
+            <button class="cart-close-btn" onclick="closeCart()">×</button>
+        </div>
+        <div class="cart-items" id="cartItemsContainer">
+            <div class="cart-empty"><div class="empty-icon">🛍️</div><p>YOUR CART IS EMPTY</p></div>
+        </div>
+        <div class="cart-footer" id="cartFooter" style="display:none;">
+            <div class="cart-total-row">
+                <div class="cart-total-label">TOTAL</div>
+                <div class="cart-total-amount" id="cartTotalAmount">₹0</div>
+            </div>
+            <button class="checkout-btn" onclick="goToCheckout()">PROCEED TO CHECKOUT →</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ PURCHASE / CHECKOUT PAGE ═══════════ -->
+<div class="overlay" id="purchaseOverlay" style="padding:0;">
+    <div class="purchase-panel">
+        <div class="purchase-header">
+            <button class="purchase-back" onclick="closePurchase()">← BACK</button>
+            <div class="purchase-title">CHECKOUT</div>
+        </div>
+        <div class="purchase-body">
+            <div class="purchase-left">
+                <!-- DELIVERY ADDRESS -->
+                <div class="purchase-section">
+                    <div class="purchase-section-title">📍 DELIVERY ADDRESS</div>
+                    <div id="savedAddressesContainer">
+                        <p style="font-size:0.8rem;color:rgba(255,255,255,0.3);margin-bottom:12px;">No saved addresses. Add one below.</p>
+                    </div>
+                    <button class="add-address-btn" onclick="toggleAddressForm()">+ ADD NEW ADDRESS</button>
+                    <div class="addr-form" id="addressForm">
+                        <div class="addr-form-grid">
+                            <div>
+                                <div class="af-label">Full Name</div>
+                                <input class="afinput" id="af-name" placeholder="Recipient name">
+                            </div>
+                            <div>
+                                <div class="af-label">Phone Number</div>
+                                <input class="afinput" id="af-phone" placeholder="+91 XXXXXXXXXX">
+                            </div>
+                            <div>
+                                <div class="af-label">Flat / House No.</div>
+                                <input class="afinput" id="af-flat" placeholder="Flat 4B, Block C">
+                            </div>
+                            <div>
+                                <div class="af-label">Building Name</div>
+                                <input class="afinput" id="af-building" placeholder="Harmony Heights">
+                            </div>
+                            <div class="af-full">
+                                <div class="af-label">Area / Street Name</div>
+                                <input class="afinput" id="af-area" placeholder="MG Road, Bandra West">
+                            </div>
+                            <div>
+                                <div class="af-label">City</div>
+                                <input class="afinput" id="af-city" placeholder="Mumbai">
+                            </div>
+                            <div>
+                                <div class="af-label">State</div>
+                                <input class="afinput" id="af-state" placeholder="Maharashtra">
+                            </div>
+                            <div>
+                                <div class="af-label">PIN Code</div>
+                                <input class="afinput" id="af-pin" placeholder="400001" maxlength="6">
+                            </div>
+                            <div class="af-full">
+                                <div class="af-label">Landmark (Optional)</div>
+                                <input class="afinput" id="af-landmark" placeholder="Near City Mall">
+                            </div>
+                        </div>
+                        <button class="save-addr-btn" onclick="saveAddress()">SAVE ADDRESS</button>
+                    </div>
+                </div>
+            </div>
+            <div class="purchase-right">
+                <!-- ORDER SUMMARY -->
+                <div class="purchase-section">
+                    <div class="purchase-section-title">📦 ORDER SUMMARY</div>
+                    <div id="checkoutSummaryItems"></div>
+                    <div class="summary-total">
+                        <div class="summary-total-label">TOTAL</div>
+                        <div class="summary-total-amt" id="checkoutTotalAmt">₹0</div>
+                    </div>
+                    <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()" disabled>SELECT ADDRESS TO CONTINUE</button>
+                </div>
+                <!-- PAYMENT NOTE -->
+                <div class="purchase-section" style="text-align:center;">
+                    <p style="font-size:0.78rem;color:rgba(255,255,255,0.4);line-height:1.7;">
+                        💳 <b style="color:white;">Payment on Delivery (COD)</b><br>
+                        Pay when your order arrives at your door. Safe & easy.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ ORDER SUCCESS ═══════════ -->
+<div class="overlay overlay-center" id="successOverlay">
+    <div class="success-box">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">ORDER PLACED!</div>
+        <p class="success-sub">Your order has been received. We'll confirm it shortly via WhatsApp.</p>
+        <div class="success-order-id" id="successOrderId">Order #ZC-000000</div>
+        <button class="success-back-btn" onclick="closeSuccess()">CONTINUE SHOPPING</button>
+    </div>
+</div>
+
+<!-- ═══════════ ACCOUNT OVERLAY ═══════════ -->
+<div class="overlay" id="accountOverlay" style="padding:0;">
+    <div class="account-panel">
+        <div class="account-header">
+            <button class="purchase-back" onclick="closeAccount()">← BACK</button>
+            <div class="account-title">MY ACCOUNT</div>
+        </div>
+        <div class="account-body">
+            <!-- Sidebar -->
+            <div class="account-sidebar">
+                <div class="acc-nav-item active" onclick="showAccPage('profile')" id="acc-nav-profile">👤 Profile</div>
+                <div class="acc-nav-item" onclick="showAccPage('orders')" id="acc-nav-orders">📦 My Orders</div>
+                <div class="acc-nav-item" onclick="showAccPage('addresses')" id="acc-nav-addresses">📍 My Addresses</div>
+                <div class="acc-nav-item" onclick="showAccPage('settings')" id="acc-nav-settings">⚙️ Settings</div>
+                <div class="acc-nav-item" onclick="showAccPage('help')" id="acc-nav-help">❓ Help Centre</div>
+                <div class="acc-nav-item" onclick="doLogout()" style="margin-top:20px;color:rgba(255,80,80,0.7);">🚪 Logout</div>
+            </div>
+            <!-- Content -->
+            <div class="account-content">
+
+                <!-- PROFILE PAGE -->
+                <div class="acc-page active" id="acc-page-profile">
+                    <div class="acc-section">
+                        <div class="profile-avatar" id="profileAvatar">👤</div>
+                        <div class="profile-name-big" id="profileNameBig">—</div>
+                        <div class="profile-email-small" id="profileEmailSmall">—</div>
+                        <div style="margin-top:8px;font-size:0.78rem;color:rgba(255,255,255,0.3);" id="profilePhoneSmall"></div>
+                    </div>
+                    <div class="acc-section">
+                        <div class="acc-section-title">QUICK LINKS</div>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <button onclick="showAccPage('orders')" style="background:rgba(255,0,255,0.1);border:1px solid rgba(255,0,255,0.3);color:var(--pink);padding:12px 20px;border-radius:10px;cursor:pointer;font-family:'Bebas Neue';letter-spacing:2px;transition:0.2s;" onmouseover="this.style.background='rgba(255,0,255,0.2)'" onmouseout="this.style.background='rgba(255,0,255,0.1)'">📦 MY ORDERS</button>
+                            <button onclick="showAccPage('help')" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);color:white;padding:12px 20px;border-radius:10px;cursor:pointer;font-family:'Bebas Neue';letter-spacing:2px;transition:0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">❓ HELP</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MY ORDERS PAGE -->
+                <div class="acc-page" id="acc-page-orders">
+                    <div class="acc-section-title" style="font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:3px;color:var(--pink);margin-bottom:18px;">MY ORDERS</div>
+                    <div id="myOrdersContainer">
+                        <div class="no-orders"><div class="no-icon">📦</div><p>NO ORDERS YET</p></div>
+                    </div>
+                </div>
+
+                <!-- ADDRESSES PAGE -->
+                <div class="acc-page" id="acc-page-addresses">
+                    <div class="acc-section">
+                        <div class="acc-section-title">SAVED ADDRESSES</div>
+                        <div id="accAddressContainer"></div>
+                        <button class="add-address-btn" onclick="toggleAccAddressForm()" style="margin-top:10px;">+ ADD NEW ADDRESS</button>
+                        <div class="addr-form" id="accAddressForm">
+                            <div class="addr-form-grid">
+                                <div><div class="af-label">Full Name</div><input class="afinput" id="acc-af-name" placeholder="Recipient name"></div>
+                                <div><div class="af-label">Phone Number</div><input class="afinput" id="acc-af-phone" placeholder="+91 XXXXXXXXXX"></div>
+                                <div><div class="af-label">Flat / House No.</div><input class="afinput" id="acc-af-flat" placeholder="Flat 4B"></div>
+                                <div><div class="af-label">Building Name</div><input class="afinput" id="acc-af-building" placeholder="Harmony Heights"></div>
+                                <div class="af-full"><div class="af-label">Area / Street</div><input class="afinput" id="acc-af-area" placeholder="MG Road, Bandra"></div>
+                                <div><div class="af-label">City</div><input class="afinput" id="acc-af-city" placeholder="Mumbai"></div>
+                                <div><div class="af-label">State</div><input class="afinput" id="acc-af-state" placeholder="Maharashtra"></div>
+                                <div><div class="af-label">PIN Code</div><input class="afinput" id="acc-af-pin" placeholder="400001" maxlength="6"></div>
+                                <div class="af-full"><div class="af-label">Landmark (Optional)</div><input class="afinput" id="acc-af-landmark" placeholder="Near City Mall"></div>
+                            </div>
+                            <button class="save-addr-btn" onclick="saveAddressFromAccount()">SAVE ADDRESS</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SETTINGS PAGE -->
+                <div class="acc-page" id="acc-page-settings">
+                    <div class="acc-section">
+                        <div class="acc-section-title">ACCOUNT SETTINGS</div>
+                        <div class="settings-field">
+                            <label>Full Name</label>
+                            <input class="settings-input" id="settings-name" placeholder="Your name">
+                        </div>
+                        <div class="settings-field">
+                            <label>Email Address</label>
+                            <input class="settings-input" id="settings-email" placeholder="you@email.com" type="email">
+                        </div>
+                        <div class="settings-field">
+                            <label>Phone Number</label>
+                            <input class="settings-input" id="settings-phone" placeholder="+91 9999999999" type="tel">
+                        </div>
+                        <button class="settings-save-btn" onclick="saveProfile()">SAVE CHANGES</button>
+                    </div>
+                    <div class="acc-section">
+                        <div class="acc-section-title">CHANGE PASSWORD</div>
+                        <div class="settings-field">
+                            <label>New Password</label>
+                            <input class="settings-input" id="settings-newpass" placeholder="Min 6 characters" type="password">
+                        </div>
+                        <div class="settings-field">
+                            <label>Confirm Password</label>
+                            <input class="settings-input" id="settings-confpass" placeholder="Repeat password" type="password">
+                        </div>
+                        <button class="settings-save-btn" onclick="changePassword()">UPDATE PASSWORD</button>
+                    </div>
+                </div>
+
+                <!-- HELP PAGE -->
+                <div class="acc-page" id="acc-page-help">
+                    <div class="acc-section">
+                        <div class="help-title">HELP CENTRE</div>
+                        <div class="help-sub">Have a question or issue? We're here to help!</div>
+                        <div class="help-field">
+                            <label>Your Name</label>
+                            <input class="help-input" id="help-name" placeholder="Your name">
+                        </div>
+                        <div class="help-field">
+                            <label>Email</label>
+                            <input class="help-input" id="help-email" type="email" placeholder="you@email.com">
+                        </div>
+                        <div class="help-field">
+                            <label>Subject</label>
+                            <input class="help-input" id="help-subject" placeholder="e.g. Order issue, Return request...">
+                        </div>
+                        <div class="help-field">
+                            <label>Message</label>
+                            <textarea class="help-textarea" id="help-message" placeholder="Describe your issue in detail..."></textarea>
+                        </div>
+                        <button class="help-send-btn" onclick="sendHelpEmail()">SEND MESSAGE</button>
+                        <div class="help-email-note">Or email us directly at <a href="mailto:zaidifycollection@gmail.com">zaidifycollection@gmail.com</a></div>
+                    </div>
+                    <!-- FAQ -->
+                    <div class="acc-section">
+                        <div class="acc-section-title">COMMON QUESTIONS</div>
+                        <div id="faq-list"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ ADMIN OVERLAY ═══════════ -->
 <div class="overlay" id="adminOverlay">
     <div class="admin-panel">
         <div class="admin-topbar">
@@ -290,21 +722,30 @@
         <div class="admin-layout">
             <div class="admin-sidebar">
                 <div class="aside-item active" onclick="showAPage('dashboard')">📊 Dashboard</div>
+                <div class="aside-item" onclick="showAPage('orders')">🛍️ Orders</div>
                 <div class="aside-item" onclick="showAPage('products')">👗 Products</div>
                 <div class="aside-item" onclick="showAPage('add')">➕ Add Product</div>
             </div>
             <div class="admin-content">
 
+                <!-- DASHBOARD -->
                 <div class="apage active" id="apage-dashboard">
                     <div class="stats-row">
                         <div class="stat-card"><div class="num" id="stat-total">—</div><div class="lbl">Total Products</div></div>
+                        <div class="stat-card"><div class="num" id="stat-orders">—</div><div class="lbl">Total Orders</div></div>
                         <div class="stat-card"><div class="num" id="stat-cats">—</div><div class="lbl">Categories</div></div>
                         <div class="stat-card"><div class="num" id="stat-imgs">—</div><div class="lbl">Avg Images</div></div>
                     </div>
+                    <!-- Recent Orders quick view -->
+                    <div class="sec-head"><h2>RECENT ORDERS</h2><button class="abtn" onclick="showAPage('orders')">VIEW ALL</button></div>
+                    <div class="tbl-wrap" style="margin-bottom:28px;">
+                        <table>
+                            <thead><tr><th>ORDER ID</th><th>CUSTOMER</th><th>PRODUCT</th><th>AMOUNT</th><th>STATUS</th><th>DATE</th></tr></thead>
+                            <tbody id="dash-orders-tbody"></tbody>
+                        </table>
+                    </div>
+                    <div class="sec-head"><h2>ALL PRODUCTS</h2></div>
                     <div class="tbl-wrap">
-                        <div style="padding:18px 22px;border-bottom:1px solid var(--border);">
-                            <span style="font-family:'Bebas Neue';letter-spacing:2px;color:var(--pink);font-size:1.1rem;">ALL PRODUCTS</span>
-                        </div>
                         <table>
                             <thead><tr><th>IMG</th><th>ID</th><th>NAME</th><th>STD PRICE</th><th>SIZES</th></tr></thead>
                             <tbody id="dash-tbody"></tbody>
@@ -312,6 +753,25 @@
                     </div>
                 </div>
 
+                <!-- ORDERS PAGE -->
+                <div class="apage" id="apage-orders">
+                    <div class="sec-head">
+                        <h2>ALL ORDERS</h2>
+                        <div style="display:flex;gap:8px;">
+                            <select id="orderStatusFilter" onchange="filterOrders()" style="background:rgba(255,255,255,0.07);border:1px solid var(--border);color:white;padding:7px 12px;border-radius:8px;font-family:'Poppins';font-size:0.8rem;outline:none;cursor:pointer;">
+                                <option value="">All Statuses</option>
+                                <option value="new">New</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="delivered">Delivered</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="adminOrdersContainer"></div>
+                </div>
+
+                <!-- PRODUCTS TABLE -->
                 <div class="apage" id="apage-products">
                     <div class="sec-head">
                         <h2>MANAGE PRODUCTS</h2>
@@ -325,6 +785,7 @@
                     </div>
                 </div>
 
+                <!-- ADD PRODUCT -->
                 <div class="apage" id="apage-add">
                     <div class="sec-head"><h2>ADD NEW PRODUCT</h2></div>
                     <div class="add-section">
@@ -338,7 +799,6 @@
                             <div class="ffield full"><label>Sizes (comma separated)</label><input id="a-sizes" placeholder="XS, S, M, L, XL, XXL"></div>
                             <div class="ffield full"><label>Colors (comma separated)</label><input id="a-colors" placeholder="Grey, Pink, Blue"></div>
                             <div class="ffield full"><label>WhatsApp Link</label><input id="a-wa" value="https://wa.me/918655171445"></div>
-                            <!-- 10 Image Inputs -->
                             <div class="ffield full"><label>Image 1 URL</label><input id="a-img1" placeholder="https://..."></div>
                             <div class="ffield full"><label>Image 2 URL</label><input id="a-img2" placeholder="https://..."></div>
                             <div class="ffield full"><label>Image 3 URL</label><input id="a-img3" placeholder="https://..."></div>
@@ -349,13 +809,12 @@
                             <div class="ffield full"><label>Image 8 URL</label><input id="a-img8" placeholder="https://..."></div>
                             <div class="ffield full"><label>Image 9 URL</label><input id="a-img9" placeholder="https://..."></div>
                             <div class="ffield full"><label>Image 10 URL</label><input id="a-img10" placeholder="https://..."></div>
-                            <!-- Review Section -->
-<div class="ffield full" style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;">
-    <label style="color: var(--pink); font-weight: bold;">Review Section (Optional)</label>
-</div>
-<div class="ffield"><label>Reviewer Name</label><input id="a-rev-name" placeholder="e.g. Ananya S."></div>
-<div class="ffield"><label>Rating (1-5)</label><input id="a-rev-star" type="number" min="1" max="5" placeholder="5"></div>
-<div class="ffield full"><label>Review Comment</label><textarea id="a-rev-text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 9px; padding: 10px 13px; color: #fff; width: 100%; font-family: 'Poppins';" placeholder="e.g. Quality is amazing!"></textarea></div>
+                            <div class="ffield full" style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;">
+                                <label style="color: var(--pink); font-weight: bold;">Review Section (Optional)</label>
+                            </div>
+                            <div class="ffield"><label>Reviewer Name</label><input id="a-rev-name" placeholder="e.g. Ananya S."></div>
+                            <div class="ffield"><label>Rating (1-5)</label><input id="a-rev-star" type="number" min="1" max="5" placeholder="5"></div>
+                            <div class="ffield full"><label>Review Comment</label><textarea id="a-rev-text" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 9px; padding: 10px 13px; color: #fff; width: 100%; font-family: 'Poppins';" placeholder="e.g. Quality is amazing!"></textarea></div>
                         </div>
                         <button class="save-btn" onclick="addProduct()">ADD PRODUCT TO STORE</button>
                     </div>
@@ -401,38 +860,57 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ── CONFIG ───────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════
 const SUPABASE_URL  = 'https://ipwlhlsxtlfqioysyzlc.supabase.co';
 const SUPABASE_KEY  = 'sb_publishable__u9RyOYFvdQ3A-kPQPPO3A_BLjsOHds';
 const ADMIN_EMAIL   = 'zaidifycollections@gmail.com';
+const HELP_EMAIL    = 'zaidifycollection@gmail.com';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ── STATE ────────────────────────────────────────────────────────────────
-let currentUser = null;
+// ════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════
+let currentUser  = null;
+let userProfile  = null;
 let allProducts  = [];
+let allOrders    = [];
 let selections   = {};
 let sliderPos    = {};
+let cart         = [];
+let selectedAddressIndex = -1;
 
-// ══════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // AUTH
-// ══════════════════════════════════════════════
+// ════════════════════════════════════════════════
 async function initAuth() {
     const { data: { session } } = await sb.auth.getSession();
     currentUser = session?.user ?? null;
+    if (currentUser) await loadUserProfile();
     refreshNavAuth();
 
-    sb.auth.onAuthStateChange((_ev, session) => {
+    sb.auth.onAuthStateChange(async (_ev, session) => {
         currentUser = session?.user ?? null;
+        if (currentUser) await loadUserProfile();
+        else userProfile = null;
         refreshNavAuth();
     });
 }
 
+async function loadUserProfile() {
+    const { data } = await sb.from('user_profiles').select('*').eq('user_id', currentUser.id).single();
+    userProfile = data || null;
+}
+
 function refreshNavAuth() {
-    const loginBtn = document.getElementById('navLoginBtn');
-    const adminBtn = document.getElementById('navAdminBtn');
+    const loginBtn   = document.getElementById('navLoginBtn');
+    const adminBtn   = document.getElementById('navAdminBtn');
+    const accountBtn = document.getElementById('navAccountBtn');
     if (currentUser) {
         loginBtn.textContent = 'LOGOUT';
         loginBtn.onclick = doLogout;
+        accountBtn.style.display = 'inline-block';
         if (currentUser.email === ADMIN_EMAIL) {
             adminBtn.style.display = 'inline-block';
             document.getElementById('admin-email-lbl').textContent = currentUser.email;
@@ -443,35 +921,8 @@ function refreshNavAuth() {
         loginBtn.textContent = 'LOGIN';
         loginBtn.onclick = openLogin;
         adminBtn.style.display = 'none';
+        accountBtn.style.display = 'none';
     }
-}
-
-async function doLogout() {
-    await sb.auth.signOut();
-    closeAdmin();
-    showToast('Logged out.');
-}
-
-function openLogin()  { document.getElementById('loginOverlay').classList.add('open'); }
-function closeLogin() { document.getElementById('loginOverlay').classList.remove('open'); clearLMsg(); }
-function closeLoginOutside(e) { if (e.target === document.getElementById('loginOverlay')) closeLogin(); }
-
-function switchLoginTab(tab) {
-    document.getElementById('tab-login').classList.toggle('active', tab==='login');
-    document.getElementById('tab-signup').classList.toggle('active', tab==='signup');
-    document.getElementById('login-form-wrap').style.display  = tab==='login'  ? 'block' : 'none';
-    document.getElementById('signup-form-wrap').style.display = tab==='signup' ? 'block' : 'none';
-    clearLMsg();
-}
-
-function showLMsg(txt, type) {
-    const el = document.getElementById('lmsg');
-    el.textContent = txt;
-    el.className = `lmsg ${type}`;
-}
-function clearLMsg() {
-    const el = document.getElementById('lmsg');
-    el.className = 'lmsg'; el.textContent = '';
 }
 
 async function doLogin() {
@@ -486,34 +937,464 @@ async function doLogin() {
 }
 
 async function doSignup() {
+    const name  = document.getElementById('su-name').value.trim();
     const email = document.getElementById('su-email').value.trim();
+    const phone = document.getElementById('su-phone').value.trim();
     const pass  = document.getElementById('su-pass').value;
     if (!email || !pass) { showLMsg('Fill in all fields.', 'err'); return; }
-    const { error } = await sb.auth.signUp({ email, password: pass });
+    const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { full_name: name, phone } } });
     if (error) { showLMsg(error.message, 'err'); return; }
+    // save profile
+    if (data.user) {
+        await sb.from('user_profiles').upsert({ user_id: data.user.id, full_name: name, email, phone });
+    }
     showLMsg('✓ Check your email to confirm!', 'ok');
 }
 
 async function doGoogle() {
     await sb.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: 'https://zaidify-collections.vercel.app' } 
+        options: { redirectTo: 'https://zaidify-collections.vercel.app' }
     });
 }
 
 async function doForgotPassword() {
     const email = document.getElementById('li-email').value.trim();
     if (!email) { showLMsg('Please enter your email address.', 'err'); return; }
-    const { error } = await sb.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin
-    });
+    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
     if (error) { showLMsg(error.message, 'err'); return; }
     showLMsg('✓ Reset link sent to your email!', 'ok');
 }
 
-// ══════════════════════════════════════════════
+async function doLogout() {
+    await sb.auth.signOut();
+    cart = [];
+    updateCartBadge();
+    closeAdmin(); closeAccount();
+    showToast('Logged out.');
+}
+
+function openLogin()  { document.getElementById('loginOverlay').classList.add('open'); }
+function closeLogin() { document.getElementById('loginOverlay').classList.remove('open'); clearLMsg(); }
+function closeLoginOutside(e) { if (e.target === document.getElementById('loginOverlay')) closeLogin(); }
+function switchLoginTab(tab) {
+    document.getElementById('tab-login').classList.toggle('active', tab==='login');
+    document.getElementById('tab-signup').classList.toggle('active', tab==='signup');
+    document.getElementById('login-form-wrap').style.display  = tab==='login'  ? 'block' : 'none';
+    document.getElementById('signup-form-wrap').style.display = tab==='signup' ? 'block' : 'none';
+    clearLMsg();
+}
+function showLMsg(txt, type) { const el=document.getElementById('lmsg'); el.textContent=txt; el.className=`lmsg ${type}`; }
+function clearLMsg()         { const el=document.getElementById('lmsg'); el.className='lmsg'; el.textContent=''; }
+
+// ════════════════════════════════════════════════
+// PROFILE (ACCOUNT SETTINGS)
+// ════════════════════════════════════════════════
+async function saveProfile() {
+    if (!currentUser) return;
+    const name  = document.getElementById('settings-name').value.trim();
+    const email = document.getElementById('settings-email').value.trim();
+    const phone = document.getElementById('settings-phone').value.trim();
+    await sb.from('user_profiles').upsert({ user_id: currentUser.id, full_name: name, email, phone });
+    userProfile = { user_id: currentUser.id, full_name: name, email, phone };
+    refreshProfileUI();
+    showToast('✓ Profile updated!');
+}
+
+async function changePassword() {
+    const np = document.getElementById('settings-newpass').value;
+    const cp = document.getElementById('settings-confpass').value;
+    if (!np || !cp) { showToast('Enter both fields.', true); return; }
+    if (np !== cp)  { showToast('Passwords do not match.', true); return; }
+    if (np.length < 6) { showToast('Min 6 characters.', true); return; }
+    const { error } = await sb.auth.updateUser({ password: np });
+    if (error) { showToast(error.message, true); return; }
+    document.getElementById('settings-newpass').value = '';
+    document.getElementById('settings-confpass').value = '';
+    showToast('✓ Password updated!');
+}
+
+function refreshProfileUI() {
+    const name  = userProfile?.full_name || currentUser?.email?.split('@')[0] || '—';
+    const email = userProfile?.email || currentUser?.email || '—';
+    const phone = userProfile?.phone || '';
+    const initial = name[0]?.toUpperCase() || '?';
+    const el = id => document.getElementById(id);
+    el('profileAvatar').textContent    = initial;
+    el('profileNameBig').textContent   = name;
+    el('profileEmailSmall').textContent= email;
+    el('profilePhoneSmall').textContent= phone ? `📱 ${phone}` : '';
+    el('settings-name').value  = userProfile?.full_name || '';
+    el('settings-email').value = userProfile?.email || currentUser?.email || '';
+    el('settings-phone').value = userProfile?.phone || '';
+    el('help-name').value  = userProfile?.full_name || '';
+    el('help-email').value = userProfile?.email || currentUser?.email || '';
+}
+
+// ════════════════════════════════════════════════
+// ADDRESSES
+// ════════════════════════════════════════════════
+async function loadUserAddresses(target='checkout') {
+    if (!currentUser) return [];
+    const { data } = await sb.from('user_addresses').select('*').eq('user_id', currentUser.id).order('id',{ascending:true});
+    return data || [];
+}
+
+async function saveAddress() {
+    if (!currentUser) { showToast('Login to save addresses.', true); return; }
+    const addr = collectAddressForm('af');
+    if (!addr.name || !addr.flat || !addr.area || !addr.city || !addr.pin) {
+        showToast('Fill all required fields!', true); return;
+    }
+    await sb.from('user_addresses').insert([{ user_id: currentUser.id, ...addr }]);
+    showToast('✓ Address saved!');
+    document.getElementById('addressForm').classList.remove('open');
+    await renderCheckoutAddresses();
+}
+
+async function saveAddressFromAccount() {
+    if (!currentUser) { showToast('Login to save addresses.', true); return; }
+    const addr = collectAddressForm('acc-af');
+    if (!addr.name || !addr.flat || !addr.area || !addr.city || !addr.pin) {
+        showToast('Fill all required fields!', true); return;
+    }
+    await sb.from('user_addresses').insert([{ user_id: currentUser.id, ...addr }]);
+    showToast('✓ Address saved!');
+    document.getElementById('accAddressForm').classList.remove('open');
+    renderAccountAddresses();
+}
+
+function collectAddressForm(prefix) {
+    return {
+        name:     document.getElementById(`${prefix}-name`)?.value.trim()     || '',
+        phone:    document.getElementById(`${prefix}-phone`)?.value.trim()    || '',
+        flat:     document.getElementById(`${prefix}-flat`)?.value.trim()     || '',
+        building: document.getElementById(`${prefix}-building`)?.value.trim() || '',
+        area:     document.getElementById(`${prefix}-area`)?.value.trim()     || '',
+        city:     document.getElementById(`${prefix}-city`)?.value.trim()     || '',
+        state:    document.getElementById(`${prefix}-state`)?.value.trim()    || '',
+        pin:      document.getElementById(`${prefix}-pin`)?.value.trim()      || '',
+        landmark: document.getElementById(`${prefix}-landmark`)?.value.trim() || '',
+    };
+}
+
+async function renderCheckoutAddresses() {
+    const addresses = await loadUserAddresses();
+    const container = document.getElementById('savedAddressesContainer');
+    if (!addresses.length) {
+        container.innerHTML = '<p style="font-size:0.8rem;color:rgba(255,255,255,0.3);margin-bottom:12px;">No saved addresses. Add one below.</p>';
+        return;
+    }
+    selectedAddressIndex = 0;
+    container.innerHTML = addresses.map((a, i) => `
+        <div class="address-card ${i===0?'selected':''}" onclick="selectAddress(${i})" id="addr-card-${i}">
+            <input type="radio" class="address-radio" name="addr" ${i===0?'checked':''}>
+            <div class="address-card-name">${a.name} · ${a.phone}</div>
+            <div class="address-card-detail">
+                ${a.flat}, ${a.building ? a.building+', ' : ''}${a.area}<br>
+                ${a.city}, ${a.state} - ${a.pin}${a.landmark ? '<br>Near: '+a.landmark : ''}
+            </div>
+        </div>`).join('');
+    document.getElementById('placeOrderBtn').disabled = false;
+    document.getElementById('placeOrderBtn').textContent = 'PLACE ORDER →';
+    window._checkoutAddresses = addresses;
+}
+
+function selectAddress(i) {
+    selectedAddressIndex = i;
+    document.querySelectorAll('.address-card').forEach((c,j) => c.classList.toggle('selected', i===j));
+    document.querySelectorAll('.address-radio').forEach((r,j) => r.checked = i===j);
+    document.getElementById('placeOrderBtn').disabled = false;
+    document.getElementById('placeOrderBtn').textContent = 'PLACE ORDER →';
+}
+
+function toggleAddressForm() {
+    document.getElementById('addressForm').classList.toggle('open');
+}
+
+async function renderAccountAddresses() {
+    const addresses = await loadUserAddresses();
+    const c = document.getElementById('accAddressContainer');
+    if (!addresses.length) { c.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:0.8rem;">No saved addresses yet.</p>'; return; }
+    c.innerHTML = addresses.map((a,i) => `
+        <div class="order-detail-row" style="margin-bottom:10px;">
+            <div style="font-weight:700;font-size:0.9rem;margin-bottom:4px;">${a.name} · <span style="color:rgba(255,255,255,0.5);font-weight:400;">${a.phone}</span></div>
+            <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.6;">
+                ${a.flat}, ${a.building?a.building+', ':''}${a.area}<br>${a.city}, ${a.state} - ${a.pin}${a.landmark?'<br>Near: '+a.landmark:''}
+            </div>
+            <button onclick="deleteAddress(${a.id})" style="background:none;border:1px solid rgba(255,0,0,0.3);color:rgba(255,80,80,0.8);padding:4px 10px;border-radius:5px;cursor:pointer;font-size:0.72rem;margin-top:8px;">REMOVE</button>
+        </div>`).join('');
+}
+
+async function deleteAddress(id) {
+    if (!confirm('Remove this address?')) return;
+    await sb.from('user_addresses').delete().eq('id', id);
+    showToast('Address removed.');
+    renderAccountAddresses();
+}
+
+function toggleAccAddressForm() {
+    document.getElementById('accAddressForm').classList.toggle('open');
+}
+
+// ════════════════════════════════════════════════
+// CART
+// ════════════════════════════════════════════════
+function addToCart(pid, name, size, price, color, imageUrl) {
+    const existIdx = cart.findIndex(i => i.pid===pid && i.size===size && i.color===color);
+    if (existIdx >= 0) {
+        cart[existIdx].qty++;
+    } else {
+        cart.push({ pid, name, size, price: parseInt(price), color, imageUrl, qty: 1 });
+    }
+    updateCartBadge();
+    showToast(`✓ Added to cart!`);
+}
+
+function removeFromCart(idx) {
+    cart.splice(idx, 1);
+    updateCartBadge();
+    renderCartItems();
+}
+
+function updateQty(idx, delta) {
+    cart[idx].qty = Math.max(1, cart[idx].qty + delta);
+    updateCartBadge();
+    renderCartItems();
+}
+
+function updateCartBadge() {
+    const total = cart.reduce((s,i) => s+i.qty, 0);
+    const badge = document.getElementById('cartBadge');
+    badge.textContent = total;
+    badge.style.display = total > 0 ? 'flex' : 'none';
+}
+
+function cartTotal() { return cart.reduce((s,i) => s + i.price * i.qty, 0); }
+
+function renderCartItems() {
+    const container = document.getElementById('cartItemsContainer');
+    const footer    = document.getElementById('cartFooter');
+    if (!cart.length) {
+        container.innerHTML = '<div class="cart-empty"><div class="empty-icon">🛍️</div><p>YOUR CART IS EMPTY</p></div>';
+        footer.style.display = 'none';
+        return;
+    }
+    container.innerHTML = cart.map((item, i) => `
+        <div class="cart-item">
+            <img class="cart-item-img" src="${item.imageUrl||''}" onerror="this.style.display='none'">
+            <div class="cart-item-info">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-sub">${item.color} · Size ${item.size}</div>
+                <div class="cart-item-qty">
+                    <button class="qty-btn" onclick="updateQty(${i},-1)">−</button>
+                    <span class="qty-num">${item.qty}</span>
+                    <button class="qty-btn" onclick="updateQty(${i},1)">+</button>
+                </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+                <button class="cart-item-remove" onclick="removeFromCart(${i})">×</button>
+                <div class="cart-item-price">₹${item.price * item.qty}</div>
+            </div>
+        </div>`).join('');
+    document.getElementById('cartTotalAmount').textContent = '₹' + cartTotal();
+    footer.style.display = 'block';
+}
+
+function openCart() {
+    renderCartItems();
+    document.getElementById('cartOverlay').classList.add('open');
+}
+function closeCart() { document.getElementById('cartOverlay').classList.remove('open'); }
+
+// ════════════════════════════════════════════════
+// CHECKOUT / PURCHASE PAGE
+// ════════════════════════════════════════════════
+async function goToCheckout() {
+    if (!currentUser) {
+        closeCart();
+        openLogin();
+        showToast('Please login to checkout.', true);
+        return;
+    }
+    closeCart();
+    // Render summary
+    const summaryContainer = document.getElementById('checkoutSummaryItems');
+    summaryContainer.innerHTML = cart.map(item => `
+        <div class="order-summary-item">
+            <img class="osi-img" src="${item.imageUrl||''}" onerror="this.style.display='none'">
+            <div class="osi-info">
+                <div class="osi-name">${item.name}</div>
+                <div class="osi-sub">${item.color} · Size ${item.size} · Qty ${item.qty}</div>
+            </div>
+            <div class="osi-price">₹${item.price * item.qty}</div>
+        </div>`).join('');
+    document.getElementById('checkoutTotalAmt').textContent = '₹' + cartTotal();
+    document.getElementById('placeOrderBtn').disabled = true;
+    document.getElementById('placeOrderBtn').textContent = 'SELECT ADDRESS TO CONTINUE';
+    document.getElementById('purchaseOverlay').classList.add('open');
+    selectedAddressIndex = -1;
+    await renderCheckoutAddresses();
+}
+
+function closePurchase() { document.getElementById('purchaseOverlay').classList.remove('open'); }
+
+async function placeOrder() {
+    if (!currentUser || cart.length === 0) return;
+    if (selectedAddressIndex < 0 || !window._checkoutAddresses) {
+        showToast('Select a delivery address!', true); return;
+    }
+    const addr = window._checkoutAddresses[selectedAddressIndex];
+    const orderId = 'ZC-' + Date.now().toString().slice(-6);
+    const orderItems = cart.map(i => ({
+        product_id: i.pid, name: i.name, size: i.size, color: i.color, price: i.price, qty: i.qty
+    }));
+    const totalAmount = cartTotal();
+    const addrStr = `${addr.name}, ${addr.flat}, ${addr.building?addr.building+', ':''}${addr.area}, ${addr.city}, ${addr.state} - ${addr.pin}. Phone: ${addr.phone}`;
+
+    const { error } = await sb.from('orders').insert([{
+        order_id:       orderId,
+        user_id:        currentUser.id,
+        user_email:     currentUser.email,
+        user_name:      userProfile?.full_name || addr.name,
+        items:          JSON.stringify(orderItems),
+        total_amount:   totalAmount,
+        delivery_address: addrStr,
+        status:         'new',
+        created_at:     new Date().toISOString()
+    }]);
+
+    if (error) { showToast('Error placing order: '+error.message, true); return; }
+
+    // Clear cart
+    cart = [];
+    updateCartBadge();
+    closePurchase();
+
+    // Show success
+    document.getElementById('successOrderId').textContent = 'Order #' + orderId;
+    document.getElementById('successOverlay').classList.add('open');
+}
+
+function closeSuccess() { document.getElementById('successOverlay').classList.remove('open'); }
+
+// ════════════════════════════════════════════════
+// ACCOUNT PANEL
+// ════════════════════════════════════════════════
+async function openAccount() {
+    if (!currentUser) { openLogin(); return; }
+    await loadUserProfile();
+    refreshProfileUI();
+    showAccPage('profile');
+    document.getElementById('accountOverlay').classList.add('open');
+    loadMyOrders();
+    renderAccountAddresses();
+    renderFAQ();
+}
+
+function closeAccount() { document.getElementById('accountOverlay').classList.remove('open'); }
+
+function showAccPage(name) {
+    document.querySelectorAll('.acc-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.acc-nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(`acc-page-${name}`)?.classList.add('active');
+    document.getElementById(`acc-nav-${name}`)?.classList.add('active');
+    if (name === 'orders') loadMyOrders();
+    if (name === 'addresses') renderAccountAddresses();
+    if (name === 'settings') refreshProfileUI();
+}
+
+async function loadMyOrders() {
+    if (!currentUser) return;
+    const { data } = await sb.from('orders').select('*').eq('user_id', currentUser.id).order('created_at',{ascending:false});
+    const orders = data || [];
+    const container = document.getElementById('myOrdersContainer');
+    if (!orders.length) {
+        container.innerHTML = '<div class="no-orders"><div class="no-icon">📦</div><p>NO ORDERS YET</p></div>';
+        return;
+    }
+    container.innerHTML = orders.map(o => {
+        const items = JSON.parse(o.items || '[]');
+        const itemSummary = items.map(i => `${i.name} (${i.size}, x${i.qty})`).join(', ');
+        const statusClass = `status-${o.status||'new'}`;
+        const steps = [
+            { label: 'Order Placed', done: true },
+            { label: 'Confirmed', done: ['confirmed','shipped','delivered'].includes(o.status) },
+            { label: 'Shipped', done: ['shipped','delivered'].includes(o.status) },
+            { label: 'Delivered', done: o.status === 'delivered' },
+        ];
+        const timeline = steps.map((s,i) => `
+            <div class="track-step">
+                ${i < steps.length-1 ? '<div class="track-line"></div>' : ''}
+                <div class="track-dot ${s.done?'done':'pending'}"></div>
+                <div class="track-info">
+                    <div class="track-info-label" style="color:${s.done?'white':'rgba(255,255,255,0.3)'};">${s.label}</div>
+                    ${s.done ? '<div class="track-info-sub">✓ Done</div>' : '<div class="track-info-sub">Pending</div>'}
+                </div>
+            </div>`).join('');
+
+        return `
+        <div class="order-history-card">
+            <div class="ohc-top">
+                <div class="ohc-id">#${o.order_id}</div>
+                <span class="status-badge ${statusClass}">${(o.status||'new').toUpperCase()}</span>
+            </div>
+            <div class="ohc-items">${itemSummary}</div>
+            <div class="ohc-bottom">
+                <div class="ohc-total">₹${o.total_amount}</div>
+                <div class="ohc-date">${new Date(o.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</div>
+            </div>
+            <div class="track-timeline" style="margin-top:14px;">${timeline}</div>
+        </div>`;
+    }).join('');
+}
+
+// ════════════════════════════════════════════════
+// HELP CENTRE
+// ════════════════════════════════════════════════
+function renderFAQ() {
+    const faqs = [
+        { q: 'How long does delivery take?', a: 'Standard delivery takes 5–7 business days across India.' },
+        { q: 'Can I return or exchange a product?', a: 'Yes! We have a 7-day easy return/exchange policy. Send an unboxing video and photos via WhatsApp.' },
+        { q: 'How do I track my order?', a: 'Log into your account and check "My Orders" for live tracking status.' },
+        { q: 'What payment methods are accepted?', a: 'We currently support Cash on Delivery (COD) for all orders.' },
+        { q: 'How do I cancel my order?', a: 'Contact us on WhatsApp or email within 24 hours of placing the order.' },
+    ];
+    document.getElementById('faq-list').innerHTML = faqs.map((f,i) => `
+        <div style="border-bottom:1px solid var(--border);padding:14px 0;cursor:pointer;" onclick="toggleFaq(${i})">
+            <div style="font-weight:600;font-size:0.88rem;display:flex;justify-content:space-between;align-items:center;">
+                ${f.q} <span id="faq-arrow-${i}" style="color:var(--pink);transition:0.2s;">▼</span>
+            </div>
+            <div id="faq-ans-${i}" style="display:none;font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:8px;line-height:1.6;">${f.a}</div>
+        </div>`).join('');
+}
+
+function toggleFaq(i) {
+    const ans = document.getElementById(`faq-ans-${i}`);
+    const arrow = document.getElementById(`faq-arrow-${i}`);
+    const open = ans.style.display === 'block';
+    ans.style.display = open ? 'none' : 'block';
+    arrow.textContent = open ? '▼' : '▲';
+}
+
+function sendHelpEmail() {
+    const name    = document.getElementById('help-name').value.trim();
+    const email   = document.getElementById('help-email').value.trim();
+    const subject = document.getElementById('help-subject').value.trim();
+    const message = document.getElementById('help-message').value.trim();
+    if (!name || !email || !subject || !message) {
+        showToast('Please fill all fields!', true); return;
+    }
+    const mailto = `mailto:${HELP_EMAIL}?subject=${encodeURIComponent('[ZAIDIFY HELP] '+subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
+    window.open(mailto, '_blank');
+    showToast('✓ Email client opened!');
+    document.getElementById('help-subject').value = '';
+    document.getElementById('help-message').value = '';
+}
+
+// ════════════════════════════════════════════════
 // STORE — PRODUCTS
-// ══════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function parseSizes(raw)  { return (raw||'').replace(/[{}"'\[\]]/g,'').split(',').map(s=>s.trim()).filter(Boolean); }
 function parseColors(raw) { return (raw||'').replace(/[{}"'\[\]]/g,'').split(',').map(c=>c.trim()).filter(Boolean); }
 
@@ -537,7 +1418,7 @@ function buildProduct(p) {
     const sizes  = parseSizes(p.sizes);
     const colors = parseColors(p.colors);
 
-    selections[pid]              = { size:'', price:'', color: colors[0]||'' };
+    selections[pid] = { size:'', price:'', color: colors[0]||'' };
     sliderPos[`slider-${pidLow}`] = 0;
 
     const slideImgs = images.length
@@ -559,6 +1440,7 @@ function buildProduct(p) {
     }).join('');
 
     const mrp = p.price_standard ? `<span class="price-old">₹${Math.round(p.price_standard*1.8)}</span>` : '';
+    const firstImg = images[0] || '';
 
     return `
     <div class="p-wrapper" id="${pidLow}">
@@ -577,7 +1459,11 @@ function buildProduct(p) {
             <p class="label">Sizes:</p>
             <div class="row">${sizeBoxes}</div>
             <div><span class="price-now" id="price-${pidLow}">₹---</span>${mrp}</div>
-            <a href="#" onclick="order(event,'${pid}','${p.name}')" class="wa-btn">🛒 ORDER ON WHATSAPP</a>
+            <div class="product-btn-row">
+                <button class="buy-now-btn" onclick="buyNow(event,'${pid}','${p.name}','${firstImg}')">⚡ BUY NOW</button>
+                <button class="cart-add-btn" onclick="cartFromProduct('${pid}','${p.name}','${firstImg}')">🛒 ADD TO CART</button>
+            </div>
+            <a href="#" onclick="order(event,'${pid}','${p.name}')" class="wa-btn" style="margin-top:10px;">💬 ORDER ON WHATSAPP</a>
         </div>
     </div>`;
 }
@@ -585,15 +1471,9 @@ function buildProduct(p) {
 async function loadProducts() {
     const container = document.getElementById('products-container');
     let { data, error } = await sb.from('products').select('*').order('id',{ascending:true});
-    if (error || !data) {
-        container.innerHTML = '<div class="loading-products" style="animation:none;">Could not load products</div>';
-        return;
-    }
+    if (error || !data) { container.innerHTML = '<div class="loading-products" style="animation:none;">Could not load products</div>'; return; }
     allProducts = data;
-    if (!data.length) {
-        container.innerHTML = '<div class="loading-products" style="animation:none;">No products yet</div>';
-        return;
-    }
+    if (!data.length) { container.innerHTML = '<div class="loading-products" style="animation:none;">No products yet</div>'; return; }
     container.innerHTML = data.map(buildProduct).join('');
 }
 
@@ -622,6 +1502,21 @@ function selectPrice(el, id, size, price) {
     selections[id].price = price;
 }
 
+function cartFromProduct(pid, name, imageUrl) {
+    const d = selections[pid]||{};
+    if (!d.size||!d.price) { showToast('Select a Size first!', true); return; }
+    addToCart(pid, name, d.size, d.price, d.color, imageUrl);
+}
+
+function buyNow(e, pid, name, imageUrl) {
+    e.preventDefault();
+    const d = selections[pid]||{};
+    if (!d.size||!d.price) { showToast('Select a Size first!', true); return; }
+    cart = [];
+    addToCart(pid, name, d.size, d.price, d.color, imageUrl);
+    goToCheckout();
+}
+
 function order(e, id, name) {
     e.preventDefault();
     const d = selections[id]||{};
@@ -630,13 +1525,11 @@ function order(e, id, name) {
     window.open(`https://wa.me/918655171445?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
-// ══════════════════════════════════════════════
+// ════════════════════════════════════════════════
 // ADMIN
-// ══════════════════════════════════════════════
+// ════════════════════════════════════════════════
 function openAdmin() {
-    if (!currentUser || currentUser.email !== ADMIN_EMAIL) {
-        openLogin(); return;
-    }
+    if (!currentUser || currentUser.email !== ADMIN_EMAIL) { openLogin(); return; }
     document.getElementById('adminOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';
     loadAdminData();
@@ -650,40 +1543,116 @@ function closeAdmin() {
 function showAPage(name) {
     document.querySelectorAll('.apage').forEach(p=>p.classList.remove('active'));
     document.querySelectorAll('.aside-item').forEach(s=>s.classList.remove('active'));
-    document.getElementById(`apage-${name}`).classList.add('active');
-    const map = {dashboard:0,products:1,add:2};
+    document.getElementById(`apage-${name}`)?.classList.add('active');
+    const map = {dashboard:0, orders:1, products:2, add:3};
     document.querySelectorAll('.aside-item')[map[name]]?.classList.add('active');
+    if (name === 'orders') renderAdminOrders();
 }
 
 async function loadAdminData() {
-    const { data } = await sb.from('products').select('*').order('id',{ascending:true});
-    allProducts = data||[];
+    const [prodRes, ordRes] = await Promise.all([
+        sb.from('products').select('*').order('id',{ascending:true}),
+        sb.from('orders').select('*').order('created_at',{ascending:false})
+    ]);
+    allProducts = prodRes.data || [];
+    allOrders   = ordRes.data || [];
     renderDashboard();
     renderProductsTable();
 }
 
 function renderDashboard() {
-    document.getElementById('stat-total').textContent = allProducts.length;
+    document.getElementById('stat-total').textContent  = allProducts.length;
+    document.getElementById('stat-orders').textContent = allOrders.length;
     const cats = new Set(allProducts.map(p=>(p.category||'').toLowerCase()));
     document.getElementById('stat-cats').textContent = cats.size;
-    const avgImgs = allProducts.length
-        ? Math.round(allProducts.reduce((s,p)=>s+getImages(p).length,0)/allProducts.length)
-        : 0;
+    const avgImgs = allProducts.length ? Math.round(allProducts.reduce((s,p)=>s+getImages(p).length,0)/allProducts.length) : 0;
     document.getElementById('stat-imgs').textContent = avgImgs;
 
+    // Recent orders (last 5)
+    const recent = allOrders.slice(0,5);
+    document.getElementById('dash-orders-tbody').innerHTML = recent.length
+        ? recent.map(o => orderTableRow(o)).join('')
+        : '<tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.3);padding:24px;">No orders yet</td></tr>';
+
+    // Products summary
     document.getElementById('dash-tbody').innerHTML = allProducts.map(p=>{
         const imgs = getImages(p);
         const thumb = imgs[0]
             ? `<img class="prod-thumb" src="${imgs[0]}" onerror="this.style.display='none'">`
             : `<div style="width:46px;height:46px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:rgba(255,255,255,0.2);">NO IMG</div>`;
-        return `<tr>
-            <td>${thumb}</td>
-            <td><span class="pid-badge">${p.product_id}</span></td>
-            <td style="font-weight:600;">${p.name}</td>
-            <td>₹${p.price_standard||0}</td>
-            <td style="font-size:0.72rem;color:rgba(255,255,255,0.4);">${(p.sizes||'').replace(/[{}"]/g,'').substring(0,45)}</td>
-        </tr>`;
+        return `<tr><td>${thumb}</td><td><span class="pid-badge">${p.product_id}</span></td><td style="font-weight:600;">${p.name}</td><td>₹${p.price_standard||0}</td><td style="font-size:0.72rem;color:rgba(255,255,255,0.4);">${(p.sizes||'').replace(/[{}"]/g,'').substring(0,45)}</td></tr>`;
     }).join('');
+}
+
+function orderTableRow(o) {
+    const items = JSON.parse(o.items||'[]');
+    const productNames = items.map(i=>`${i.name} (${i.size})`).join(', ');
+    const statusClass = `status-${o.status||'new'}`;
+    return `<tr>
+        <td><span class="pid-badge">${o.order_id}</span></td>
+        <td><div style="font-weight:600;font-size:0.82rem;">${o.user_name||'—'}</div><div style="font-size:0.7rem;color:rgba(255,255,255,0.35);">${o.user_email}</div></td>
+        <td style="font-size:0.78rem;max-width:200px;">${productNames}</td>
+        <td style="font-weight:700;color:var(--pink);">₹${o.total_amount}</td>
+        <td><span class="status-badge ${statusClass}">${(o.status||'new').toUpperCase()}</span></td>
+        <td style="font-size:0.72rem;color:rgba(255,255,255,0.4);">${new Date(o.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</td>
+    </tr>`;
+}
+
+function renderAdminOrders(filterStatus='') {
+    const filter = filterStatus || document.getElementById('orderStatusFilter')?.value || '';
+    const filtered = filter ? allOrders.filter(o=>o.status===filter) : allOrders;
+    const container = document.getElementById('adminOrdersContainer');
+    if (!filtered.length) {
+        container.innerHTML = '<div style="text-align:center;padding:60px;color:rgba(255,255,255,0.3);font-family:\'Bebas Neue\';font-size:1.2rem;letter-spacing:2px;">NO ORDERS FOUND</div>';
+        return;
+    }
+    container.innerHTML = filtered.map(o => {
+        const items = JSON.parse(o.items||'[]');
+        const statusClass = `status-${o.status||'new'}`;
+        return `
+        <div class="order-detail-row" style="margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">
+                <div>
+                    <span class="pid-badge" style="font-size:0.85rem;">${o.order_id}</span>
+                    <span style="margin-left:10px;font-size:0.72rem;color:rgba(255,255,255,0.3);">${new Date(o.created_at).toLocaleString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</span>
+                </div>
+                <span class="status-badge ${statusClass}">${(o.status||'new').toUpperCase()}</span>
+            </div>
+            <div style="margin-top:10px;display:flex;gap:20px;flex-wrap:wrap;">
+                <div>
+                    <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Customer</div>
+                    <div style="font-weight:600;font-size:0.85rem;">${o.user_name||'—'}</div>
+                    <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${o.user_email}</div>
+                </div>
+                <div>
+                    <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Delivery Address</div>
+                    <div style="font-size:0.8rem;color:rgba(255,255,255,0.6);max-width:300px;line-height:1.5;">${o.delivery_address||'—'}</div>
+                </div>
+                <div>
+                    <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Items</div>
+                    ${items.map(i=>`<div style="font-size:0.78rem;margin-bottom:2px;">${i.name} · Size ${i.size} · ${i.color} · Qty ${i.qty} · <span style="color:var(--pink);">₹${i.price*i.qty}</span></div>`).join('')}
+                    <div style="margin-top:6px;font-weight:700;font-size:0.9rem;color:var(--pink);">TOTAL: ₹${o.total_amount}</div>
+                </div>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;">
+                <span style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-right:6px;align-self:center;">Update Status:</span>
+                ${['new','confirmed','shipped','delivered','cancelled'].map(s=>`<button class="order-action-btn ${o.status===s?'active-status':''}" style="${o.status===s?'border-color:var(--pink);color:var(--pink);':''}" onclick="updateOrderStatus('${o.order_id}','${s}')">${s.toUpperCase()}</button>`).join('')}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function filterOrders() { renderAdminOrders(); }
+
+async function updateOrderStatus(orderId, newStatus) {
+    const { error } = await sb.from('orders').update({ status: newStatus }).eq('order_id', orderId);
+    if (error) { showToast('Error: '+error.message, true); return; }
+    // Update local state
+    const idx = allOrders.findIndex(o => o.order_id === orderId);
+    if (idx >= 0) allOrders[idx].status = newStatus;
+    showToast(`✓ Order ${orderId} → ${newStatus.toUpperCase()}`);
+    renderAdminOrders();
+    renderDashboard();
 }
 
 function renderProductsTable() {
@@ -780,30 +1749,30 @@ async function addProduct() {
         sizes:          document.getElementById('a-sizes').value.trim(),
         colors:         document.getElementById('a-colors').value.trim(),
         whatsapp_link:  document.getElementById('a-wa').value.trim()||'https://wa.me/918655171445',
-rev_name: document.getElementById('a-rev-name').value.trim(),
-rev_star: parseInt(document.getElementById('a-rev-star').value) || 5,
-rev_text: document.getElementById('a-rev-text').value.trim(),
+        rev_name:       document.getElementById('a-rev-name').value.trim(),
+        rev_star:       parseInt(document.getElementById('a-rev-star').value)||5,
+        rev_text:       document.getElementById('a-rev-text').value.trim(),
     };
 
-    for (let i = 1; i <= 10; i++) {
+    for (let i=1;i<=10;i++) {
         const input = document.getElementById(`a-img${i}`);
-        newProd[`image_${i}`] = input ? input.value.trim() || null : null;
+        newProd[`image_${i}`] = input ? input.value.trim()||null : null;
     }
 
     const { error } = await sb.from('products').insert([newProd]);
     if (error) { showToast('Error: '+error.message, true); return; }
     showToast('✓ Product added!');
-    
-    // Reset all 10 image fields + other fields
     const resetFields = ['a-pid','a-name','a-pxxs','a-pxs','a-pstd','a-sizes','a-colors','a-wa','a-rev-name','a-rev-star','a-rev-text'];
-    for(let i=1; i<=10; i++) resetFields.push(`a-img${i}`);
+    for(let i=1;i<=10;i++) resetFields.push(`a-img${i}`);
     resetFields.forEach(id => { if(document.getElementById(id)) document.getElementById(id).value=''; });
-    
     loadAdminData();
     loadProducts();
     showAPage('products');
 }
 
+// ════════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════════
 function showToast(msg, isErr=false) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -816,9 +1785,65 @@ function openPolicy()  { document.getElementById('policyOverlay').classList.add(
 function closePolicy() { document.getElementById('policyOverlay').classList.remove('open'); }
 function closePolicyOutside(e) { if (e.target === document.getElementById('policyOverlay')) closePolicy(); }
 
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
 initAuth();
 loadProducts();
 </script>
+
+<!-- ═══════════════════════════════════════
+     SUPABASE SQL — run these in your Supabase SQL editor
+     to create the required tables:
+
+CREATE TABLE IF NOT EXISTS user_profiles (
+    id BIGSERIAL PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    full_name TEXT,
+    email TEXT,
+    phone TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(user_id)
+);
+ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can manage own profile" ON user_profiles FOR ALL USING (auth.uid() = user_id);
+
+CREATE TABLE IF NOT EXISTS user_addresses (
+    id BIGSERIAL PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    name TEXT,
+    phone TEXT,
+    flat TEXT,
+    building TEXT,
+    area TEXT,
+    city TEXT,
+    state TEXT,
+    pin TEXT,
+    landmark TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE user_addresses ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can manage own addresses" ON user_addresses FOR ALL USING (auth.uid() = user_id);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id BIGSERIAL PRIMARY KEY,
+    order_id TEXT UNIQUE,
+    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+    user_email TEXT,
+    user_name TEXT,
+    items JSONB,
+    total_amount INTEGER,
+    delivery_address TEXT,
+    status TEXT DEFAULT 'new',
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can read own orders" ON orders FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert orders" ON orders FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Admin can manage all orders" ON orders FOR ALL USING (
+    (SELECT email FROM auth.users WHERE id = auth.uid()) = 'zaidifycollections@gmail.com'
+);
+
+═══════════════════════════════════════ -->
 </body>
-</html>                                              <div class="slider-container" id="slider-zw06">
-                                        
+</html>
