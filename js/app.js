@@ -63,6 +63,132 @@ function toast(msg) {
   box.classList.add("show");
   setTimeout(() => box.classList.remove("show"), 2000);
 }
+function updateBadges() {
+  const cartBadge = $("cartCount");
+  const wishlistBadge = $("wishlistCount");
+
+  if (cartBadge) {
+    cartBadge.textContent = state.cart.length;
+  }
+
+  if (wishlistBadge) {
+    wishlistBadge.textContent = state.wishlist.length;
+  }
+}
+
+function renderWishlist() {
+  const container = $("wishlistItems");
+
+  if (!container) return;
+
+  if (state.wishlist.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        Wishlist is empty
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = state.wishlist.map(product => `
+    <div class="wishlist-card">
+      <img src="${product.images[0]}" class="wishlist-img">
+
+      <div class="wishlist-info">
+        <h4>${product.name}</h4>
+        <p>₹${product.price}</p>
+
+        <button onclick="openProduct('${product.id}')">
+          View
+        </button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function renderCart() {
+  const container = $("cartItems");
+  const total = $("cartTotal");
+
+  if (!container) return;
+
+  if (state.cart.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        Cart is empty
+      </div>
+    `;
+
+    if (total) total.textContent = "₹0";
+
+    return;
+  }
+
+  let totalPrice = 0;
+
+  container.innerHTML = state.cart.map(item => {
+    totalPrice += item.price;
+
+    return `
+      <div class="cart-card">
+        <img src="${item.images[0]}" class="cart-img">
+
+        <div class="cart-info">
+          <h4>${item.name}</h4>
+          <p>${item.size || ""}</p>
+          <p>₹${item.price}</p>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  if (total) {
+    total.textContent = `₹${totalPrice}`;
+  }
+}
+
+function toggleWishlist(product) {
+  const exists = state.wishlist.find(p => p.id === product.id);
+
+  if (exists) {
+    state.wishlist = state.wishlist.filter(p => p.id !== product.id);
+    toast("Removed from wishlist");
+  } else {
+    state.wishlist.push(product);
+    toast("Added to wishlist");
+  }
+
+  localStorage.setItem(
+    "zc_wishlist",
+    JSON.stringify(state.wishlist)
+  );
+}
+
+function addToCart(buyNow = false) {
+  if (!selectedProduct) return;
+
+  const cartItem = {
+    ...selectedProduct,
+    size: selectedSize,
+    color: selectedColor
+  };
+
+  state.cart.push(cartItem);
+
+  localStorage.setItem(
+    "zc_cart",
+    JSON.stringify(state.cart)
+  );
+
+  updateBadges();
+  renderCart();
+
+  toast("Added to cart");
+
+  if (buyNow) {
+    openOverlay("cartOverlay");
+  }
+}
 
 function setupEvents() {
   $("cartBtn")?.addEventListener("click", () => {
