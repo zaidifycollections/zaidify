@@ -1,12 +1,5 @@
 
-const SUPABASE_URL = "https://ipwlhlsxtlfqioysyzlc.supabase.co";
-const SUPABASE_KEY = "sb_publishable__u9RyOYFvdQ3A-kPQPPO3A_BLjsOHds";
-
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-export let products = [];
-
-const fallbackProducts = [
+export let products = [
   {
     id: "zw01",
     ref: "ZW01",
@@ -19,7 +12,7 @@ const fallbackProducts = [
     sizes: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"],
     colors: ["Grey", "Pink", "Yellow"],
     images: ["logo.png"],
-    description: "Testing product. Remove fallback after Supabase products are working.",
+    description: "Testing product. Remove this once Supabase works.",
     reviews: [
       { name: "Test Customer", text: "This is a test review." }
     ],
@@ -45,49 +38,5 @@ const fallbackProducts = [
   }
 ];
 
-export async function loadProducts() {
-  try {
-    const { data, error } = await supabaseClient
-      .from("products")
-      .select("*")
-      .eq("is_active", true)
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error("Supabase products error:", error);
-      products = fallbackProducts;
-      return products;
-    }
-
-    if (!data || data.length === 0) {
-      console.warn("No Supabase products found. Using fallback products.");
-      products = fallbackProducts;
-      return products;
-    }
-
-    products = data.map((p) => ({
-      id: p.id,
-      ref: p.ref,
-      name: p.name,
-      category: p.category,
-      price: p.price,
-      oldPrice: p.old_price || 0,
-      rating: p.rating || 5,
-      badge: p.badge || "NEW",
-      sizes: p.sizes || [],
-      colors: p.colors || [],
-      images: p.images?.length ? p.images : ["logo.png"],
-      description: p.description || "",
-      reviews: p.reviews || [],
-      stock: p.stock || 0
-    }));
-
-    return products;
-  } catch (err) {
-    console.error("Products load failed:", err);
-    products = fallbackProducts;
-    return products;
-  }
-}
 
     
