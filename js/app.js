@@ -17,13 +17,13 @@ let selectedColor = "";
 
 const $ = (id) => document.getElementById(id);
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   setupModalClose();
   setupEvents();
+  await loadProducts();
   renderAll();
   updateAuthUI(null);
 });
-
 function setupEvents() {
   $("searchBtn")?.addEventListener("click", renderAll);
   $("searchInput")?.addEventListener("input", renderAll);
