@@ -20,21 +20,28 @@ const $ = (id) => document.getElementById(id);
 document.addEventListener("DOMContentLoaded", async () => {
   setupModalClose();
   setupEvents();
+
   await loadProducts();
+
   renderAll();
   updateAuthUI(null);
 });
+
 function setupEvents() {
   $("searchBtn")?.addEventListener("click", renderAll);
   $("searchInput")?.addEventListener("input", renderAll);
 
   $("mobileSearchBtn")?.addEventListener("click", () => {
-    $("searchInput").value = $("mobileSearchInput").value;
+    if ($("searchInput") && $("mobileSearchInput")) {
+      $("searchInput").value = $("mobileSearchInput").value;
+    }
     renderAll();
   });
 
   $("mobileSearchInput")?.addEventListener("input", () => {
-    $("searchInput").value = $("mobileSearchInput").value;
+    if ($("searchInput") && $("mobileSearchInput")) {
+      $("searchInput").value = $("mobileSearchInput").value;
+    }
     renderAll();
   });
 
@@ -43,12 +50,12 @@ function setupEvents() {
   });
 
   $("clearFiltersBtn")?.addEventListener("click", () => {
-    $("searchInput").value = "";
-    $("mobileSearchInput").value = "";
-    $("categoryFilter").value = "all";
-    $("sizeFilter").value = "all";
-    $("priceFilter").value = "all";
-    $("sortFilter").value = "popular";
+    if ($("searchInput")) $("searchInput").value = "";
+    if ($("mobileSearchInput")) $("mobileSearchInput").value = "";
+    if ($("categoryFilter")) $("categoryFilter").value = "all";
+    if ($("sizeFilter")) $("sizeFilter").value = "all";
+    if ($("priceFilter")) $("priceFilter").value = "all";
+    if ($("sortFilter")) $("sortFilter").value = "popular";
 
     document.querySelectorAll(".category-tile").forEach((btn) => {
       btn.classList.remove("active");
@@ -72,7 +79,9 @@ function setupEvents() {
 
       btn.classList.add("active");
 
-      $("categoryFilter").value = btn.dataset.category || "all";
+      if ($("categoryFilter")) {
+        $("categoryFilter").value = btn.dataset.category || "all";
+      }
 
       renderAll();
     });
@@ -169,8 +178,8 @@ function setupEvents() {
   $("loginForm")?.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const email = $("loginEmail").value.trim().toLowerCase();
-    const pass = $("loginPassword").value.trim();
+    const email = $("loginEmail")?.value.trim().toLowerCase();
+    const pass = $("loginPassword")?.value.trim();
 
     if (!email || !pass) {
       setAuthMessage("Enter email and password", true);
@@ -191,8 +200,8 @@ function setupEvents() {
   $("signupForm")?.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const email = $("signupEmail").value.trim().toLowerCase();
-    const name = $("signupName").value.trim();
+    const email = $("signupEmail")?.value.trim().toLowerCase();
+    const name = $("signupName")?.value.trim();
 
     if (!email || !name) {
       setAuthMessage("Enter name and email", true);
@@ -224,67 +233,32 @@ function setupEvents() {
     openOverlay("adminOverlay");
   });
 
-  $("closeAdminBtn")?.addEventListener("click", () => {
+  $("backToStoreBtn")?.addEventListener("click", () => {
     closeOverlay("adminOverlay");
   });
 
- document.querySelectorAll(".admin-nav").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const page = btn.dataset.adminPage;
-
-    document.querySelectorAll(".admin-nav").forEach((b) => {
-      b.classList.remove("active");
-    });
-
-    document.querySelectorAll(".admin-page").forEach((p) => {
-      p.classList.remove("active");
-    });
-
-    btn.classList.add("active");
-
-    document
-      .getElementById(`admin-${page}`)
-      ?.classList.add("active");
-
-    const title =
-      document.getElementById("adminPageTitle");
-
-    if (title) {
-      title.textContent = page
-        .replace("-", " ")
-        .replace(/\\b\\w/g, (c) =>
-          c.toUpperCase()
-        );
-    }
-  });
-});
-
-document.querySelectorAll("[data-admin-go]").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const page = btn.dataset.adminGo;
-
-    document
-      .querySelector(
-        `.admin-nav[data-admin-page="${page}"]`
-      )
-      ?.click();
-  });
-});
-
-document
-  .getElementById("backToStoreBtn")
-  ?.addEventListener("click", () => {
+  $("adminLogoutBtn")?.addEventListener("click", () => {
+    state.user = null;
+    updateAuthUI(null);
     closeOverlay("adminOverlay");
+    showToast("Logged out");
   });
 
-      document.querySelectorAll(".apage").forEach((p) => {
-        p.classList.remove("active");
-      });
-
-      btn.classList.add("active");
-
-      $(`admin-${page}`)?.classList.add("active");
+  document.querySelectorAll(".admin-nav").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openAdminPage(btn.dataset.adminPage);
     });
+  });
+
+  document.querySelectorAll("[data-admin-go]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openAdminPage(btn.dataset.adminGo);
+    });
+  });
+
+  $("adminProductForm")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    showToast("Product save frontend ready. Backend next.");
   });
 }
 
@@ -302,7 +276,9 @@ function renderAll() {
   renderProductScroller("popularProducts", [...products].sort((a, b) => b.rating - a.rating).slice(0, 10));
   renderProductsGrid(list);
 
-  $("resultCount").textContent = `${list.length} product${list.length === 1 ? "" : "s"} found`;
+  if ($("resultCount")) {
+    $("resultCount").textContent = `${list.length} product${list.length === 1 ? "" : "s"} found`;
+  }
 
   updateCartBadge();
   updateWishlistBadge();
@@ -316,7 +292,7 @@ function productCard(product) {
       <div class="product-card-img-wrap">
         <img
           class="product-card-img"
-          src="${product.images[0]}"
+          src="${product.images?.[0] || "logo.png"}"
           alt="${product.name}"
           onerror="this.src='logo.png'"
         >
@@ -329,11 +305,11 @@ function productCard(product) {
 
         <div class="product-card-price">
           <span class="price-now">₹${product.price}</span>
-          <span class="price-old">₹${product.oldPrice}</span>
+          <span class="price-old">${product.oldPrice ? "₹" + product.oldPrice : ""}</span>
         </div>
 
         <div class="card-rating">
-          ★★★★★ <span class="rev-count">${product.reviews.length} reviews</span>
+          ★★★★★ <span class="rev-count">${product.reviews?.length || 0} reviews</span>
         </div>
 
         <div class="product-card-actions">
@@ -352,7 +328,6 @@ function productCard(product) {
 
 function renderProductScroller(containerId, list) {
   const container = $(containerId);
-
   if (!container) return;
 
   if (!list.length) {
@@ -361,13 +336,11 @@ function renderProductScroller(containerId, list) {
   }
 
   container.innerHTML = list.map(productCard).join("");
-
   bindProductButtons(container);
 }
 
 function renderProductsGrid(list) {
   const container = $("productsGrid");
-
   if (!container) return;
 
   if (!list.length) {
@@ -376,7 +349,6 @@ function renderProductsGrid(list) {
   }
 
   container.innerHTML = list.map(productCard).join("");
-
   bindProductButtons(container);
 }
 
@@ -393,7 +365,6 @@ function bindProductButtons(container) {
       e.stopPropagation();
 
       const product = products.find((p) => p.id === btn.dataset.wishId);
-
       if (!product) return;
 
       toggleWishlist(product);
@@ -411,22 +382,21 @@ function bindProductButtons(container) {
 
 function openProductDetail(productId) {
   const product = products.find((p) => p.id === productId);
-
   if (!product) return;
 
   selectedProduct = product;
   selectedSize = "";
-  selectedColor = product.colors[0] || "";
+  selectedColor = product.colors?.[0] || "";
 
-  $("modalProductImage").src = product.images[0];
+  $("modalProductImage").src = product.images?.[0] || "logo.png";
   $("modalProductName").textContent = product.name;
-  $("modalProductRef").textContent = product.ref;
+  $("modalProductRef").textContent = product.ref || product.id;
   $("modalProductPrice").textContent = `₹${product.price}`;
   $("modalOldPrice").textContent = product.oldPrice ? `₹${product.oldPrice}` : "";
-  $("modalProductDesc").textContent = product.description;
-  $("modalReviewCount").textContent = `${product.reviews.length} reviews`;
+  $("modalProductDesc").textContent = product.description || "";
+  $("modalReviewCount").textContent = `${product.reviews?.length || 0} reviews`;
 
-  $("modalThumbs").innerHTML = product.images.map((img, index) => `
+  $("modalThumbs").innerHTML = (product.images || ["logo.png"]).map((img, index) => `
     <img
       src="${img}"
       class="${index === 0 ? "active" : ""}"
@@ -447,7 +417,7 @@ function openProductDetail(productId) {
     });
   });
 
-  $("modalSizeOptions").innerHTML = product.sizes.map((size) => `
+  $("modalSizeOptions").innerHTML = (product.sizes || []).map((size) => `
     <button class="option-btn size-option" type="button" data-size="${size}">
       ${size}
     </button>
@@ -465,7 +435,7 @@ function openProductDetail(productId) {
     });
   });
 
-  $("modalColorOptions").innerHTML = product.colors.map((color) => `
+  $("modalColorOptions").innerHTML = (product.colors || []).map((color) => `
     <button class="option-btn color-option ${color === selectedColor ? "active" : ""}" type="button" data-color="${color}">
       ${color}
     </button>
@@ -483,7 +453,7 @@ function openProductDetail(productId) {
     });
   });
 
-  $("modalReviews").innerHTML = product.reviews.map((review) => `
+  $("modalReviews").innerHTML = (product.reviews || []).map((review) => `
     <div class="review-item">
       <div class="review-name">${review.name} <span class="stars">★★★★★</span></div>
       <div class="review-text">${review.text}</div>
@@ -491,7 +461,6 @@ function openProductDetail(productId) {
   `).join("");
 
   updateWishlistButton();
-
   openOverlay("productModal");
 }
 
@@ -507,17 +476,16 @@ function updateWishlistButton() {
 function switchAuthTab(type) {
   const login = type === "login";
 
-  $("loginTabBtn").classList.toggle("active", login);
-  $("signupTabBtn").classList.toggle("active", !login);
-  $("loginForm").classList.toggle("hidden", !login);
-  $("signupForm").classList.toggle("hidden", login);
+  $("loginTabBtn")?.classList.toggle("active", login);
+  $("signupTabBtn")?.classList.toggle("active", !login);
+  $("loginForm")?.classList.toggle("hidden", !login);
+  $("signupForm")?.classList.toggle("hidden", login);
 
   setAuthMessage("");
 }
 
 function setAuthMessage(message, isError = false) {
   const box = $("authMessage");
-
   if (!box) return;
 
   box.textContent = message;
@@ -534,22 +502,70 @@ function updateAuthUI(user) {
 
   $("loginBtn")?.classList.toggle("hidden", isLoggedIn);
   $("accountBtn")?.classList.toggle("hidden", !isLoggedIn);
-
   $("adminBtn")?.classList.toggle("hidden", !isAdmin);
+
+  $("adminBtn")?.setAttribute("aria-hidden", String(!isAdmin));
+}
+
+function openAdminPage(page) {
+  if (!page) return;
+
+  document.querySelectorAll(".admin-nav").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.adminPage === page);
+  });
+
+  document.querySelectorAll(".admin-page").forEach((section) => {
+    section.classList.remove("active");
+  });
+
+  $(`admin-${page}`)?.classList.add("active");
+
+  const title = $("adminPageTitle");
+  if (title) {
+    title.textContent = page
+      .replace("-", " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  }
 }
 
 function renderAdmin() {
-  $("statProducts").textContent = products.length;
-  $("statOrders").textContent = state.orders.length;
-  $("statCustomers").textContent = state.customers.length;
-  $("statRevenue").textContent = "₹0";
+  const orders = state.orders || [];
+  const customers = state.customers || [];
 
-  $("adminProductsTable").innerHTML = `
+  $("statProducts").textContent = products.length;
+  $("statOrders").textContent = orders.length;
+  $("statCustomers").textContent = customers.length;
+  $("statRevenue").textContent = `₹${orders.reduce((sum, order) => sum + (order.total || 0), 0)}`;
+
+  if ($("statPending")) {
+    $("statPending").textContent = orders.filter((o) => o.status === "New").length;
+  }
+
+  if ($("statLowStock")) {
+    $("statLowStock").textContent = products.filter((p) => Number(p.stock || 0) <= 5).length;
+  }
+
+  renderAdminProducts();
+  renderAdminInventory();
+  renderAdminReviews();
+}
+
+function renderAdminProducts() {
+  const box = $("adminProductsTable");
+  if (!box) return;
+
+  if (!products.length) {
+    box.innerHTML = `<div class="empty-state">No products found</div>`;
+    return;
+  }
+
+  box.innerHTML = `
     <table class="admin-table">
       <thead>
         <tr>
+          <th>Image</th>
           <th>Ref</th>
-          <th>Product</th>
+          <th>Name</th>
           <th>Category</th>
           <th>Price</th>
           <th>Sizes</th>
@@ -559,14 +575,78 @@ function renderAdmin() {
       <tbody>
         ${products.map((p) => `
           <tr>
-            <td>${p.ref}</td>
+            <td><img src="${p.images?.[0] || "logo.png"}" style="width:46px;height:46px;object-fit:cover;border-radius:8px;" onerror="this.src='logo.png'"></td>
+            <td>${p.ref || p.id}</td>
             <td>${p.name}</td>
             <td>${p.category}</td>
             <td>₹${p.price}</td>
-            <td>${p.sizes.join(", ")}</td>
+            <td>${(p.sizes || []).join(", ")}</td>
           </tr>
         `).join("")}
       </tbody>
     </table>
   `;
+}
+
+function renderAdminInventory() {
+  const box = $("adminInventoryTable");
+  if (!box) return;
+
+  if (!products.length) {
+    box.innerHTML = `<div class="empty-state">No inventory found</div>`;
+    return;
+  }
+
+  box.innerHTML = `
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Ref</th>
+          <th>Product</th>
+          <th>Stock</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        ${products.map((p) => {
+          const stock = Number(p.stock || 0);
+          const status = stock <= 5 ? "Low Stock" : "In Stock";
+
+          return `
+            <tr>
+              <td>${p.ref || p.id}</td>
+              <td>${p.name}</td>
+              <td>${stock}</td>
+              <td>${status}</td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderAdminReviews() {
+  const box = $("adminReviewsList");
+  if (!box) return;
+
+  const reviews = products.flatMap((product) =>
+    (product.reviews || []).map((review) => ({
+      product: product.name,
+      ...review
+    }))
+  );
+
+  if (!reviews.length) {
+    box.innerHTML = `<div class="empty-state">No reviews yet</div>`;
+    return;
+  }
+
+  box.innerHTML = reviews.map((review) => `
+    <div class="review-item">
+      <div class="review-name">${review.name} — ${review.product}</div>
+      <div class="review-text">${review.text}</div>
+    </div>
+  `).join("");
 }
