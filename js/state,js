@@ -1,1 +1,17 @@
+export const ADMIN_EMAIL = "zaidifycollections@gmail.com";
 
+export const state = {
+  user: null,
+  cart: JSON.parse(localStorage.getItem("zc_cart") || "[]"),
+  wishlist: JSON.parse(localStorage.getItem("zc_wishlist") || "[]"),
+  orders: [],
+  customers: []
+};
+
+export function saveCart() {
+  localStorage.setItem("zc_cart", JSON.stringify(state.cart));
+}
+
+export function saveWishlist() {
+  localStorage.setItem("zc_wishlist", JSON.stringify(state.wishlist));
+}
