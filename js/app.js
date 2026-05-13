@@ -228,13 +228,54 @@ function setupEvents() {
     closeOverlay("adminOverlay");
   });
 
-  document.querySelectorAll(".aside-item").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const page = btn.dataset.adminPage;
+ document.querySelectorAll(".admin-nav").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const page = btn.dataset.adminPage;
 
-      document.querySelectorAll(".aside-item").forEach((b) => {
-        b.classList.remove("active");
-      });
+    document.querySelectorAll(".admin-nav").forEach((b) => {
+      b.classList.remove("active");
+    });
+
+    document.querySelectorAll(".admin-page").forEach((p) => {
+      p.classList.remove("active");
+    });
+
+    btn.classList.add("active");
+
+    document
+      .getElementById(`admin-${page}`)
+      ?.classList.add("active");
+
+    const title =
+      document.getElementById("adminPageTitle");
+
+    if (title) {
+      title.textContent = page
+        .replace("-", " ")
+        .replace(/\\b\\w/g, (c) =>
+          c.toUpperCase()
+        );
+    }
+  });
+});
+
+document.querySelectorAll("[data-admin-go]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const page = btn.dataset.adminGo;
+
+    document
+      .querySelector(
+        `.admin-nav[data-admin-page="${page}"]`
+      )
+      ?.click();
+  });
+});
+
+document
+  .getElementById("backToStoreBtn")
+  ?.addEventListener("click", () => {
+    closeOverlay("adminOverlay");
+  });
 
       document.querySelectorAll(".apage").forEach((p) => {
         p.classList.remove("active");
