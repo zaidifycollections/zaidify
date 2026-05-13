@@ -1,3 +1,4 @@
+alert("APP JS LOADED");
 import { products, loadProducts } from "./products.js";
 import { state, ADMIN_EMAIL } from "./state.js";
 import { showToast } from "./toast.js";
