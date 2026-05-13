@@ -2,14 +2,6 @@ import { products, loadProducts } from "./products.js";
 import { state, ADMIN_EMAIL } from "./state.js";
 import { showToast } from "./toast.js";
 import { openOverlay, closeOverlay, setupModalClose } from "./modal.js";
-import { addToCart, renderCart, updateCartBadge } from "./cart.js";
-import {
-  toggleWishlist,
-  renderWishlist,
-  updateWishlistBadge,
-  isWishlisted
-} from "./wishlist.js";
-import { filterProducts, sortProducts } from "./search.js";
 
 let selectedProduct = null;
 let selectedSize = "";
@@ -18,35 +10,53 @@ let selectedColor = "";
 const $ = (id) => document.getElementById(id);
 
 document.addEventListener("DOMContentLoaded", async () => {
-  setupModalClose();
-  setupEvents();
+  try {
+    setupModalClose();
+    setupEvents();
 
-  await loadProducts();
+    await safeLoadProducts();
 
-  renderAll();
-  updateAuthUI(null);
+    renderAllProducts();
+    updateBadges();
+    updateAuthUI(null);
+  } catch (err) {
+    console.error("APP CRASH:", err);
+    showToast("App error. Check code.", true);
+  }
 });
 
+async function safeLoadProducts() {
+  try {
+    await loadProducts();
+  } catch (err) {
+    console.error("loadProducts failed:", err);
+  }
+}
+
+function getProducts() {
+  return Array.isArray(products) ? products : [];
+}
+
 function setupEvents() {
-  $("searchBtn")?.addEventListener("click", renderAll);
-  $("searchInput")?.addEventListener("input", renderAll);
+  $("searchBtn")?.addEventListener("click", renderAllProducts);
+  $("searchInput")?.addEventListener("input", renderAllProducts);
 
   $("mobileSearchBtn")?.addEventListener("click", () => {
     if ($("searchInput") && $("mobileSearchInput")) {
       $("searchInput").value = $("mobileSearchInput").value;
     }
-    renderAll();
+    renderAllProducts();
   });
 
   $("mobileSearchInput")?.addEventListener("input", () => {
     if ($("searchInput") && $("mobileSearchInput")) {
       $("searchInput").value = $("mobileSearchInput").value;
     }
-    renderAll();
+    renderAllProducts();
   });
 
   ["categoryFilter", "sizeFilter", "priceFilter", "sortFilter"].forEach((id) => {
-    $(id)?.addEventListener("change", renderAll);
+    $(id)?.addEventListener("change", renderAllProducts);
   });
 
   $("clearFiltersBtn")?.addEventListener("click", () => {
@@ -61,9 +71,11 @@ function setupEvents() {
       btn.classList.remove("active");
     });
 
-    document.querySelector('.category-tile[data-category="all"]')?.classList.add("active");
+    document
+      .querySelector('.category-tile[data-category="all"]')
+      ?.classList.add("active");
 
-    renderAll();
+    renderAllProducts();
   });
 
   document.querySelectorAll(".category-tile").forEach((btn) => {
@@ -83,7 +95,7 @@ function setupEvents() {
         $("categoryFilter").value = btn.dataset.category || "all";
       }
 
-      renderAll();
+      renderAllProducts();
     });
   });
 
@@ -97,7 +109,7 @@ function setupEvents() {
   });
 
   $("wishlistBtn")?.addEventListener("click", () => {
-    renderWishlist(openProductDetail);
+    renderWishlist();
     openOverlay("wishlistOverlay");
   });
 
@@ -126,62 +138,31 @@ function setupEvents() {
   });
 
   $("modalAddCartBtn")?.addEventListener("click", () => {
-    if (!selectedProduct) return;
-
-    if (!selectedSize) {
-      showToast("Select size first", true);
-      return;
-    }
-
-    addToCart(selectedProduct, selectedSize, selectedColor);
-    updateCartBadge();
-    renderCart();
-    showToast("Added to cart");
+    addSelectedProductToCart(false);
   });
 
   $("modalBuyNowBtn")?.addEventListener("click", () => {
-    if (!selectedProduct) return;
-
-    if (!selectedSize) {
-      showToast("Select size first", true);
-      return;
-    }
-
-    addToCart(selectedProduct, selectedSize, selectedColor);
-    updateCartBadge();
-    renderCart();
-
-    closeOverlay("productModal");
-    openOverlay("cartOverlay");
-
-    showToast("Added to cart");
+    addSelectedProductToCart(true);
   });
 
   $("modalWishlistBtn")?.addEventListener("click", () => {
     if (!selectedProduct) return;
-
     toggleWishlist(selectedProduct);
-    updateWishlistBadge();
-    renderWishlist(openProductDetail);
     updateWishlistButton();
-    renderAll();
+    renderAllProducts();
+    updateBadges();
   });
 
-  $("loginTabBtn")?.addEventListener("click", () => {
-    switchAuthTab("login");
-  });
-
-  $("signupTabBtn")?.addEventListener("click", () => {
-    switchAuthTab("signup");
-  });
+  $("loginTabBtn")?.addEventListener("click", () => switchAuthTab("login"));
+  $("signupTabBtn")?.addEventListener("click", () => switchAuthTab("signup"));
 
   $("loginForm")?.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const email = $("loginEmail")?.value.trim().toLowerCase();
-    const pass = $("loginPassword")?.value.trim();
+    const password = $("loginPassword")?.value.trim();
 
-    if (!email || !pass) {
+    if (!email || !password) {
       setAuthMessage("Enter email and password", true);
       return;
     }
@@ -208,10 +189,7 @@ function setupEvents() {
       return;
     }
 
-    state.user = {
-      email,
-      name
-    };
+    state.user = { email, name };
 
     updateAuthUI(state.user);
     closeOverlay("loginOverlay");
@@ -262,68 +240,74 @@ function setupEvents() {
   });
 }
 
-function renderAll() {
-  let list = filterProducts(products, {
-    search: $("searchInput")?.value || "",
-    category: $("categoryFilter")?.value || "all",
-    size: $("sizeFilter")?.value || "all",
-    price: $("priceFilter")?.value || "all"
-  });
+function renderAllProducts() {
+  let list = getFilteredProducts();
 
-  list = sortProducts(list, $("sortFilter")?.value || "popular");
-
-  renderProductScroller("featuredProducts", list.slice(0, 10));
-  renderProductScroller("popularProducts", [...products].sort((a, b) => b.rating - a.rating).slice(0, 10));
+  renderProductScroller("featuredProducts", list.slice(0, 12));
+  renderProductScroller(
+    "popularProducts",
+    [...getProducts()].sort((a, b) => Number(b.rating || 0) - Number(a.rating || 0)).slice(0, 12)
+  );
   renderProductsGrid(list);
 
   if ($("resultCount")) {
     $("resultCount").textContent = `${list.length} product${list.length === 1 ? "" : "s"} found`;
   }
 
-  updateCartBadge();
-  updateWishlistBadge();
+  updateBadges();
 }
 
-function productCard(product) {
-  const wished = isWishlisted(product.id);
+function getFilteredProducts() {
+  const search = ($("searchInput")?.value || "").trim().toLowerCase();
+  const category = $("categoryFilter")?.value || "all";
+  const size = $("sizeFilter")?.value || "all";
+  const price = $("priceFilter")?.value || "all";
+  const sort = $("sortFilter")?.value || "popular";
 
-  return `
-    <article class="product-card" data-product-id="${product.id}">
-      <div class="product-card-img-wrap">
-        <img
-          class="product-card-img"
-          src="${product.images?.[0] || "logo.png"}"
-          alt="${product.name}"
-          onerror="this.src='logo.png'"
-        >
+  let list = getProducts().filter((product) => {
+    const name = String(product.name || "").toLowerCase();
+    const ref = String(product.ref || "").toLowerCase();
+    const desc = String(product.description || "").toLowerCase();
+    const productCategory = String(product.category || "").toLowerCase();
+    const sizes = Array.isArray(product.sizes) ? product.sizes : [];
 
-        <span class="product-badge">${product.badge || "NEW"}</span>
-      </div>
+    const matchesSearch =
+      !search ||
+      name.includes(search) ||
+      ref.includes(search) ||
+      desc.includes(search) ||
+      productCategory.includes(search);
 
-      <div class="product-card-body">
-        <div class="product-card-title">${product.name}</div>
+    const matchesCategory =
+      category === "all" ||
+      productCategory === category ||
+      (category === "women" && ["kurti", "coords", "sets", "women"].includes(productCategory));
 
-        <div class="product-card-price">
-          <span class="price-now">₹${product.price}</span>
-          <span class="price-old">${product.oldPrice ? "₹" + product.oldPrice : ""}</span>
-        </div>
+    const matchesSize =
+      size === "all" ||
+      sizes.includes(size);
 
-        <div class="card-rating">
-          ★★★★★ <span class="rev-count">${product.reviews?.length || 0} reviews</span>
-        </div>
+    let matchesPrice = true;
 
-        <div class="product-card-actions">
-          <button class="view-product-btn" type="button" data-view-id="${product.id}">
-            VIEW
-          </button>
+    if (price !== "all") {
+      const [min, max] = price.split("-").map(Number);
+      matchesPrice = Number(product.price || 0) >= min && Number(product.price || 0) <= max;
+    }
 
-          <button class="quick-wishlist-btn" type="button" data-wish-id="${product.id}">
-            ${wished ? "♥" : "♡"}
-          </button>
-        </div>
-      </div>
-    </article>
-  `;
+    return matchesSearch && matchesCategory && matchesSize && matchesPrice;
+  });
+
+  if (sort === "low-high") {
+    list.sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
+  } else if (sort === "high-low") {
+    list.sort((a, b) => Number(b.price || 0) - Number(a.price || 0));
+  } else if (sort === "newest") {
+    list.reverse();
+  } else {
+    list.sort((a, b) => Number(b.rating || 0) - Number(a.rating || 0));
+  }
+
+  return list;
 }
 
 function renderProductScroller(containerId, list) {
@@ -352,6 +336,50 @@ function renderProductsGrid(list) {
   bindProductButtons(container);
 }
 
+function productCard(product) {
+  const image = product.images?.[0] || "logo.png";
+  const oldPrice = product.oldPrice || product.old_price || 0;
+  const reviewCount = product.reviews?.length || 0;
+  const wished = isWishlisted(product.id);
+
+  return `
+    <article class="product-card" data-product-id="${product.id}">
+      <div class="product-card-img-wrap">
+        <img
+          class="product-card-img"
+          src="${image}"
+          alt="${escapeHtml(product.name || "Product")}"
+          onerror="this.src='logo.png'"
+        >
+        <span class="product-badge">${escapeHtml(product.badge || "NEW")}</span>
+      </div>
+
+      <div class="product-card-body">
+        <div class="product-card-title">${escapeHtml(product.name || "Product")}</div>
+
+        <div class="product-card-price">
+          <span class="price-now">₹${product.price || 0}</span>
+          <span class="price-old">${oldPrice ? "₹" + oldPrice : ""}</span>
+        </div>
+
+        <div class="card-rating">
+          ★★★★★ <span class="rev-count">${reviewCount} reviews</span>
+        </div>
+
+        <div class="product-card-actions">
+          <button class="view-product-btn" type="button" data-view-id="${product.id}">
+            VIEW
+          </button>
+
+          <button class="quick-wishlist-btn" type="button" data-wish-id="${product.id}">
+            ${wished ? "♥" : "♡"}
+          </button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
 function bindProductButtons(container) {
   container.querySelectorAll("[data-view-id]").forEach((btn) => {
     btn.addEventListener("click", (e) => {
@@ -364,12 +392,12 @@ function bindProductButtons(container) {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
 
-      const product = products.find((p) => p.id === btn.dataset.wishId);
+      const product = getProducts().find((p) => String(p.id) === String(btn.dataset.wishId));
       if (!product) return;
 
       toggleWishlist(product);
-      updateWishlistBadge();
-      renderAll();
+      updateBadges();
+      renderAllProducts();
     });
   });
 
@@ -381,87 +409,294 @@ function bindProductButtons(container) {
 }
 
 function openProductDetail(productId) {
-  const product = products.find((p) => p.id === productId);
+  const product = getProducts().find((p) => String(p.id) === String(productId));
   if (!product) return;
 
   selectedProduct = product;
   selectedSize = "";
   selectedColor = product.colors?.[0] || "";
 
-  $("modalProductImage").src = product.images?.[0] || "logo.png";
-  $("modalProductName").textContent = product.name;
-  $("modalProductRef").textContent = product.ref || product.id;
-  $("modalProductPrice").textContent = `₹${product.price}`;
-  $("modalOldPrice").textContent = product.oldPrice ? `₹${product.oldPrice}` : "";
-  $("modalProductDesc").textContent = product.description || "";
-  $("modalReviewCount").textContent = `${product.reviews?.length || 0} reviews`;
+  if ($("modalProductImage")) $("modalProductImage").src = product.images?.[0] || "logo.png";
+  if ($("modalProductName")) $("modalProductName").textContent = product.name || "Product";
+  if ($("modalProductRef")) $("modalProductRef").textContent = product.ref || product.id;
+  if ($("modalProductPrice")) $("modalProductPrice").textContent = `₹${product.price || 0}`;
+  if ($("modalOldPrice")) $("modalOldPrice").textContent = product.oldPrice ? `₹${product.oldPrice}` : "";
+  if ($("modalProductDesc")) $("modalProductDesc").textContent = product.description || "";
+  if ($("modalReviewCount")) $("modalReviewCount").textContent = `${product.reviews?.length || 0} reviews`;
 
-  $("modalThumbs").innerHTML = (product.images || ["logo.png"]).map((img, index) => `
-    <img
-      src="${img}"
-      class="${index === 0 ? "active" : ""}"
-      alt="${product.name}"
-      onerror="this.src='logo.png'"
-    >
-  `).join("");
+  if ($("modalThumbs")) {
+    $("modalThumbs").innerHTML = (product.images?.length ? product.images : ["logo.png"]).map((img, index) => `
+      <img
+        src="${img}"
+        class="${index === 0 ? "active" : ""}"
+        alt="${escapeHtml(product.name || "Product")}"
+        onerror="this.src='logo.png'"
+      >
+    `).join("");
 
-  $("modalThumbs").querySelectorAll("img").forEach((img) => {
-    img.addEventListener("click", () => {
-      $("modalProductImage").src = img.src;
+    $("modalThumbs").querySelectorAll("img").forEach((img) => {
+      img.addEventListener("click", () => {
+        if ($("modalProductImage")) $("modalProductImage").src = img.src;
 
-      $("modalThumbs").querySelectorAll("img").forEach((i) => {
-        i.classList.remove("active");
+        $("modalThumbs").querySelectorAll("img").forEach((i) => {
+          i.classList.remove("active");
+        });
+
+        img.classList.add("active");
       });
-
-      img.classList.add("active");
     });
-  });
+  }
 
-  $("modalSizeOptions").innerHTML = (product.sizes || []).map((size) => `
-    <button class="option-btn size-option" type="button" data-size="${size}">
-      ${size}
-    </button>
-  `).join("");
+  if ($("modalSizeOptions")) {
+    $("modalSizeOptions").innerHTML = (product.sizes || []).map((size) => `
+      <button class="option-btn size-option" type="button" data-size="${escapeHtml(size)}">
+        ${escapeHtml(size)}
+      </button>
+    `).join("");
 
-  $("modalSizeOptions").querySelectorAll("[data-size]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      selectedSize = btn.dataset.size;
+    $("modalSizeOptions").querySelectorAll("[data-size]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        selectedSize = btn.dataset.size;
 
-      $("modalSizeOptions").querySelectorAll("button").forEach((b) => {
-        b.classList.remove("active");
+        $("modalSizeOptions").querySelectorAll("button").forEach((b) => {
+          b.classList.remove("active");
+        });
+
+        btn.classList.add("active");
       });
-
-      btn.classList.add("active");
     });
-  });
+  }
 
-  $("modalColorOptions").innerHTML = (product.colors || []).map((color) => `
-    <button class="option-btn color-option ${color === selectedColor ? "active" : ""}" type="button" data-color="${color}">
-      ${color}
-    </button>
-  `).join("");
+  if ($("modalColorOptions")) {
+    $("modalColorOptions").innerHTML = (product.colors || []).map((color) => `
+      <button class="option-btn color-option ${color === selectedColor ? "active" : ""}" type="button" data-color="${escapeHtml(color)}">
+        ${escapeHtml(color)}
+      </button>
+    `).join("");
 
-  $("modalColorOptions").querySelectorAll("[data-color]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      selectedColor = btn.dataset.color;
+    $("modalColorOptions").querySelectorAll("[data-color]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        selectedColor = btn.dataset.color;
 
-      $("modalColorOptions").querySelectorAll("button").forEach((b) => {
-        b.classList.remove("active");
+        $("modalColorOptions").querySelectorAll("button").forEach((b) => {
+          b.classList.remove("active");
+        });
+
+        btn.classList.add("active");
       });
-
-      btn.classList.add("active");
     });
-  });
+  }
 
-  $("modalReviews").innerHTML = (product.reviews || []).map((review) => `
-    <div class="review-item">
-      <div class="review-name">${review.name} <span class="stars">★★★★★</span></div>
-      <div class="review-text">${review.text}</div>
-    </div>
-  `).join("");
+  if ($("modalReviews")) {
+    const reviews = product.reviews || [];
+
+    $("modalReviews").innerHTML = reviews.length
+      ? reviews.map((review) => `
+          <div class="review-item">
+            <div class="review-name">${escapeHtml(review.name || "Customer")} <span class="stars">★★★★★</span></div>
+            <div class="review-text">${escapeHtml(review.text || "")}</div>
+          </div>
+        `).join("")
+      : `<div class="empty-state">No reviews yet</div>`;
+  }
 
   updateWishlistButton();
   openOverlay("productModal");
+}
+
+function addSelectedProductToCart(openCartAfter) {
+  if (!selectedProduct) return;
+
+  if (!selectedSize) {
+    showToast("Select size first", true);
+    return;
+  }
+
+  addToCart(selectedProduct, selectedSize, selectedColor);
+  renderCart();
+  updateBadges();
+
+  if (openCartAfter) {
+    closeOverlay("productModal");
+    openOverlay("cartOverlay");
+  }
+
+  showToast("Added to cart");
+}
+
+function addToCart(product, size, color) {
+  if (!Array.isArray(state.cart)) state.cart = [];
+
+  const key = `${product.id}-${size}-${color}`;
+
+  const existing = state.cart.find((item) => item.key === key);
+
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    state.cart.push({
+      key,
+      id: product.id,
+      name: product.name,
+      ref: product.ref,
+      price: Number(product.price || 0),
+      image: product.images?.[0] || "logo.png",
+      size,
+      color,
+      qty: 1
+    });
+  }
+
+  localStorage.setItem("zc_cart", JSON.stringify(state.cart));
+}
+
+function renderCart() {
+  const box = $("cartItems");
+  const totalBox = $("cartTotal");
+
+  if (!box) return;
+
+  if (!state.cart || !state.cart.length) {
+    box.innerHTML = `<div class="empty-state">Your cart is empty</div>`;
+    if (totalBox) totalBox.textContent = "₹0";
+    return;
+  }
+
+  box.innerHTML = state.cart.map((item) => `
+    <div class="cart-item">
+      <img src="${item.image || "logo.png"}" alt="${escapeHtml(item.name)}" onerror="this.src='logo.png'">
+
+      <div class="cart-item-info">
+        <div class="cart-item-title">${escapeHtml(item.name)}</div>
+        <div class="cart-item-meta">${escapeHtml(item.size)} / ${escapeHtml(item.color || "")}</div>
+        <div class="cart-item-price">₹${item.price} × ${item.qty}</div>
+
+        <div class="qty-control">
+          <button class="qty-btn" data-dec="${item.key}" type="button">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" data-inc="${item.key}" type="button">+</button>
+        </div>
+      </div>
+
+      <button class="remove-btn" data-remove="${item.key}" type="button">×</button>
+    </div>
+  `).join("");
+
+  box.querySelectorAll("[data-remove]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.cart = state.cart.filter((item) => item.key !== btn.dataset.remove);
+      localStorage.setItem("zc_cart", JSON.stringify(state.cart));
+      renderCart();
+      updateBadges();
+    });
+  });
+
+  box.querySelectorAll("[data-inc]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const item = state.cart.find((x) => x.key === btn.dataset.inc);
+      if (item) item.qty += 1;
+      localStorage.setItem("zc_cart", JSON.stringify(state.cart));
+      renderCart();
+      updateBadges();
+    });
+  });
+
+  box.querySelectorAll("[data-dec]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const item = state.cart.find((x) => x.key === btn.dataset.dec);
+      if (!item) return;
+
+      item.qty -= 1;
+
+      if (item.qty <= 0) {
+        state.cart = state.cart.filter((x) => x.key !== btn.dataset.dec);
+      }
+
+      localStorage.setItem("zc_cart", JSON.stringify(state.cart));
+      renderCart();
+      updateBadges();
+    });
+  });
+
+  const total = state.cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.qty || 1), 0);
+
+  if (totalBox) totalBox.textContent = `₹${total}`;
+}
+
+function isWishlisted(productId) {
+  if (!Array.isArray(state.wishlist)) state.wishlist = [];
+  return state.wishlist.some((item) => String(item.id) === String(productId));
+}
+
+function toggleWishlist(product) {
+  if (!Array.isArray(state.wishlist)) state.wishlist = [];
+
+  if (isWishlisted(product.id)) {
+    state.wishlist = state.wishlist.filter((item) => String(item.id) !== String(product.id));
+    showToast("Removed from wishlist");
+  } else {
+    state.wishlist.push({
+      id: product.id,
+      name: product.name,
+      ref: product.ref,
+      price: product.price,
+      image: product.images?.[0] || "logo.png"
+    });
+    showToast("Added to wishlist");
+  }
+
+  localStorage.setItem("zc_wishlist", JSON.stringify(state.wishlist));
+}
+
+function renderWishlist() {
+  const box = $("wishlistItems");
+  if (!box) return;
+
+  if (!state.wishlist || !state.wishlist.length) {
+    box.innerHTML = `<div class="empty-state">Your wishlist is empty</div>`;
+    return;
+  }
+
+  box.innerHTML = state.wishlist.map((item) => `
+    <div class="wishlist-item">
+      <img src="${item.image || "logo.png"}" alt="${escapeHtml(item.name)}" onerror="this.src='logo.png'">
+
+      <div class="wishlist-item-info">
+        <div class="wishlist-item-title">${escapeHtml(item.name)}</div>
+        <div class="wishlist-item-meta">${escapeHtml(item.ref || item.id)}</div>
+        <div class="wishlist-item-price">₹${item.price}</div>
+
+        <button class="view-product-btn" data-open-wish="${item.id}" type="button">
+          VIEW PRODUCT
+        </button>
+      </div>
+
+      <button class="remove-btn" data-remove-wish="${item.id}" type="button">×</button>
+    </div>
+  `).join("");
+
+  box.querySelectorAll("[data-open-wish]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      closeOverlay("wishlistOverlay");
+      openProductDetail(btn.dataset.openWish);
+    });
+  });
+
+  box.querySelectorAll("[data-remove-wish]").forEach((btn) => {
+    state.wishlist = state.wishlist.filter((item) => String(item.id) !== String(btn.dataset.removeWish));
+    localStorage.setItem("zc_wishlist", JSON.stringify(state.wishlist));
+    renderWishlist();
+    renderAllProducts();
+    updateBadges();
+  });
+}
+
+function updateBadges() {
+  const cartCount = (state.cart || []).reduce((sum, item) => sum + Number(item.qty || 1), 0);
+  const wishCount = (state.wishlist || []).length;
+
+  if ($("cartBadge")) $("cartBadge").textContent = cartCount;
+  if ($("wishlistBadge")) $("wishlistBadge").textContent = wishCount;
 }
 
 function updateWishlistButton() {
@@ -488,7 +723,7 @@ function setAuthMessage(message, isError = false) {
   const box = $("authMessage");
   if (!box) return;
 
-  box.textContent = message;
+  box.textContent = message || "";
   box.className = "lmsg";
 
   if (!message) return;
@@ -503,7 +738,6 @@ function updateAuthUI(user) {
   $("loginBtn")?.classList.toggle("hidden", isLoggedIn);
   $("accountBtn")?.classList.toggle("hidden", !isLoggedIn);
   $("adminBtn")?.classList.toggle("hidden", !isAdmin);
-
   $("adminBtn")?.setAttribute("aria-hidden", String(!isAdmin));
 }
 
@@ -521,6 +755,7 @@ function openAdminPage(page) {
   $(`admin-${page}`)?.classList.add("active");
 
   const title = $("adminPageTitle");
+
   if (title) {
     title.textContent = page
       .replace("-", " ")
@@ -531,19 +766,14 @@ function openAdminPage(page) {
 function renderAdmin() {
   const orders = state.orders || [];
   const customers = state.customers || [];
+  const list = getProducts();
 
-  $("statProducts").textContent = products.length;
-  $("statOrders").textContent = orders.length;
-  $("statCustomers").textContent = customers.length;
-  $("statRevenue").textContent = `₹${orders.reduce((sum, order) => sum + (order.total || 0), 0)}`;
-
-  if ($("statPending")) {
-    $("statPending").textContent = orders.filter((o) => o.status === "New").length;
-  }
-
-  if ($("statLowStock")) {
-    $("statLowStock").textContent = products.filter((p) => Number(p.stock || 0) <= 5).length;
-  }
+  if ($("statProducts")) $("statProducts").textContent = list.length;
+  if ($("statOrders")) $("statOrders").textContent = orders.length;
+  if ($("statCustomers")) $("statCustomers").textContent = customers.length;
+  if ($("statRevenue")) $("statRevenue").textContent = `₹${orders.reduce((sum, order) => sum + (order.total || 0), 0)}`;
+  if ($("statPending")) $("statPending").textContent = orders.filter((o) => o.status === "New").length;
+  if ($("statLowStock")) $("statLowStock").textContent = list.filter((p) => Number(p.stock || 0) <= 5).length;
 
   renderAdminProducts();
   renderAdminInventory();
@@ -552,9 +782,11 @@ function renderAdmin() {
 
 function renderAdminProducts() {
   const box = $("adminProductsTable");
+  const list = getProducts();
+
   if (!box) return;
 
-  if (!products.length) {
+  if (!list.length) {
     box.innerHTML = `<div class="empty-state">No products found</div>`;
     return;
   }
@@ -573,14 +805,14 @@ function renderAdminProducts() {
       </thead>
 
       <tbody>
-        ${products.map((p) => `
+        ${list.map((p) => `
           <tr>
             <td><img src="${p.images?.[0] || "logo.png"}" style="width:46px;height:46px;object-fit:cover;border-radius:8px;" onerror="this.src='logo.png'"></td>
-            <td>${p.ref || p.id}</td>
-            <td>${p.name}</td>
-            <td>${p.category}</td>
-            <td>₹${p.price}</td>
-            <td>${(p.sizes || []).join(", ")}</td>
+            <td>${escapeHtml(p.ref || p.id)}</td>
+            <td>${escapeHtml(p.name || "")}</td>
+            <td>${escapeHtml(p.category || "")}</td>
+            <td>₹${p.price || 0}</td>
+            <td>${(p.sizes || []).map(escapeHtml).join(", ")}</td>
           </tr>
         `).join("")}
       </tbody>
@@ -590,9 +822,11 @@ function renderAdminProducts() {
 
 function renderAdminInventory() {
   const box = $("adminInventoryTable");
+  const list = getProducts();
+
   if (!box) return;
 
-  if (!products.length) {
+  if (!list.length) {
     box.innerHTML = `<div class="empty-state">No inventory found</div>`;
     return;
   }
@@ -609,14 +843,14 @@ function renderAdminInventory() {
       </thead>
 
       <tbody>
-        ${products.map((p) => {
+        ${list.map((p) => {
           const stock = Number(p.stock || 0);
           const status = stock <= 5 ? "Low Stock" : "In Stock";
 
           return `
             <tr>
-              <td>${p.ref || p.id}</td>
-              <td>${p.name}</td>
+              <td>${escapeHtml(p.ref || p.id)}</td>
+              <td>${escapeHtml(p.name || "")}</td>
               <td>${stock}</td>
               <td>${status}</td>
             </tr>
@@ -631,7 +865,7 @@ function renderAdminReviews() {
   const box = $("adminReviewsList");
   if (!box) return;
 
-  const reviews = products.flatMap((product) =>
+  const reviews = getProducts().flatMap((product) =>
     (product.reviews || []).map((review) => ({
       product: product.name,
       ...review
@@ -645,8 +879,17 @@ function renderAdminReviews() {
 
   box.innerHTML = reviews.map((review) => `
     <div class="review-item">
-      <div class="review-name">${review.name} — ${review.product}</div>
-      <div class="review-text">${review.text}</div>
+      <div class="review-name">${escapeHtml(review.name || "Customer")} — ${escapeHtml(review.product || "")}</div>
+      <div class="review-text">${escapeHtml(review.text || "")}</div>
     </div>
   `).join("");
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
