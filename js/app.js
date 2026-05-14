@@ -1,58 +1,81 @@
+const SUPABASE_URL = "https://ipwlhlsxtlfqioysyzlc.supabase.co";
+const SUPABASE_KEY = "sb_publishable__u9RyOYFvdQ3A-kPQPPO3A_BLjsOHds";
 const ADMIN_EMAIL = "zaidifycollections@gmail.com";
 
-let products = [
-  {
-    id: "zw01",
-    ref: "ZW01",
-    name: "Test Cotton Kurta Set",
-    category: "kurti",
-    price: 484,
-    oldPrice: 999,
-    rating: 4.8,
-    badge: "TEST",
-    sizes: ["S", "M", "L", "XL"],
-    colors: ["Grey", "Pink"],
-    images: ["logo.png"],
-    description: "Testing product for frontend. Remove this once Supabase is connected.",
-    reviews: [{ name: "Test", text: "Product popup working." }],
-    stock: 10
-  },
-  {
-    id: "zw02",
-    ref: "ZW02",
-    name: "Premium Kurti",
-    category: "kurti",
-    price: 599,
-    oldPrice: 1299,
-    rating: 4.7,
-    badge: "TEST",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["White", "Blue"],
-    images: ["logo.png"],
-    description: "Second testing product for frontend.",
-    reviews: [{ name: "Customer", text: "Cart and wishlist working." }],
-    stock: 8
-  }
-];
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let products = [];
+let selectedProduct = null;
+let selectedSize = "";
+let selectedColor = "";
+let currentUser = null;
 
 let state = {
-  user: null,
   cart: JSON.parse(localStorage.getItem("zc_cart") || "[]"),
   wishlist: JSON.parse(localStorage.getItem("zc_wishlist") || "[]")
 };
 
-let selectedProduct = null;
-let selectedSize = "";
-let selectedColor = "";
-
 const $ = (id) => document.getElementById(id);
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   setupEvents();
+  await checkAuth();
+  await loadProducts();
   renderAll();
   updateBadges();
-  updateAuthUI();
 });
+
+async function checkAuth() {
+  const { data } = await supabaseClient.auth.getUser();
+  currentUser = data?.user || null;
+  updateAuthUI();
+
+  supabaseClient.auth.onAuthStateChange(async (_event, session) => {
+    currentUser = session?.user || null;
+    updateAuthUI();
+  });
+}
+
+async function loadProducts() {
+  const { data, error } = await supabaseClient
+    .from("products")
+    .select("*")
+    .eq("is_active", true)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    toast("Products failed to load");
+    products = [];
+    return;
+  }
+
+  products = (data || []).map(normalizeProduct);
+}
+
+function normalizeProduct(p) {
+  const variants = Array.isArray(p.variants) ? p.variants : [];
+  const images = Array.isArray(p.images) ? p.images : [];
+
+  return {
+    id: p.id,
+    ref: p.ref || p.id,
+    name: p.name || "Product",
+    category: p.category || "women",
+    price: Number(p.price || 0),
+    oldPrice: Number(p.old_price || 0),
+    stock: Number(p.stock || 0),
+    sizes: Array.isArray(p.sizes) ? p.sizes : [],
+    colors: Array.isArray(p.colors) ? p.colors : [],
+    images: images.length ? images : ["logo.png"],
+    variants,
+    description: p.description || "",
+    badge: p.badge || "NEW",
+    rating: Number(p.rating || 5),
+    reviews: [],
+    isActive: p.is_active
+  };
+}
 
 function setupEvents() {
   $("cartBtn")?.addEventListener("click", () => {
@@ -66,81 +89,28 @@ function setupEvents() {
   });
 
   $("loginBtn")?.addEventListener("click", () => openOverlay("loginOverlay"));
-
   $("closeCartBtn")?.addEventListener("click", () => closeOverlay("cartOverlay"));
   $("closeWishlistBtn")?.addEventListener("click", () => closeOverlay("wishlistOverlay"));
   $("closeLoginBtn")?.addEventListener("click", () => closeOverlay("loginOverlay"));
   $("closeProductModal")?.addEventListener("click", () => closeOverlay("productModal"));
-  $("closePolicyBtn")?.addEventListener("click", () => closeOverlay("policyOverlay"));
-  $("policyBtn")?.addEventListener("click", () => openOverlay("policyOverlay"));
 
   $("loginTabBtn")?.addEventListener("click", () => switchAuthTab("login"));
   $("signupTabBtn")?.addEventListener("click", () => switchAuthTab("signup"));
 
-  $("loginForm")?.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const email = $("loginEmail")?.value.trim().toLowerCase();
-    const password = $("loginPassword")?.value.trim();
-
-    if (!email || !password) {
-      toast("Enter email and password");
-      return;
-    }
-
-    state.user = { email };
-    updateAuthUI();
-    closeOverlay("loginOverlay");
-    toast("Logged in");
-  });
-
-  $("signupForm")?.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const email = $("signupEmail")?.value.trim().toLowerCase();
-    const name = $("signupName")?.value.trim();
-
-    if (!email || !name) {
-      toast("Enter name and email");
-      return;
-    }
-
-    state.user = { email, name };
-    updateAuthUI();
-    closeOverlay("loginOverlay");
-    toast("Account created");
-  });
+  $("loginForm")?.addEventListener("submit", handleLogin);
+  $("signupForm")?.addEventListener("submit", handleSignup);
 
   $("googleLoginBtn")?.addEventListener("click", async () => {
-
-  const SUPABASE_URL = "https://ipwlhlsxtlfqioysyzlc.supabase.co";
-
-  const SUPABASE_KEY = "sb_publishable__u9RyOYFvdQ3A-kPQPPO3A_BLjsOHds";
-
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
-
-  const { error } = await supabaseClient.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: window.location.href
-    }
-  });
-
-  if (error) {
-    console.error(error);
-    toast("Google login failed");
-  }
-});
-
-  $("accountBtn")?.addEventListener("click", () => {
-    toast("Account frontend ready");
+    await supabaseClient.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.href
+      }
+    });
   });
 
   $("adminBtn")?.addEventListener("click", () => {
-    if (!state.user || state.user.email !== ADMIN_EMAIL) {
+    if (!isAdmin()) {
       toast("Admin access denied");
       return;
     }
@@ -151,37 +121,29 @@ function setupEvents() {
 
   $("backToStoreBtn")?.addEventListener("click", () => closeOverlay("adminOverlay"));
 
-  $("adminLogoutBtn")?.addEventListener("click", () => {
-    state.user = null;
+  $("adminLogoutBtn")?.addEventListener("click", async () => {
+    await supabaseClient.auth.signOut();
+    currentUser = null;
     updateAuthUI();
     closeOverlay("adminOverlay");
     toast("Logged out");
   });
 
- document.querySelectorAll(".za-admin-nav").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    openAdminPage(btn.dataset.adminPage);
+  document.querySelectorAll(".za-admin-nav").forEach((btn) => {
+    btn.addEventListener("click", () => openAdminPage(btn.dataset.adminPage));
   });
-});
 
   document.querySelectorAll("[data-admin-go]").forEach((btn) => {
     btn.addEventListener("click", () => openAdminPage(btn.dataset.adminGo));
   });
 
+  $("adminProductForm")?.addEventListener("submit", handleAdminProductSave);
+
   document.querySelectorAll(".category-tile").forEach((btn) => {
     btn.addEventListener("click", () => {
-      if (btn.classList.contains("inactive")) {
-        toast("Coming soon");
-        return;
-      }
-
       document.querySelectorAll(".category-tile").forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
-
-      if ($("categoryFilter")) {
-        $("categoryFilter").value = btn.dataset.category || "all";
-      }
-
+      if ($("categoryFilter")) $("categoryFilter").value = btn.dataset.category || "all";
       renderAll();
     });
   });
@@ -191,28 +153,12 @@ function setupEvents() {
     $(id)?.addEventListener("change", renderAll);
   });
 
-  $("searchBtn")?.addEventListener("click", renderAll);
-
-  $("mobileSearchBtn")?.addEventListener("click", () => {
-    if ($("searchInput") && $("mobileSearchInput")) {
-      $("searchInput").value = $("mobileSearchInput").value;
-    }
+  $("searchBtn")?.addEventListener("click", () => {
     renderAll();
+    $("products")?.scrollIntoView({ behavior: "smooth" });
   });
 
-  $("clearFiltersBtn")?.addEventListener("click", () => {
-    if ($("searchInput")) $("searchInput").value = "";
-    if ($("mobileSearchInput")) $("mobileSearchInput").value = "";
-    if ($("categoryFilter")) $("categoryFilter").value = "all";
-    if ($("sizeFilter")) $("sizeFilter").value = "all";
-    if ($("priceFilter")) $("priceFilter").value = "all";
-    if ($("sortFilter")) $("sortFilter").value = "popular";
-
-    document.querySelectorAll(".category-tile").forEach((b) => b.classList.remove("active"));
-    document.querySelector('.category-tile[data-category="all"]')?.classList.add("active");
-
-    renderAll();
-  });
+  $("clearFiltersBtn")?.addEventListener("click", clearFilters);
 
   $("modalAddCartBtn")?.addEventListener("click", () => addSelectedToCart(false));
   $("modalBuyNowBtn")?.addEventListener("click", () => addSelectedToCart(true));
@@ -222,28 +168,60 @@ function setupEvents() {
     toggleWishlist(selectedProduct);
     updateModalWishlistBtn();
     renderAll();
-    updateBadges();
   });
+}
 
-  $("adminProductForm")?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    toast("Product save frontend ready. Supabase next.");
-  });
+async function handleLogin(e) {
+  e.preventDefault();
 
-  document.querySelectorAll(".overlay").forEach((overlay) => {
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) {
-        closeOverlay(overlay.id);
-      }
-    });
-  });
+  const email = $("loginEmail")?.value.trim().toLowerCase();
+  const password = $("loginPassword")?.value.trim();
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    toast(error.message);
+    return;
+  }
+
+  currentUser = data.user;
+  updateAuthUI();
+  closeOverlay("loginOverlay");
+  toast("Logged in");
+}
+
+async function handleSignup(e) {
+  e.preventDefault();
+
+  const email = $("signupEmail")?.value.trim().toLowerCase();
+  const password = $("signupPassword")?.value.trim();
+
+  const { error } = await supabaseClient.auth.signUp({ email, password });
+
+  if (error) {
+    toast(error.message);
+    return;
+  }
+
+  toast("Signup done. Check email if confirmation is enabled.");
+}
+
+function isAdmin() {
+  return currentUser?.email === ADMIN_EMAIL;
+}
+
+function updateAuthUI() {
+  const loggedIn = Boolean(currentUser);
+  $("loginBtn")?.classList.toggle("hidden", loggedIn);
+  $("accountBtn")?.classList.toggle("hidden", !loggedIn);
+  $("adminBtn")?.classList.toggle("hidden", !isAdmin());
 }
 
 function renderAll() {
   const list = getFilteredProducts();
 
   renderProducts("featuredProducts", list);
-  renderProducts("popularProducts", [...products].sort((a, b) => b.rating - a.rating));
+  renderProducts("popularProducts", [...list].sort((a, b) => b.rating - a.rating));
   renderProducts("productsGrid", list);
 
   if ($("resultCount")) {
@@ -260,37 +238,26 @@ function getFilteredProducts() {
   const price = $("priceFilter")?.value || "all";
   const sort = $("sortFilter")?.value || "popular";
 
-  let list = products.filter((product) => {
-    const text = `${product.name} ${product.ref} ${product.category} ${product.description}`.toLowerCase();
+  let list = products.filter((p) => {
+    const text = `${p.name} ${p.ref} ${p.category} ${p.description}`.toLowerCase();
 
-    const matchesSearch = !search || text.includes(search);
+    const searchOk = !search || text.includes(search);
+    const categoryOk = category === "all" || p.category === category || (category === "women" && ["women", "kurti", "sets", "coords"].includes(p.category));
+    const sizeOk = size === "all" || p.sizes.includes(size);
 
-    const matchesCategory =
-      category === "all" ||
-      product.category === category ||
-      (category === "women" && ["women", "kurti", "sets", "coords"].includes(product.category));
-
-    const matchesSize = size === "all" || product.sizes.includes(size);
-
-    let matchesPrice = true;
-
+    let priceOk = true;
     if (price !== "all") {
       const [min, max] = price.split("-").map(Number);
-      matchesPrice = product.price >= min && product.price <= max;
+      priceOk = p.price >= min && p.price <= max;
     }
 
-    return matchesSearch && matchesCategory && matchesSize && matchesPrice;
+    return searchOk && categoryOk && sizeOk && priceOk;
   });
 
-  if (sort === "low-high") {
-    list.sort((a, b) => a.price - b.price);
-  } else if (sort === "high-low") {
-    list.sort((a, b) => b.price - a.price);
-  } else if (sort === "newest") {
-    list.reverse();
-  } else {
-    list.sort((a, b) => b.rating - a.rating);
-  }
+  if (sort === "low-high") list.sort((a, b) => a.price - b.price);
+  if (sort === "high-low") list.sort((a, b) => b.price - a.price);
+  if (sort === "newest") list.reverse();
+  if (sort === "popular") list.sort((a, b) => b.rating - a.rating);
 
   return list;
 }
@@ -316,18 +283,14 @@ function renderProducts(containerId, list) {
 
         <div class="product-card-price">
           <span class="price-now">₹${p.price}</span>
-          <span class="price-old">₹${p.oldPrice}</span>
+          <span class="price-old">${p.oldPrice ? "₹" + p.oldPrice : ""}</span>
         </div>
 
-        <div class="card-rating">
-          ★★★★★ <span class="rev-count">${p.reviews.length} reviews</span>
-        </div>
+        <div class="card-rating">★★★★★ <span class="rev-count">${p.rating}</span></div>
 
         <div class="product-card-actions">
           <button class="view-product-btn" data-view="${p.id}" type="button">VIEW</button>
-          <button class="quick-wishlist-btn" data-wish="${p.id}" type="button">
-            ${isWishlisted(p.id) ? "♥" : "♡"}
-          </button>
+          <button class="quick-wishlist-btn" data-wish="${p.id}" type="button">${isWishlisted(p.id) ? "♥" : "♡"}</button>
         </div>
       </div>
     </article>
@@ -343,10 +306,9 @@ function renderProducts(containerId, list) {
   box.querySelectorAll("[data-wish]").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const product = products.find((p) => p.id === btn.dataset.wish);
-      toggleWishlist(product);
+      const p = products.find((x) => x.id === btn.dataset.wish);
+      toggleWishlist(p);
       renderAll();
-      updateBadges();
     });
   });
 
@@ -355,41 +317,30 @@ function renderProducts(containerId, list) {
   });
 }
 
+function getImagesForColor(product, color) {
+  const match = product.variants?.find((v) => v.color === color);
+  return match?.images?.length ? match.images : product.images;
+}
+
 function openProduct(id) {
   const product = products.find((p) => p.id === id);
   if (!product) return;
 
   selectedProduct = product;
   selectedSize = "";
-  selectedColor = product.colors[0] || "";
+  selectedColor = product.variants?.[0]?.color || product.colors?.[0] || "";
 
-  if ($("modalProductImage")) $("modalProductImage").src = product.images[0];
+  renderProductModalImages(getImagesForColor(product, selectedColor));
+
   if ($("modalProductName")) $("modalProductName").textContent = product.name;
   if ($("modalProductRef")) $("modalProductRef").textContent = product.ref;
   if ($("modalProductPrice")) $("modalProductPrice").textContent = `₹${product.price}`;
-  if ($("modalOldPrice")) $("modalOldPrice").textContent = `₹${product.oldPrice}`;
+  if ($("modalOldPrice")) $("modalOldPrice").textContent = product.oldPrice ? `₹${product.oldPrice}` : "";
   if ($("modalProductDesc")) $("modalProductDesc").textContent = product.description;
-  if ($("modalReviewCount")) $("modalReviewCount").textContent = `${product.reviews.length} reviews`;
-
-  if ($("modalThumbs")) {
-    $("modalThumbs").innerHTML = product.images.map((img, index) => `
-      <img src="${img}" class="${index === 0 ? "active" : ""}" onerror="this.src='logo.png'">
-    `).join("");
-
-    $("modalThumbs").querySelectorAll("img").forEach((img) => {
-      img.addEventListener("click", () => {
-        if ($("modalProductImage")) $("modalProductImage").src = img.src;
-        $("modalThumbs").querySelectorAll("img").forEach((i) => i.classList.remove("active"));
-        img.classList.add("active");
-      });
-    });
-  }
+  if ($("modalReviewCount")) $("modalReviewCount").textContent = `${product.rating} rating`;
 
   if ($("modalSizeOptions")) {
-    $("modalSizeOptions").innerHTML = product.sizes.map((size) => `
-      <button class="option-btn" data-size="${escapeHTML(size)}" type="button">${escapeHTML(size)}</button>
-    `).join("");
-
+    $("modalSizeOptions").innerHTML = product.sizes.map((s) => `<button class="option-btn" data-size="${s}">${s}</button>`).join("");
     $("modalSizeOptions").querySelectorAll("[data-size]").forEach((btn) => {
       btn.addEventListener("click", () => {
         selectedSize = btn.dataset.size;
@@ -399,31 +350,41 @@ function openProduct(id) {
     });
   }
 
+  const variantColors = product.variants?.map((v) => v.color) || product.colors;
+
   if ($("modalColorOptions")) {
-    $("modalColorOptions").innerHTML = product.colors.map((color) => `
-      <button class="option-btn ${color === selectedColor ? "active" : ""}" data-color="${escapeHTML(color)}" type="button">${escapeHTML(color)}</button>
-    `).join("");
+    $("modalColorOptions").innerHTML = variantColors.map((c) => `<button class="option-btn ${c === selectedColor ? "active" : ""}" data-color="${c}">${c}</button>`).join("");
 
     $("modalColorOptions").querySelectorAll("[data-color]").forEach((btn) => {
       btn.addEventListener("click", () => {
         selectedColor = btn.dataset.color;
         $("modalColorOptions").querySelectorAll("button").forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
+        renderProductModalImages(getImagesForColor(product, selectedColor));
       });
     });
   }
 
-  if ($("modalReviews")) {
-    $("modalReviews").innerHTML = product.reviews.map((r) => `
-      <div class="review-item">
-        <div class="review-name">${escapeHTML(r.name)} <span class="stars">★★★★★</span></div>
-        <div class="review-text">${escapeHTML(r.text)}</div>
-      </div>
-    `).join("");
-  }
-
   updateModalWishlistBtn();
   openOverlay("productModal");
+}
+
+function renderProductModalImages(images) {
+  const safe = images?.length ? images : ["logo.png"];
+
+  if ($("modalProductImage")) $("modalProductImage").src = safe[0];
+
+  if ($("modalThumbs")) {
+    $("modalThumbs").innerHTML = safe.map((img, i) => `<img src="${img}" class="${i === 0 ? "active" : ""}" onerror="this.src='logo.png'">`).join("");
+
+    $("modalThumbs").querySelectorAll("img").forEach((img) => {
+      img.addEventListener("click", () => {
+        $("modalProductImage").src = img.src;
+        $("modalThumbs").querySelectorAll("img").forEach((x) => x.classList.remove("active"));
+        img.classList.add("active");
+      });
+    });
+  }
 }
 
 function addSelectedToCart(openCartAfter) {
@@ -434,18 +395,18 @@ function addSelectedToCart(openCartAfter) {
     return;
   }
 
+  const image = getImagesForColor(selectedProduct, selectedColor)[0];
   const key = `${selectedProduct.id}-${selectedSize}-${selectedColor}`;
-  const existing = state.cart.find((item) => item.key === key);
+  const existing = state.cart.find((x) => x.key === key);
 
-  if (existing) {
-    existing.qty += 1;
-  } else {
+  if (existing) existing.qty += 1;
+  else {
     state.cart.push({
       key,
       id: selectedProduct.id,
       name: selectedProduct.name,
       price: selectedProduct.price,
-      image: selectedProduct.images[0],
+      image,
       size: selectedSize,
       color: selectedColor,
       qty: 1
@@ -467,7 +428,6 @@ function addSelectedToCart(openCartAfter) {
 function renderCart() {
   const box = $("cartItems");
   const totalBox = $("cartTotal");
-
   if (!box) return;
 
   if (!state.cart.length) {
@@ -478,50 +438,15 @@ function renderCart() {
 
   box.innerHTML = state.cart.map((item) => `
     <div class="cart-item">
-      <img src="${item.image}" alt="${escapeHTML(item.name)}" onerror="this.src='logo.png'">
-
+      <img src="${item.image}" onerror="this.src='logo.png'">
       <div class="cart-item-info">
         <div class="cart-item-title">${escapeHTML(item.name)}</div>
         <div class="cart-item-meta">${escapeHTML(item.size)} / ${escapeHTML(item.color)}</div>
         <div class="cart-item-price">₹${item.price} × ${item.qty}</div>
-
-        <div class="qty-control">
-          <button class="qty-btn" data-minus="${item.key}" type="button">−</button>
-          <span class="qty-num">${item.qty}</span>
-          <button class="qty-btn" data-plus="${item.key}" type="button">+</button>
-        </div>
       </div>
-
-      <button class="remove-btn" data-remove="${item.key}" type="button">×</button>
+      <button class="remove-btn" data-remove="${item.key}">×</button>
     </div>
   `).join("");
-
-  box.querySelectorAll("[data-plus]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const item = state.cart.find((x) => x.key === btn.dataset.plus);
-      if (item) item.qty += 1;
-      saveCart();
-      renderCart();
-      updateBadges();
-    });
-  });
-
-  box.querySelectorAll("[data-minus]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const item = state.cart.find((x) => x.key === btn.dataset.minus);
-      if (!item) return;
-
-      item.qty -= 1;
-
-      if (item.qty <= 0) {
-        state.cart = state.cart.filter((x) => x.key !== btn.dataset.minus);
-      }
-
-      saveCart();
-      renderCart();
-      updateBadges();
-    });
-  });
 
   box.querySelectorAll("[data-remove]").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -532,32 +457,22 @@ function renderCart() {
     });
   });
 
-  const total = state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const total = state.cart.reduce((sum, i) => sum + i.price * i.qty, 0);
   if (totalBox) totalBox.textContent = `₹${total}`;
-}
-
-function isWishlisted(productId) {
-  return state.wishlist.some((item) => item.id === productId);
 }
 
 function toggleWishlist(product) {
   if (!product) return;
 
-  if (isWishlisted(product.id)) {
-    state.wishlist = state.wishlist.filter((item) => item.id !== product.id);
-    toast("Removed from wishlist");
-  } else {
-    state.wishlist.push({
-      id: product.id,
-      name: product.name,
-      ref: product.ref,
-      price: product.price,
-      image: product.images[0]
-    });
-    toast("Added to wishlist");
-  }
+  if (isWishlisted(product.id)) state.wishlist = state.wishlist.filter((x) => x.id !== product.id);
+  else state.wishlist.push({ id: product.id, name: product.name, ref: product.ref, price: product.price, image: product.images[0] });
 
   saveWishlist();
+  updateBadges();
+}
+
+function isWishlisted(id) {
+  return state.wishlist.some((x) => x.id === id);
 }
 
 function renderWishlist() {
@@ -571,139 +486,62 @@ function renderWishlist() {
 
   box.innerHTML = state.wishlist.map((item) => `
     <div class="wishlist-item">
-      <img src="${item.image}" alt="${escapeHTML(item.name)}" onerror="this.src='logo.png'">
-
-      <div class="wishlist-item-info">
+      <img src="${item.image}" onerror="this.src='logo.png'">
+      <div>
         <div class="wishlist-item-title">${escapeHTML(item.name)}</div>
-        <div class="wishlist-item-meta">${escapeHTML(item.ref)}</div>
         <div class="wishlist-item-price">₹${item.price}</div>
-
-        <button class="view-product-btn" data-open-wish="${item.id}" type="button">VIEW PRODUCT</button>
       </div>
-
-      <button class="remove-btn" data-remove-wish="${item.id}" type="button">×</button>
+      <button class="remove-btn" data-remove-wish="${item.id}">×</button>
     </div>
   `).join("");
 
-  box.querySelectorAll("[data-open-wish]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      closeOverlay("wishlistOverlay");
-      openProduct(btn.dataset.openWish);
-    });
-  });
-
   box.querySelectorAll("[data-remove-wish]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      state.wishlist = state.wishlist.filter((item) => item.id !== btn.dataset.removeWish);
+      state.wishlist = state.wishlist.filter((x) => x.id !== btn.dataset.removeWish);
       saveWishlist();
       renderWishlist();
       renderAll();
-      updateBadges();
     });
   });
 }
 
-function updateBadges() {
-  const cartCount = state.cart.reduce((sum, item) => sum + item.qty, 0);
-
-  if ($("cartBadge")) $("cartBadge").textContent = cartCount;
-  if ($("wishlistBadge")) $("wishlistBadge").textContent = state.wishlist.length;
-}
-
-function updateModalWishlistBtn() {
-  if (!$("modalWishlistBtn") || !selectedProduct) return;
-
-  $("modalWishlistBtn").textContent = isWishlisted(selectedProduct.id)
-    ? "♥ WISHLISTED"
-    : "♡ WISHLIST";
-}
-
-
- function switchAuthTab(type) {
-  const isLogin = type === "login";
-
-  $("loginTabBtn")?.classList.toggle("active", isLogin);
-  $("signupTabBtn")?.classList.toggle("active", !isLogin);
-
-  $("loginForm")?.classList.toggle("hidden", !isLogin);
-  $("signupForm")?.classList.toggle("hidden", isLogin);
-}
-
-
-function updateAuthUI() {
-  const isLoggedIn = Boolean(state.user);
-  const isAdmin = state.user?.email === ADMIN_EMAIL;
-
-  $("loginBtn")?.classList.toggle("hidden", isLoggedIn);
-  $("accountBtn")?.classList.toggle("hidden", !isLoggedIn);
-  $("adminBtn")?.classList.toggle("hidden", !isAdmin);
-}
-
-function openAdminPage(page) {
-  if (!page) return;
-
-  document.querySelectorAll(".za-admin-nav").forEach((btn) => {
-  btn.classList.toggle("active", btn.dataset.adminPage === page);
-});
-
-document.querySelectorAll(".za-admin-page").forEach((section) => {
-  section.classList.remove("active");
-});
-
-const target = document.getElementById(`admin-${page}`);
-
-if (target) {
-  target.classList.add("active");
-}
-  if ($("adminPageTitle")) {
-    $("adminPageTitle").textContent = page.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase());
-  }
-}
-
 function renderAdmin() {
-  if ($("statProducts")) $("statProducts").textContent = products.length;
-  if ($("statOrders")) $("statOrders").textContent = "0";
-  if ($("statRevenue")) $("statRevenue").textContent = "₹0";
-  if ($("statCustomers")) $("statCustomers").textContent = "0";
-  if ($("statPending")) $("statPending").textContent = "0";
-  if ($("statLowStock")) $("statLowStock").textContent = products.filter((p) => p.stock <= 5).length;
+  $("statProducts") && ($("statProducts").textContent = products.length);
+  $("statOrders") && ($("statOrders").textContent = "0");
+  $("statRevenue") && ($("statRevenue").textContent = "₹0");
+  $("statCustomers") && ($("statCustomers").textContent = "0");
+  $("statPending") && ($("statPending").textContent = "0");
+  $("statLowStock") && ($("statLowStock").textContent = products.filter((p) => p.stock <= 5).length);
 
   renderAdminProducts();
   renderAdminInventory();
-  renderAdminReviews();
 }
 
 function renderAdminProducts() {
-  const box = $("adminProductsTable");
-  if (!box) return;
+  const boxes = [$("adminProductsTable"), $("adminProductsOverview")].filter(Boolean);
 
-  box.innerHTML = `
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Ref</th>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Price</th>
-          <th>Sizes</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        ${products.map((p) => `
-          <tr>
-            <td><img src="${p.images[0]}" style="width:46px;height:46px;object-fit:cover;border-radius:8px;" onerror="this.src='logo.png'"></td>
-            <td>${escapeHTML(p.ref)}</td>
-            <td>${escapeHTML(p.name)}</td>
-            <td>${escapeHTML(p.category)}</td>
-            <td>₹${p.price}</td>
-            <td>${p.sizes.map(escapeHTML).join(", ")}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-  `;
+  boxes.forEach((box) => {
+    box.innerHTML = `
+      <table class="admin-table">
+        <thead>
+          <tr><th>Image</th><th>Ref</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Sizes</th></tr>
+        </thead>
+        <tbody>
+          ${products.map((p) => `
+            <tr>
+              <td><img src="${p.images[0]}" style="width:48px;height:48px;object-fit:cover;border-radius:10px" onerror="this.src='logo.png'"></td>
+              <td>${escapeHTML(p.ref)}</td>
+              <td>${escapeHTML(p.name)}</td>
+              <td>${escapeHTML(p.category)}</td>
+              <td>₹${p.price}</td>
+              <td>${p.stock}</td>
+              <td>${p.sizes.join(", ")}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    `;
+  });
 }
 
 function renderAdminInventory() {
@@ -712,15 +550,7 @@ function renderAdminInventory() {
 
   box.innerHTML = `
     <table class="admin-table">
-      <thead>
-        <tr>
-          <th>Ref</th>
-          <th>Product</th>
-          <th>Stock</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-
+      <thead><tr><th>Ref</th><th>Product</th><th>Stock</th><th>Status</th></tr></thead>
       <tbody>
         ${products.map((p) => `
           <tr>
@@ -735,51 +565,111 @@ function renderAdminInventory() {
   `;
 }
 
-function renderAdminReviews() {
-  const box = $("adminReviewsList");
-  if (!box) return;
+async function handleAdminProductSave(e) {
+  e.preventDefault();
 
-  const reviews = products.flatMap((p) =>
-    p.reviews.map((r) => ({ ...r, product: p.name }))
-  );
+  if (!isAdmin()) {
+    toast("Only admin can save products");
+    return;
+  }
 
-  box.innerHTML = reviews.map((r) => `
-    <div class="review-item">
-      <div class="review-name">${escapeHTML(r.name)} — ${escapeHTML(r.product)}</div>
-      <div class="review-text">${escapeHTML(r.text)}</div>
-    </div>
-  `).join("");
+  const product = {
+    ref: $("ap-id")?.value.trim(),
+    name: $("ap-name")?.value.trim(),
+    category: $("ap-category")?.value,
+    price: Number($("ap-price")?.value || 0),
+    old_price: Number($("ap-old-price")?.value || 0),
+    stock: Number($("ap-stock")?.value || 0),
+    sizes: splitList($("ap-sizes")?.value),
+    colors: splitList($("ap-colors")?.value),
+    images: splitLines($("ap-images")?.value),
+    variants: parseVariants($("ap-variants")?.value),
+    description: $("ap-description")?.value.trim(),
+    badge: $("ap-badge")?.value.trim() || "NEW",
+    is_active: $("ap-active")?.value === "true"
+  };
+
+  const { error } = await supabaseClient.from("products").insert(product);
+
+  if (error) {
+    console.error(error);
+    toast("Product save failed");
+    return;
+  }
+
+  toast("Product saved");
+  await loadProducts();
+  renderAll();
+  renderAdmin();
+  openAdminPage("products");
+}
+
+function parseVariants(value) {
+  if (!value) return [];
+  try {
+    return JSON.parse(value);
+  } catch {
+    toast("Variants JSON invalid");
+    return [];
+  }
+}
+
+function openAdminPage(page) {
+  if (!page) return;
+
+  document.querySelectorAll(".za-admin-nav").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.adminPage === page);
+  });
+
+  document.querySelectorAll(".za-admin-page").forEach((section) => {
+    section.classList.remove("active");
+  });
+
+  $(`admin-${page}`)?.classList.add("active");
+
+  if ($("adminPageTitle")) {
+    $("adminPageTitle").textContent = page.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+}
+
+function switchAuthTab(type) {
+  const isLogin = type === "login";
+  $("loginTabBtn")?.classList.toggle("active", isLogin);
+  $("signupTabBtn")?.classList.toggle("active", !isLogin);
+  $("loginForm")?.classList.toggle("hidden", !isLogin);
+  $("signupForm")?.classList.toggle("hidden", isLogin);
+}
+
+function clearFilters() {
+  if ($("searchInput")) $("searchInput").value = "";
+  if ($("mobileSearchInput")) $("mobileSearchInput").value = "";
+  if ($("categoryFilter")) $("categoryFilter").value = "all";
+  if ($("sizeFilter")) $("sizeFilter").value = "all";
+  if ($("priceFilter")) $("priceFilter").value = "all";
+  if ($("sortFilter")) $("sortFilter").value = "popular";
+  renderAll();
 }
 
 function openOverlay(id) {
-  const el = $(id);
-  if (!el) return;
-  el.classList.remove("hidden");
-  el.classList.add("open");
+  $(id)?.classList.remove("hidden");
+  $(id)?.classList.add("open");
   document.body.style.overflow = "hidden";
 }
 
 function closeOverlay(id) {
-  const el = $(id);
-  if (!el) return;
-  el.classList.remove("open");
+  $(id)?.classList.remove("open");
   document.body.style.overflow = "";
 }
 
-function toast(message) {
-  const box = $("toast");
+function updateBadges() {
+  if ($("cartBadge")) $("cartBadge").textContent = state.cart.reduce((s, i) => s + i.qty, 0);
+  if ($("wishlistBadge")) $("wishlistBadge").textContent = state.wishlist.length;
+}
 
-  if (!box) {
-    alert(message);
-    return;
+function updateModalWishlistBtn() {
+  if ($("modalWishlistBtn") && selectedProduct) {
+    $("modalWishlistBtn").textContent = isWishlisted(selectedProduct.id) ? "♥ WISHLISTED" : "♡ WISHLIST";
   }
-
-  box.textContent = message;
-  box.classList.add("show");
-
-  setTimeout(() => {
-    box.classList.remove("show");
-  }, 2200);
 }
 
 function saveCart() {
@@ -788,6 +678,22 @@ function saveCart() {
 
 function saveWishlist() {
   localStorage.setItem("zc_wishlist", JSON.stringify(state.wishlist));
+}
+
+function splitList(value) {
+  return String(value || "").split(",").map((x) => x.trim()).filter(Boolean);
+}
+
+function splitLines(value) {
+  return String(value || "").split("\n").map((x) => x.trim()).filter(Boolean);
+}
+
+function toast(message) {
+  const box = $("toast");
+  if (!box) return alert(message);
+  box.textContent = message;
+  box.classList.add("show");
+  setTimeout(() => box.classList.remove("show"), 2200);
 }
 
 function escapeHTML(value) {
