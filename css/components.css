@@ -622,3 +622,36 @@
     grid-column: span 1;
   }
 }
+/* FIX SELECT WHITE COLOR */
+.za-admin-content select,
+.za-admin-card select,
+.za-admin-form select {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255,0,255,0.2);
+}
+
+.za-admin-content option,
+.za-admin-card option,
+.za-admin-form option {
+  background: #111111;
+  color: #ffffff;
+}
+
+/* FIX BOTTOM OVERLAP */
+.za-admin-user {
+  margin-top: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.za-admin-sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* SETTINGS BUTTON SPACING */
+.za-admin-nav:last-child {
+  margin-bottom: 30px;
+}
