@@ -373,222 +373,168 @@ Continue with Google
       </div>
     </div>
   </div>
-
-  <!-- ADVANCED ADMIN PANEL -->
-  <div id="adminOverlay" class="overlay admin-overlay hidden" aria-hidden="true">
-    <div class="admin-shell">
-
-      <aside class="admin-sidebar">
-        <div class="admin-brand">⚡ ZAIDIFY ADMIN</div>
-
-        <button class="admin-nav active" data-admin-page="dashboard" type="button">📊 Dashboard</button>
-        <button class="admin-nav" data-admin-page="orders" type="button">📦 Orders</button>
-        <button class="admin-nav" data-admin-page="products" type="button">👗 Products</button>
-        <button class="admin-nav" data-admin-page="add-product" type="button">➕ Add Product</button>
-        <button class="admin-nav" data-admin-page="inventory" type="button">📉 Inventory</button>
-        <button class="admin-nav" data-admin-page="reviews" type="button">⭐ Reviews</button>
-        <button class="admin-nav" data-admin-page="customers" type="button">👤 Customers</button>
-        <button class="admin-nav" data-admin-page="settings" type="button">⚙️ Settings</button>
-      </aside>
-
-      <main class="admin-main">
-        <header class="admin-header">
-          <div>
-            <h1 id="adminPageTitle">Dashboard</h1>
-            <p>Manage products, orders, stock, customers and reviews.</p>
-          </div>
-
-          <div class="admin-header-actions">
-            <span id="adminEmailText">zaidifycollections@gmail.com</span>
-            <button id="backToStoreBtn" class="admin-outline-btn" type="button">← Back to Store</button>
-            <button id="adminLogoutBtn" class="admin-outline-btn" type="button">Logout</button>
-          </div>
-        </header>
-
-        <!-- DASHBOARD -->
-        <section id="admin-dashboard" class="admin-page active">
-          <div class="admin-stats">
-            <div class="admin-stat-card"><strong id="statProducts">0</strong><span>Total Products</span></div>
-            <div class="admin-stat-card"><strong id="statOrders">0</strong><span>Total Orders</span></div>
-            <div class="admin-stat-card"><strong id="statRevenue">₹0</strong><span>Total Revenue</span></div>
-            <div class="admin-stat-card"><strong id="statCustomers">0</strong><span>Customers</span></div>
-            <div class="admin-stat-card"><strong id="statPending">0</strong><span>Pending Orders</span></div>
-            <div class="admin-stat-card"><strong id="statLowStock">0</strong><span>Low Stock</span></div>
-          </div>
-
-          <div class="admin-card">
-            <div class="admin-card-head">
-              <h2>Recent Orders</h2>
-              <button class="admin-small-btn" data-admin-go="orders" type="button">View All</button>
-            </div>
-            <div id="adminRecentOrders">
-              <div class="empty-state">No orders connected yet</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ORDERS -->
-        <section id="admin-orders" class="admin-page">
-          <div class="admin-card">
-            <div class="admin-card-head">
-              <h2>All Orders</h2>
-              <div class="admin-tools">
-                <input id="adminOrderSearch" placeholder="Search order ID, name, email...">
-                <select id="adminOrderStatusFilter">
-                  <option value="all">All Statuses</option>
-                  <option value="New">New</option>
-                  <option value="Confirmed">Confirmed</option>
-                  <option value="Packed">Packed</option>
-                  <option value="Shipped">Shipped</option>
-                  <option value="Out for Delivery">Out for Delivery</option>
-                  <option value="Delivered">Delivered</option>
-                  <option value="Cancelled">Cancelled</option>
-                  <option value="Returned">Returned</option>
-                </select>
-              </div>
-            </div>
-
-            <div id="adminOrdersList">
-              <div class="empty-state">Orders backend will connect here</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- PRODUCTS -->
-        <section id="admin-products" class="admin-page">
-          <div class="admin-card">
-            <div class="admin-card-head">
-              <h2>Manage Products</h2>
-              <button class="admin-primary-btn" data-admin-go="add-product" type="button">+ Add New</button>
-            </div>
-
-            <div id="adminProductsTable">
-              <div class="empty-state">Loading products...</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ADD PRODUCT -->
-        <section id="admin-add-product" class="admin-page">
-          <div class="admin-card">
-            <h2>Add / Edit Product</h2>
-
-            <form id="adminProductForm" class="admin-product-form">
-              <div>
-                <label>Product ID / Ref</label>
-                <input id="ap-id" placeholder="ZW01">
-              </div>
-
-              <div>
-                <label>Product Name</label>
-                <input id="ap-name" placeholder="Kurti Pant Set">
-              </div>
-
-              <div>
-                <label>Category</label>
-                <select id="ap-category">
-                  <option value="kurti">Kurti</option>
-                  <option value="sets">Sets</option>
-                  <option value="coords">Co-ords</option>
-                  <option value="women">Women</option>
-                </select>
-              </div>
-
-              <div>
-                <label>Price</label>
-                <input id="ap-price" type="number" placeholder="599">
-              </div>
-
-              <div>
-                <label>Old Price</label>
-                <input id="ap-old-price" type="number" placeholder="1299">
-              </div>
-
-              <div>
-                <label>Stock</label>
-                <input id="ap-stock" type="number" placeholder="25">
-              </div>
-
-              <div class="full">
-                <label>Sizes</label>
-                <input id="ap-sizes" placeholder="S,M,L,XL,XXL">
-              </div>
-
-              <div class="full">
-                <label>Colors</label>
-                <input id="ap-colors" placeholder="Maroon, Pink, White">
-              </div>
-
-              <div class="full">
-                <label>Image URLs</label>
-                <textarea id="ap-images" placeholder="Paste image URLs, one per line"></textarea>
-              </div>
-
-              <div class="full">
-                <label>Description</label>
-                <textarea id="ap-description" placeholder="Product description"></textarea>
-              </div>
-
-              <div>
-                <label>Badge</label>
-                <input id="ap-badge" placeholder="NEW / BESTSELLER">
-              </div>
-
-              <div>
-                <label>Status</label>
-                <select id="ap-active">
-                  <option value="true">Active</option>
-                  <option value="false">Hidden</option>
-                </select>
-              </div>
-
-              <button class="admin-primary-btn full" type="submit">Save Product</button>
-            </form>
-          </div>
-        </section>
-
-        <!-- INVENTORY -->
-        <section id="admin-inventory" class="admin-page">
-          <div class="admin-card">
-            <h2>Inventory</h2>
-            <div id="adminInventoryTable">
-              <div class="empty-state">Inventory backend will connect here</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- REVIEWS -->
-        <section id="admin-reviews" class="admin-page">
-          <div class="admin-card">
-            <h2>Product Reviews</h2>
-            <div id="adminReviewsList">
-              <div class="empty-state">Reviews backend will connect here</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- CUSTOMERS -->
-        <section id="admin-customers" class="admin-page">
-          <div class="admin-card">
-            <h2>Customers</h2>
-            <div id="adminCustomersTable">
-              <div class="empty-state">Customers backend will connect here</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- SETTINGS -->
-        <section id="admin-settings" class="admin-page">
-          <div class="admin-card">
-            <h2>Admin Settings</h2>
-            <p class="admin-muted">Admin access must only be visible for:</p>
-            <strong>zaidifycollections@gmail.com</strong>
-          </div>
-        </section>
-      </main>
+<div id="adminOverlay" class="admin-overlay hidden">
+  <aside class="za-admin-sidebar">
+    <div class="za-admin-logo">
+      <img src="logo.png" alt="Zaidify">
+      <div>
+        <h2>ZAIDIFY</h2>
+        <span>ADMIN PANEL</span>
+      </div>
     </div>
-  </div>
 
+    <button class="za-admin-nav active" data-admin-page="dashboard">⌂ Dashboard</button>
+    <button class="za-admin-nav" data-admin-page="orders">🛒 Orders</button>
+    <button class="za-admin-nav" data-admin-page="products">▣ Products</button>
+    <button class="za-admin-nav" data-admin-page="add-product">＋ Add Product</button>
+    <button class="za-admin-nav" data-admin-page="inventory">▤ Inventory</button>
+    <button class="za-admin-nav" data-admin-page="reviews">☆ Reviews</button>
+    <button class="za-admin-nav" data-admin-page="customers">♚ Customers</button>
+    <button class="za-admin-nav" data-admin-page="settings">⚙ Settings</button>
+
+    <div class="za-admin-user">
+      <div class="za-user-circle">Z</div>
+      <div>
+        <strong>Zaid Admin</strong>
+        <small>zaidifycollections@gmail.com</small>
+      </div>
+    </div>
+  </aside>
+
+  <main class="za-admin-main">
+    <header class="za-admin-topbar">
+      <div>
+        <h1 id="adminPageTitle">Dashboard</h1>
+        <p>Welcome back, Zaid Admin 👋</p>
+      </div>
+
+      <div class="za-admin-actions">
+        <button id="backToStoreBtn" class="za-outline-btn">← Back to Store</button>
+        <button id="adminLogoutBtn" class="za-purple-btn">Logout</button>
+      </div>
+    </header>
+
+    <section id="admin-dashboard" class="za-admin-page active">
+      <div class="za-stats-grid">
+        <div class="za-stat-card purple"><span>📦</span><p>Total Products</p><h3 id="statProducts">0</h3><small>Active products</small></div>
+        <div class="za-stat-card pink"><span>🛒</span><p>Total Orders</p><h3 id="statOrders">0</h3><small>Orders received</small></div>
+        <div class="za-stat-card orange"><span>₹</span><p>Total Revenue</p><h3 id="statRevenue">₹0</h3><small>Total earnings</small></div>
+        <div class="za-stat-card blue"><span>👥</span><p>Total Customers</p><h3 id="statCustomers">0</h3><small>Registered users</small></div>
+        <div class="za-stat-card green"><span>📋</span><p>Pending Orders</p><h3 id="statPending">0</h3><small>Awaiting processing</small></div>
+        <div class="za-stat-card red"><span>⚠</span><p>Low Stock</p><h3 id="statLowStock">0</h3><small>Products low in stock</small></div>
+      </div>
+
+      <div class="za-admin-grid-2">
+        <div class="za-admin-card">
+          <div class="za-card-head">
+            <h2>Recent Orders</h2>
+            <button class="za-outline-btn" data-admin-go="orders">View All Orders →</button>
+          </div>
+          <div id="adminRecentOrders" class="za-empty-box">🛍️<h3>No orders yet</h3><p>Orders will appear here once customers start placing them.</p></div>
+        </div>
+
+        <div class="za-admin-card">
+          <div class="za-card-head">
+            <h2>Low Stock Alert</h2>
+            <button class="za-outline-btn" data-admin-go="inventory">View Inventory →</button>
+          </div>
+          <div class="za-empty-box">📦<h3>No low stock items</h3><p>All products are well stocked.</p></div>
+        </div>
+      </div>
+
+      <div class="za-admin-card">
+        <div class="za-card-head">
+          <h2>Products Overview</h2>
+          <button class="za-purple-btn" data-admin-go="add-product">＋ Add New Product</button>
+        </div>
+        <div id="adminProductsOverview"></div>
+      </div>
+    </section>
+
+    <section id="admin-orders" class="za-admin-page">
+      <div class="za-admin-card">
+        <div class="za-card-head">
+          <h2>Orders</h2>
+          <input id="adminOrderSearch" class="za-admin-input" placeholder="Search orders...">
+        </div>
+        <div class="za-empty-box">🛒<h3>No orders yet</h3><p>Orders backend will connect here.</p></div>
+      </div>
+    </section>
+
+    <section id="admin-products" class="za-admin-page">
+      <div class="za-admin-card">
+        <div class="za-card-head">
+          <h2>Manage Products</h2>
+          <button class="za-purple-btn" data-admin-go="add-product">＋ Add Product</button>
+        </div>
+        <div id="adminProductsTable"></div>
+      </div>
+    </section>
+
+    <section id="admin-add-product" class="za-admin-page">
+      <div class="za-admin-card">
+        <h2>Add / Edit Product</h2>
+
+        <form id="adminProductForm" class="za-product-form">
+          <input id="ap-id" placeholder="Product ID / Ref">
+          <input id="ap-name" placeholder="Product Name">
+          <select id="ap-category">
+            <option value="kurti">Kurti</option>
+            <option value="sets">Sets</option>
+            <option value="coords">Co-ords</option>
+            <option value="women">Women</option>
+          </select>
+          <input id="ap-price" type="number" placeholder="Price">
+          <input id="ap-old-price" type="number" placeholder="Old Price">
+          <input id="ap-stock" type="number" placeholder="Stock">
+          <input id="ap-sizes" placeholder="Sizes: S,M,L,XL">
+          <input id="ap-colors" placeholder="Colors: Pink, White">
+          <textarea id="ap-images" placeholder="Image URLs, one per line"></textarea>
+          <textarea id="ap-description" placeholder="Description"></textarea>
+          <input id="ap-badge" placeholder="Badge: NEW / BESTSELLER">
+          <select id="ap-active">
+            <option value="true">Active</option>
+            <option value="false">Hidden</option>
+          </select>
+
+          <button class="za-purple-btn" type="submit">Save Product</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="admin-inventory" class="za-admin-page">
+      <div class="za-admin-card">
+        <h2>Inventory</h2>
+        <div id="adminInventoryTable"></div>
+      </div>
+    </section>
+
+    <section id="admin-reviews" class="za-admin-page">
+      <div class="za-admin-card">
+        <h2>Reviews</h2>
+        <div id="adminReviewsList"></div>
+      </div>
+    </section>
+
+    <section id="admin-customers" class="za-admin-page">
+      <div class="za-admin-card">
+        <h2>Customers</h2>
+        <div class="za-empty-box">👥<h3>No customers yet</h3><p>Customer backend will connect here.</p></div>
+      </div>
+    </section>
+
+    <section id="admin-settings" class="za-admin-page">
+      <div class="za-admin-card">
+        <h2>Settings</h2>
+        <p>Admin access allowed only for:</p>
+        <strong>zaidifycollections@gmail.com</strong>
+      </div>
+    </section>
+  </main>
+</div>
+  
+
+             
   <div id="toast" class="toast"></div>
 <script src="js/app.js?v=4"></script>
 </body>
