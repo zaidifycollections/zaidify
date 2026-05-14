@@ -111,9 +111,29 @@ function setupEvents() {
     toast("Account created");
   });
 
-  $("googleLoginBtn")?.addEventListener("click", () => {
-    toast("Google sign-in will connect with Supabase next");
+  $("googleLoginBtn")?.addEventListener("click", async () => {
+
+  const SUPABASE_URL = "https://ipwlhlsxtlfqioysyzlc.supabase.co";
+
+  const SUPABASE_KEY = "sb_publishable__u9RyOYFvdQ3A-kPQPPO3A_BLjsOHds";
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  const { error } = await supabaseClient.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: window.location.href
+    }
   });
+
+  if (error) {
+    console.error(error);
+    toast("Google login failed");
+  }
+});
 
   $("accountBtn")?.addEventListener("click", () => {
     toast("Account frontend ready");
