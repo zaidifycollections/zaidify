@@ -1,7 +1,3 @@
-
-
-    alert("APP JS LOADED");
-
 const ADMIN_EMAIL = "zaidifycollections@gmail.com";
 
 let products = [
