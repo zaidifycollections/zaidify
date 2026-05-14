@@ -158,9 +158,11 @@ function setupEvents() {
     toast("Logged out");
   });
 
-  document.querySelectorAll(".admin-nav").forEach((btn) => {
-    btn.addEventListener("click", () => openAdminPage(btn.dataset.adminPage));
+ document.querySelectorAll(".za-admin-nav").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    openAdminPage(btn.dataset.adminPage);
   });
+});
 
   document.querySelectorAll("[data-admin-go]").forEach((btn) => {
     btn.addEventListener("click", () => openAdminPage(btn.dataset.adminGo));
@@ -640,16 +642,19 @@ function updateAuthUI() {
 function openAdminPage(page) {
   if (!page) return;
 
-  document.querySelectorAll(".admin-nav").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.adminPage === page);
-  });
+  document.querySelectorAll(".za-admin-nav").forEach((btn) => {
+  btn.classList.toggle("active", btn.dataset.adminPage === page);
+});
 
-  document.querySelectorAll(".admin-page").forEach((section) => {
-    section.classList.remove("active");
-  });
+document.querySelectorAll(".za-admin-page").forEach((section) => {
+  section.classList.remove("active");
+});
 
-  $(`admin-${page}`)?.classList.add("active");
+const target = document.getElementById(`admin-${page}`);
 
+if (target) {
+  target.classList.add("active");
+}
   if ($("adminPageTitle")) {
     $("adminPageTitle").textContent = page.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase());
   }
