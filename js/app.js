@@ -596,13 +596,16 @@ function updateModalWishlistBtn() {
     : "♡ WISHLIST";
 }
 
-function switchAuthTab(type) {
+
+ function switchAuthTab(type) {
   const isLogin = type === "login";
 
   $("loginTabBtn")?.classList.toggle("active", isLogin);
   $("signupTabBtn")?.classList.toggle("active", !isLogin);
+
   $("loginForm")?.classList.toggle("hidden", !isLogin);
   $("signupForm")?.classList.toggle("hidden", isLogin);
+}
 }
 
 function updateAuthUI() {
