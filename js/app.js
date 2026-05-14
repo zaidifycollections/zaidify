@@ -606,7 +606,7 @@ function updateModalWishlistBtn() {
   $("loginForm")?.classList.toggle("hidden", !isLogin);
   $("signupForm")?.classList.toggle("hidden", isLogin);
 }
-}
+
 
 function updateAuthUI() {
   const isLoggedIn = Boolean(state.user);
