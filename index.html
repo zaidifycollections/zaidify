@@ -3,464 +3,451 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Zaidify Collections</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <!-- ONE FINAL CSS FILE ONLY -->
   <link rel="stylesheet" href="css/main.css?v=1">
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
 
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <div class="nav-left">
-      <img src="logo.png" alt="Zaidify Collections" class="nav-logo">
-      <div>
-        <h1 class="brand-title">ZAIDIFY COLLECTIONS</h1>
-        <p class="brand-sub">Premium Fashion Store</p>
-      </div>
-    </div>
-
-    <div class="nav-center desktop-search">
-      <input id="searchInput" type="text" placeholder="Search products...">
-      <button id="searchBtn" type="button">Search</button>
-    </div>
-
-    <div class="nav-right">
-      <button id="wishlistBtn" class="nav-btn" type="button">
-        ♡
-        <span id="wishlistBadge" class="badge">0</span>
-      </button>
-
-      <button id="cartBtn" class="nav-btn" type="button">
-        🛒
-        <span id="cartBadge" class="badge">0</span>
-      </button>
-
-      <button id="loginBtn" class="nav-btn" type="button">Login</button>
-      <button id="accountBtn" class="nav-btn hidden" type="button">Account</button>
-      <button id="adminBtn" class="nav-btn hidden" type="button">Admin</button>
-    </div>
-  </header>
-
-  <!-- MOBILE SEARCH -->
-  <section class="mobile-search">
-    <input id="mobileSearchInput" type="text" placeholder="Search products...">
-    <button id="mobileSearchBtn" type="button">Search</button>
-  </section>
-
-  <!-- HERO -->
-  <section class="hero-section">
-    <div class="hero-overlay"></div>
-
-    <div class="hero-content">
-      <h1>ZAIDIFY COLLECTIONS</h1>
-      <p>Fashion for every age, every size, every style.</p>
-
-      <div class="hero-buttons">
-        <a href="#products" class="hero-btn primary">SHOP NOW</a>
-        <button id="policyBtn" class="hero-btn secondary" type="button">OUR POLICY</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- CATEGORIES -->
-  <section class="categories-section">
-    <div class="section-head">
-      <h2>Shop by Category</h2>
-    </div>
-
-    <div class="categories-grid">
-      <button class="category-tile active" data-category="all" type="button">All</button>
-      <button class="category-tile" data-category="women" type="button">Women</button>
-      <button class="category-tile" data-category="kurti" type="button">Kurti</button>
-      <button class="category-tile" data-category="sets" type="button">Sets</button>
-      <button class="category-tile" data-category="coords" type="button">Co-ords</button>
-      <button class="category-tile inactive" type="button">Men (Soon)</button>
-      <button class="category-tile inactive" type="button">Kids (Soon)</button>
-    </div>
-  </section>
-
-  <!-- FILTERS -->
-  <section class="filters-section">
-    <select id="categoryFilter">
-      <option value="all">All Categories</option>
-      <option value="women">Women</option>
-      <option value="kurti">Kurti</option>
-      <option value="sets">Sets</option>
-      <option value="coords">Co-ords</option>
-    </select>
-
-    <select id="sizeFilter">
-      <option value="all">All Sizes</option>
-      <option value="S">S</option>
-      <option value="M">M</option>
-      <option value="L">L</option>
-      <option value="XL">XL</option>
-      <option value="XXL">XXL</option>
-    </select>
-
-    <select id="priceFilter">
-      <option value="all">All Prices</option>
-      <option value="0-499">Under ₹499</option>
-      <option value="500-999">₹500 - ₹999</option>
-      <option value="1000-999999">₹1000+</option>
-    </select>
-
-    <select id="sortFilter">
-      <option value="popular">Most Popular</option>
-      <option value="newest">Newest</option>
-      <option value="low-high">Price Low to High</option>
-      <option value="high-low">Price High to Low</option>
-    </select>
-
-    <button id="clearFiltersBtn" type="button">Clear Filters</button>
-  </section>
-
-  <!-- FEATURED -->
-  <section class="products-section">
-    <div class="section-head">
-      <h2>Featured Products</h2>
-    </div>
-
-    <div id="featuredProducts" class="horizontal-products"></div>
-  </section>
-
-  <!-- POPULAR -->
-  <section class="products-section">
-    <div class="section-head">
-      <h2>Popular Products</h2>
-    </div>
-
-    <div id="popularProducts" class="horizontal-products"></div>
-  </section>
-
-  <!-- ALL PRODUCTS -->
-  <section id="products" class="products-main-section">
-    <div class="section-head products-head">
-      <div>
-        <h2>All Products</h2>
-        <p id="resultCount">0 products found</p>
-      </div>
-    </div>
-
-    <div id="productsGrid" class="products-grid"></div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
+<header class="navbar">
+  <div class="nav-left">
+    <img src="logo.png" alt="Zaidify Collections" class="nav-logo">
     <div>
-      <h3>ZAIDIFY COLLECTIONS</h3>
-      <p>Premium fashion with premium experience.</p>
+      <h1 class="brand-title">ZAIDIFY COLLECTIONS</h1>
+      <p class="brand-sub">Premium Fashion Store</p>
     </div>
+  </div>
 
+  <div class="nav-center desktop-search">
+    <input id="searchInput" type="text" placeholder="Search products...">
+    <button id="searchBtn" type="button">Search</button>
+  </div>
+
+  <div class="nav-right">
+    <button id="wishlistBtn" class="nav-btn" type="button">♡<span id="wishlistBadge" class="badge">0</span></button>
+    <button id="cartBtn" class="nav-btn" type="button">🛒<span id="cartBadge" class="badge">0</span></button>
+    <button id="loginBtn" class="nav-btn" type="button">Login</button>
+    <button id="accountBtn" class="nav-btn hidden" type="button">Account</button>
+    <button id="adminBtn" class="nav-btn hidden" type="button">Admin</button>
+  </div>
+</header>
+
+<section class="mobile-search">
+  <input id="mobileSearchInput" type="text" placeholder="Search products...">
+  <button id="mobileSearchBtn" type="button">Search</button>
+</section>
+
+<section class="hero-section">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>ZAIDIFY COLLECTIONS</h1>
+    <p>Fashion for every age, every size, every style.</p>
+    <div class="hero-buttons">
+      <a href="#products" class="hero-btn primary">SHOP NOW</a>
+      <button id="policyBtn" class="hero-btn secondary" type="button">OUR POLICY</button>
+    </div>
+  </div>
+</section>
+
+<section class="categories-section">
+  <div class="section-head"><h2>Shop by Category</h2></div>
+  <div class="categories-grid">
+    <button class="category-tile active" data-category="all" type="button">All</button>
+    <button class="category-tile" data-category="women" type="button">Women</button>
+    <button class="category-tile" data-category="kurti" type="button">Kurti</button>
+    <button class="category-tile" data-category="sets" type="button">Sets</button>
+    <button class="category-tile" data-category="coords" type="button">Co-ords</button>
+    <button class="category-tile inactive" type="button">Men (Soon)</button>
+    <button class="category-tile inactive" type="button">Kids (Soon)</button>
+  </div>
+</section>
+
+<section class="filters-section">
+  <select id="categoryFilter">
+    <option value="all">All Categories</option>
+    <option value="women">Women</option>
+    <option value="kurti">Kurti</option>
+    <option value="sets">Sets</option>
+    <option value="coords">Co-ords</option>
+  </select>
+
+  <select id="sizeFilter">
+    <option value="all">All Sizes</option>
+    <option value="XXS">XXS</option>
+    <option value="XS">XS</option>
+    <option value="S">S</option>
+    <option value="M">M</option>
+    <option value="L">L</option>
+    <option value="XL">XL</option>
+    <option value="XXL">XXL</option>
+    <option value="3XL">3XL</option>
+    <option value="4XL">4XL</option>
+    <option value="5XL">5XL</option>
+    <option value="6XL">6XL</option>
+  </select>
+
+  <select id="priceFilter">
+    <option value="all">All Prices</option>
+    <option value="0-499">Under ₹499</option>
+    <option value="500-999">₹500 - ₹999</option>
+    <option value="1000-999999">₹1000+</option>
+  </select>
+
+  <select id="sortFilter">
+    <option value="popular">Most Popular</option>
+    <option value="newest">Newest</option>
+    <option value="low-high">Price Low to High</option>
+    <option value="high-low">Price High to Low</option>
+  </select>
+
+  <button id="clearFiltersBtn" type="button">Clear Filters</button>
+</section>
+
+<section class="products-section">
+  <div class="section-head"><h2>Featured Products</h2></div>
+  <div id="featuredProducts" class="horizontal-products"></div>
+</section>
+
+<section class="products-section">
+  <div class="section-head"><h2>Popular Products</h2></div>
+  <div id="popularProducts" class="horizontal-products"></div>
+</section>
+
+<section id="products" class="products-main-section">
+  <div class="section-head products-head">
     <div>
-      <p>WhatsApp: 8655171445</p>
-      <p>Website: www.zaidifycollections.in</p>
+      <h2>All Products</h2>
+      <p id="resultCount">0 products found</p>
     </div>
-  </footer>
+  </div>
+  <div id="productsGrid" class="products-grid"></div>
+</section>
 
-  <!-- PRODUCT MODAL -->
-  <div id="productModal" class="overlay hidden">
-    <div class="modal product-modal">
-      <button id="closeProductModal" class="close-btn" type="button">×</button>
+<footer class="footer">
+  <div>
+    <h3>ZAIDIFY COLLECTIONS</h3>
+    <p>Premium fashion with premium experience.</p>
+  </div>
+  <div>
+    <p>WhatsApp Support: 8655171445</p>
+    <p>Website: www.zaidifycollections.in</p>
+  </div>
+</footer>
 
-      <div class="product-modal-grid">
-        <div class="modal-gallery">
-          <img id="modalProductImage" class="main-product-image" src="logo.png" alt="Product image">
-          <div id="modalThumbs" class="modal-thumbs"></div>
+<!-- PRODUCT MODAL -->
+<div id="productModal" class="overlay hidden">
+  <div class="modal product-modal">
+    <button id="closeProductModal" class="close-btn" type="button">×</button>
+    <div class="product-modal-grid">
+      <div class="modal-gallery">
+        <img id="modalProductImage" class="main-product-image" src="logo.png" alt="Product image">
+        <div id="modalThumbs" class="modal-thumbs"></div>
+      </div>
+      <div class="modal-content">
+        <p id="modalProductRef" class="modal-ref"></p>
+        <h2 id="modalProductName"></h2>
+        <div class="modal-price-row">
+          <span id="modalProductPrice" class="modal-price"></span>
+          <span id="modalOldPrice" class="modal-old-price"></span>
+        </div>
+        <p id="modalReviewCount" class="modal-rating"></p>
+
+        <div class="option-block">
+          <h4>Select Size</h4>
+          <div id="modalSizeOptions" class="options-wrap"></div>
         </div>
 
-        <div class="modal-content">
-          <p id="modalProductRef" class="modal-ref"></p>
-          <h2 id="modalProductName"></h2>
+        <div class="option-block">
+          <h4>Select Color</h4>
+          <div id="modalColorOptions" class="options-wrap"></div>
+        </div>
 
-          <div class="modal-price-row">
-            <span id="modalProductPrice" class="modal-price"></span>
-            <span id="modalOldPrice" class="modal-old-price"></span>
-          </div>
+        <div class="modal-actions">
+          <button id="modalAddCartBtn" class="main-btn" type="button">Add to Cart</button>
+          <button id="modalBuyNowBtn" class="main-btn purple" type="button">Buy Now</button>
+        </div>
 
-          <p id="modalReviewCount" class="modal-rating"></p>
+        <button id="modalWishlistBtn" class="wishlist-modal-btn" type="button">♡ Wishlist</button>
 
-          <div class="option-block">
-            <h4>Select Size</h4>
-            <div id="modalSizeOptions" class="options-wrap"></div>
-          </div>
-
-          <div class="option-block">
-            <h4>Select Color</h4>
-            <div id="modalColorOptions" class="options-wrap"></div>
-          </div>
-
-          <div class="modal-actions">
-            <button id="modalAddCartBtn" class="main-btn" type="button">Add to Cart</button>
-            <button id="modalBuyNowBtn" class="main-btn purple" type="button">Buy Now</button>
-          </div>
-
-          <button id="modalWishlistBtn" class="wishlist-modal-btn" type="button">♡ Wishlist</button>
-
-          <div class="modal-description">
-            <h4>Description</h4>
-            <p id="modalProductDesc"></p>
-          </div>
+        <div class="modal-description">
+          <h4>Description</h4>
+          <p id="modalProductDesc"></p>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- LOGIN MODAL -->
-  <div id="loginOverlay" class="overlay hidden">
-    <div class="modal auth-modal">
-      <button id="closeLoginBtn" class="close-btn" type="button">×</button>
+<!-- LOGIN MODAL -->
+<div id="loginOverlay" class="overlay hidden">
+  <div class="modal auth-modal">
+    <button id="closeLoginBtn" class="close-btn" type="button">×</button>
+    <h2>Welcome to Zaidify</h2>
 
-      <h2>Welcome to Zaidify</h2>
+    <div class="tab-row">
+      <button id="loginTabBtn" class="tab active" type="button">LOGIN</button>
+      <button id="signupTabBtn" class="tab" type="button">SIGN UP</button>
+    </div>
 
-      <div class="tab-row">
-        <button id="loginTabBtn" class="tab active" type="button">LOGIN</button>
-        <button id="signupTabBtn" class="tab" type="button">SIGN UP</button>
-      </div>
+    <form id="loginForm" class="auth-form">
+      <input id="loginEmail" type="email" placeholder="Email" autocomplete="email">
+      <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
+      <button class="main-btn purple" type="submit">Login</button>
+    </form>
 
-      <form id="loginForm" class="auth-form">
-        <input id="loginEmail" type="email" placeholder="Email" autocomplete="email">
-        <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
-        <button class="main-btn purple" type="submit">Login</button>
-      </form>
+    <button id="googleLoginBtn" class="google-login-btn" type="button">
+      <span style="font-weight:900;color:#4285F4;margin-right:8px;">G</span>
+      Continue with Google
+    </button>
 
-      <button id="googleLoginBtn" class="google-login-btn" type="button">
-        Continue with Google
-      </button>
+    <form id="signupForm" class="auth-form hidden">
+      <input id="signupName" type="text" placeholder="Full Name" autocomplete="name">
+      <input id="signupEmail" type="email" placeholder="Email" autocomplete="email">
+      <input id="signupPhone" type="tel" placeholder="Phone Number" autocomplete="tel">
+      <input id="signupPassword" type="password" placeholder="Password" autocomplete="new-password">
+      <button class="main-btn purple" type="submit">Create Account</button>
+    </form>
+  </div>
+</div>
 
-      <form id="signupForm" class="auth-form hidden">
-        <input id="signupEmail" type="email" placeholder="Email" autocomplete="email">
-        <input id="signupPassword" type="password" placeholder="Password" autocomplete="new-password">
-        <button class="main-btn purple" type="submit">Create Account</button>
-      </form>
+<!-- ACCOUNT PAGE -->
+<div id="accountPage" class="overlay hidden account-page-overlay">
+  <div class="account-full-page">
+    <div class="account-topbar">
+      <button id="accountBackBtn" class="za-outline-btn" type="button">← Back</button>
+      <h1>MY ACCOUNT</h1>
+    </div>
+
+    <div class="account-layout">
+      <aside class="account-sidebar">
+        <button class="account-tab active" data-account-tab="profile" type="button">👤 Profile</button>
+        <button class="account-tab" data-account-tab="orders" type="button">📦 My Orders</button>
+        <button class="account-tab" data-account-tab="addresses" type="button">📍 My Addresses</button>
+        <button class="account-tab" data-account-tab="settings" type="button">⚙ Settings</button>
+        <button class="account-tab" data-account-tab="help" type="button">❔ Help Centre</button>
+        <button class="account-tab logout-tab" id="accountLogoutBtn" type="button">🚪 Logout</button>
+      </aside>
+
+      <main class="account-main">
+        <section id="account-profile" class="account-section active">
+          <div class="account-card">
+            <div class="za-user-circle big">Z</div>
+            <h2 id="accountUserName">ZAIDIFY</h2>
+            <p id="accountUserEmail">Not logged in</p>
+          </div>
+        </section>
+
+        <section id="account-orders" class="account-section">
+          <div class="account-card">
+            <h2>My Orders</h2>
+            <div id="accountOrdersBox" class="za-empty-box">No orders found yet.</div>
+          </div>
+        </section>
+
+        <section id="account-addresses" class="account-section">
+          <div class="account-card">
+            <h2>My Addresses</h2>
+
+            <form id="addressForm" class="za-product-form">
+              <input id="addrName" placeholder="Full Name">
+              <input id="addrPhone" placeholder="Phone Number">
+              <input id="addrFlat" placeholder="Flat / House No">
+              <input id="addrBuilding" placeholder="Building / Society">
+              <input id="addrArea" placeholder="Area / Street">
+              <input id="addrCity" placeholder="City">
+              <input id="addrState" placeholder="State">
+              <input id="addrPin" placeholder="PIN Code">
+              <input id="addrLandmark" placeholder="Landmark">
+              <button class="za-purple-btn" type="submit">Save Address</button>
+            </form>
+
+            <div id="accountAddressesBox" class="za-empty-box">No saved addresses found.</div>
+          </div>
+        </section>
+
+        <section id="account-settings" class="account-section">
+          <div class="account-card">
+            <h2>Settings</h2>
+
+            <form id="profileForm" class="za-product-form">
+              <input id="profileName" placeholder="Full Name">
+              <input id="profileEmail" placeholder="Email">
+              <input id="profilePhone" placeholder="Phone Number">
+              <button class="za-purple-btn" type="submit">Save Profile</button>
+            </form>
+          </div>
+        </section>
+
+        <section id="account-help" class="account-section">
+          <div class="account-card">
+            <h2>Help Centre</h2>
+            <p style="color:rgba(255,255,255,.65);margin-bottom:18px;">
+              WhatsApp is only for support. Orders should be placed through website cart/checkout.
+            </p>
+            <div class="account-help-grid">
+              <button class="main-btn purple" id="helpWhatsappBtn" type="button">WhatsApp Support</button>
+              <button class="main-btn" id="helpEmailSupportBtn" type="button">Email Support</button>
+              <button class="main-btn" id="helpReturnsBtn" type="button">Returns & Refunds</button>
+              <button class="main-btn" id="helpShippingBtn" type="button">Shipping Help</button>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   </div>
+</div>
 
-  <!-- CART -->
-  <div id="cartOverlay" class="overlay hidden">
-    <div class="side-modal">
-      <div class="side-modal-head">
-        <h2>Your Cart</h2>
-        <button id="closeCartBtn" class="close-btn" type="button">×</button>
+<!-- CART -->
+<div id="cartOverlay" class="overlay hidden">
+  <div class="side-modal">
+    <div class="side-modal-head">
+      <h2>Your Cart</h2>
+      <button id="closeCartBtn" class="close-btn" type="button">×</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Total</span>
+        <strong id="cartTotal">₹0</strong>
       </div>
+      <button class="main-btn purple" type="button">Checkout</button>
+    </div>
+  </div>
+</div>
 
-      <div id="cartItems"></div>
+<!-- WISHLIST -->
+<div id="wishlistOverlay" class="overlay hidden">
+  <div class="side-modal">
+    <div class="side-modal-head">
+      <h2>Wishlist</h2>
+      <button id="closeWishlistBtn" class="close-btn" type="button">×</button>
+    </div>
+    <div id="wishlistItems"></div>
+  </div>
+</div>
 
-      <div class="cart-footer">
-        <div class="cart-total-row">
-          <span>Total</span>
-          <strong id="cartTotal">₹0</strong>
+<!-- POLICY -->
+<div id="policyOverlay" class="overlay hidden">
+  <div class="modal">
+    <button id="closePolicyBtn" class="close-btn" type="button">×</button>
+    <h2>Store Policy</h2>
+    <ul class="policy-list">
+      <li>7 day easy return available</li>
+      <li>Premium quality products</li>
+      <li>Fast delivery across India</li>
+      <li>Secure payments</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminOverlay" class="admin-overlay hidden">
+  <aside class="za-admin-sidebar">
+    <div>
+      <div class="za-admin-logo">
+        <img src="logo.png" alt="Zaidify logo">
+        <div>
+          <h2>ZAIDIFY</h2>
+          <span>ADMIN PANEL</span>
         </div>
-
-        <button class="main-btn purple" type="button">Checkout</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- WISHLIST -->
-  <div id="wishlistOverlay" class="overlay hidden">
-    <div class="side-modal">
-      <div class="side-modal-head">
-        <h2>Wishlist</h2>
-        <button id="closeWishlistBtn" class="close-btn" type="button">×</button>
       </div>
 
-      <div id="wishlistItems"></div>
+      <button class="za-admin-nav active" data-admin-page="dashboard" type="button">⌂ Dashboard</button>
+      <button class="za-admin-nav" data-admin-page="orders" type="button">🛒 Orders</button>
+      <button class="za-admin-nav" data-admin-page="products" type="button">▣ Products</button>
+      <button class="za-admin-nav" data-admin-page="add-product" type="button">＋ Add Product</button>
+      <button class="za-admin-nav" data-admin-page="inventory" type="button">▤ Inventory</button>
+      <button class="za-admin-nav" data-admin-page="reviews" type="button">☆ Reviews</button>
+      <button class="za-admin-nav" data-admin-page="customers" type="button">♚ Customers</button>
+      <button class="za-admin-nav" data-admin-page="settings" type="button">⚙ Settings</button>
     </div>
-  </div>
 
-  <!-- POLICY -->
-  <div id="policyOverlay" class="overlay hidden">
-    <div class="modal">
-      <button id="closePolicyBtn" class="close-btn" type="button">×</button>
-
-      <h2>Store Policy</h2>
-
-      <ul class="policy-list">
-        <li>7 day easy return available</li>
-        <li>Premium quality products</li>
-        <li>Fast delivery across India</li>
-        <li>Secure payments</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- ADMIN PANEL -->
-  <div id="adminOverlay" class="admin-overlay hidden">
-    <aside class="za-admin-sidebar">
+    <div class="za-admin-user">
+      <div class="za-user-circle">Z</div>
       <div>
-        <div class="za-admin-logo">
-          <img src="logo.png" alt="Zaidify logo">
-          <div>
-            <h2>ZAIDIFY</h2>
-            <span>ADMIN PANEL</span>
-          </div>
-        </div>
+        <strong>Zaid Admin</strong>
+        <small>zaidifycollections@gmail.com</small>
+      </div>
+    </div>
+  </aside>
 
-        <button class="za-admin-nav active" data-admin-page="dashboard" type="button">⌂ Dashboard</button>
-        <button class="za-admin-nav" data-admin-page="orders" type="button">🛒 Orders</button>
-        <button class="za-admin-nav" data-admin-page="products" type="button">▣ Products</button>
-        <button class="za-admin-nav" data-admin-page="add-product" type="button">＋ Add Product</button>
-        <button class="za-admin-nav" data-admin-page="inventory" type="button">▤ Inventory</button>
-        <button class="za-admin-nav" data-admin-page="reviews" type="button">☆ Reviews</button>
-        <button class="za-admin-nav" data-admin-page="customers" type="button">♚ Customers</button>
-        <button class="za-admin-nav" data-admin-page="settings" type="button">⚙ Settings</button>
+  <main class="za-admin-main">
+    <header class="za-admin-topbar">
+      <div>
+        <h1 id="adminPageTitle">Dashboard</h1>
+        <p>Welcome back, Zaid 👋</p>
+      </div>
+      <div class="za-admin-actions">
+        <button id="backToStoreBtn" class="za-outline-btn" type="button">← Back</button>
+        <button id="adminLogoutBtn" class="za-purple-btn" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section id="admin-dashboard" class="za-admin-page active">
+      <div class="za-stats-grid">
+        <div class="za-stat-card purple"><span>📦</span><p>Total Products</p><h3 id="statProducts">0</h3></div>
+        <div class="za-stat-card pink"><span>🛒</span><p>Total Orders</p><h3 id="statOrders">0</h3></div>
+        <div class="za-stat-card orange"><span>₹</span><p>Revenue</p><h3 id="statRevenue">₹0</h3></div>
+        <div class="za-stat-card blue"><span>👥</span><p>Customers</p><h3 id="statCustomers">0</h3></div>
       </div>
 
-      <div class="za-admin-user">
-        <div class="za-user-circle">Z</div>
-        <div>
-          <strong>Zaid Admin</strong>
-          <small>zaidifycollections@gmail.com</small>
+      <div class="za-admin-card">
+        <div class="za-card-head">
+          <h2>Products Overview</h2>
+          <button class="za-purple-btn" data-admin-go="add-product" type="button">＋ Add Product</button>
         </div>
+        <div id="adminProductsOverview"></div>
       </div>
-    </aside>
+    </section>
 
-    <main class="za-admin-main">
-      <header class="za-admin-topbar">
-        <div>
-          <h1 id="adminPageTitle">Dashboard</h1>
-          <p>Welcome back, Zaid 👋</p>
-        </div>
+    <section id="admin-orders" class="za-admin-page"><div class="za-admin-card"><h2>Orders</h2><div class="za-empty-box">Orders backend coming next.</div></div></section>
+    <section id="admin-products" class="za-admin-page"><div class="za-admin-card"><h2>Manage Products</h2><div id="adminProductsTable"></div></div></section>
 
-        <div class="za-admin-actions">
-          <button id="backToStoreBtn" class="za-outline-btn" type="button">← Back</button>
-          <button id="adminLogoutBtn" class="za-purple-btn" type="button">Logout</button>
-        </div>
-      </header>
+    <section id="admin-add-product" class="za-admin-page">
+      <div class="za-admin-card">
+        <h2>Add Product</h2>
+        <form id="adminProductForm" class="za-product-form">
+          <input id="ap-id" placeholder="Product Ref">
+          <input id="ap-name" placeholder="Product Name">
+          <select id="ap-category">
+            <option value="kurti">Kurti</option>
+            <option value="sets">Sets</option>
+            <option value="coords">Co-ords</option>
+            <option value="women">Women</option>
+          </select>
+          <input id="ap-price" type="number" placeholder="Standard Price">
+          <input id="ap-old-price" type="number" placeholder="Old Price">
+          <input id="ap-stock" type="number" placeholder="Stock">
+          <input id="ap-sizes" placeholder="Sizes: XXS,XS,S,M,L,XL">
+          <input id="ap-colors" placeholder="Colors: Pink,White">
+          <textarea id="ap-images" placeholder="Image URLs, one per line"></textarea>
+          <textarea id="ap-variants" placeholder='Variants JSON'></textarea>
+          <textarea id="ap-description" placeholder="Description"></textarea>
+          <input id="ap-badge" placeholder="Badge">
+          <select id="ap-active">
+            <option value="true">Active</option>
+            <option value="false">Hidden</option>
+          </select>
+          <button type="submit" class="za-purple-btn">Save Product</button>
+        </form>
+      </div>
+    </section>
 
-      <section id="admin-dashboard" class="za-admin-page active">
-        <div class="za-stats-grid">
-          <div class="za-stat-card purple">
-            <span>📦</span>
-            <p>Total Products</p>
-            <h3 id="statProducts">0</h3>
-          </div>
+    <section id="admin-inventory" class="za-admin-page"><div class="za-admin-card"><h2>Inventory</h2><div id="adminInventoryTable"></div></div></section>
+    <section id="admin-reviews" class="za-admin-page"><div class="za-admin-card"><h2>Reviews</h2><div class="za-empty-box">Reviews system coming next.</div></div></section>
+    <section id="admin-customers" class="za-admin-page"><div class="za-admin-card"><h2>Customers</h2><div class="za-empty-box">Customers system coming next.</div></div></section>
+    <section id="admin-settings" class="za-admin-page"><div class="za-admin-card"><h2>Settings</h2><p>Admin restricted to:</p><strong>zaidifycollections@gmail.com</strong></div></section>
+  </main>
+</div>
 
-          <div class="za-stat-card pink">
-            <span>🛒</span>
-            <p>Total Orders</p>
-            <h3 id="statOrders">0</h3>
-          </div>
+<div id="toast" class="toast"></div>
 
-          <div class="za-stat-card orange">
-            <span>₹</span>
-            <p>Revenue</p>
-            <h3 id="statRevenue">₹0</h3>
-          </div>
-
-          <div class="za-stat-card blue">
-            <span>👥</span>
-            <p>Customers</p>
-            <h3 id="statCustomers">0</h3>
-          </div>
-        </div>
-
-        <div class="za-admin-card">
-          <div class="za-card-head">
-            <h2>Products Overview</h2>
-            <button class="za-purple-btn" data-admin-go="add-product" type="button">＋ Add Product</button>
-          </div>
-
-          <div id="adminProductsOverview"></div>
-        </div>
-      </section>
-
-      <section id="admin-orders" class="za-admin-page">
-        <div class="za-admin-card">
-          <h2>Orders</h2>
-          <div class="za-empty-box">Orders backend coming next.</div>
-        </div>
-      </section>
-
-      <section id="admin-products" class="za-admin-page">
-        <div class="za-admin-card">
-          <h2>Manage Products</h2>
-          <div id="adminProductsTable"></div>
-        </div>
-      </section>
-
-      <section id="admin-add-product" class="za-admin-page">
-        <div class="za-admin-card">
-          <h2>Add Product</h2>
-
-          <form id="adminProductForm" class="za-product-form">
-            <input id="ap-id" placeholder="Product Ref">
-            <input id="ap-name" placeholder="Product Name">
-
-            <select id="ap-category">
-              <option value="kurti">Kurti</option>
-              <option value="sets">Sets</option>
-              <option value="coords">Co-ords</option>
-              <option value="women">Women</option>
-            </select>
-
-            <input id="ap-price" type="number" placeholder="Price">
-            <input id="ap-old-price" type="number" placeholder="Old Price">
-            <input id="ap-stock" type="number" placeholder="Stock">
-            <input id="ap-sizes" placeholder="Sizes: S,M,L,XL">
-            <input id="ap-colors" placeholder="Colors: Pink,White">
-
-            <textarea id="ap-images" placeholder="Image URLs, one per line. These save into image_1 to image_10."></textarea>
-            <textarea id="ap-variants" placeholder='Variants JSON example: [{"color":"Green","images":["url1","url2"]}]'></textarea>
-            <textarea id="ap-description" placeholder="Description"></textarea>
-
-            <input id="ap-badge" placeholder="Badge">
-
-            <select id="ap-active">
-              <option value="true">Active</option>
-              <option value="false">Hidden</option>
-            </select>
-
-            <button type="submit" class="za-purple-btn">Save Product</button>
-          </form>
-        </div>
-      </section>
-
-      <section id="admin-inventory" class="za-admin-page">
-        <div class="za-admin-card">
-          <h2>Inventory</h2>
-          <div id="adminInventoryTable"></div>
-        </div>
-      </section>
-
-      <section id="admin-reviews" class="za-admin-page">
-        <div class="za-admin-card">
-          <h2>Reviews</h2>
-          <div class="za-empty-box">Reviews system coming next.</div>
-        </div>
-      </section>
-
-      <section id="admin-customers" class="za-admin-page">
-        <div class="za-admin-card">
-          <h2>Customers</h2>
-          <div class="za-empty-box">Customers system coming next.</div>
-        </div>
-      </section>
-
-      <section id="admin-settings" class="za-admin-page">
-        <div class="za-admin-card">
-          <h2>Settings</h2>
-          <p>Admin restricted to:</p>
-          <strong>zaidifycollections@gmail.com</strong>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <!-- TOAST -->
-  <div id="toast" class="toast"></div>
-
-  <!-- ONE FINAL JS FILE ONLY -->
-<script src="js/app.js?v=4"></script>
+<script src="./js/app.js?v=5"></script>
 </body>
 </html>
