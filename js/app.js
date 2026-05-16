@@ -1273,132 +1273,264 @@ function debounce(fn, delay = 200) {
     clearTimeout(timer);
     timer = setTimeout(() => fn(...args), delay);
   };
+}
+
 /* =========================
-   FINAL PATCH: ACCOUNT, POLICY, TRACKING, ADMIN STATUS
+   FINAL FIX PATCH
+   COD CHECKOUT + HELP + POLICY + ACCOUNT + ORDERS
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-  patchProductBackButton();
-  patchAccountForms();
-  patchPolicyModal();
-  patchHelpButtons();
-  patchAdminOrderStatusButtons();
+  setupFinalFixes();
 });
 
-/* PRODUCT MODAL BACK BUTTON */
-function patchProductBackButton() {
-  const addBtn = () => {
-    const modal = document.querySelector("#productModal .product-modal");
-    if (!modal || document.getElementById("productBackBtn")) return;
-
-    const btn = document.createElement("button");
-    btn.id = "productBackBtn";
-    btn.type = "button";
-    btn.textContent = "← Back";
-    btn.className = "za-outline-btn";
-    btn.style.cssText = "position:absolute;top:18px;left:18px;z-index:20;";
-    btn.onclick = () => closeOverlay("productModal");
-
-    modal.appendChild(btn);
-  };
-
-  document.addEventListener("click", () => setTimeout(addBtn, 80));
-  addBtn();
+function setupFinalFixes() {
+  createCheckoutOverlay();
+  patchPolicyModal();
+  bindFinalClickActions();
+  bindProfileAndAddressForms();
 }
 
-/* SIGNUP + PROFILE + ADDRESS */
-function patchAccountForms() {
-  const signupForm = $("signupForm");
-  if (signupForm) {
-    signupForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      e.stopImmediatePropagation();
+/* CHECKOUT OVERLAY */
 
-      const full_name = $("signupName")?.value.trim();
-      const email = $("signupEmail")?.value.trim().toLowerCase();
-      const phone = $("signupPhone")?.value.trim();
-      const password = $("signupPassword")?.value.trim();
+function createCheckoutOverlay() {
+  if ($("checkoutOverlay")) return;
 
-      if (!full_name || !email || !phone || !password) {
-        return toast("Enter name, email, phone and password", true);
-      }
+  document.body.insertAdjacentHTML("beforeend", `
+    <div id="checkoutOverlay" class="overlay hidden">
+      <div class="modal auth-modal" style="max-width:620px;">
+        <button id="closeCheckoutBtn" class="close-btn" type="button">×</button>
+        <h2>Checkout</h2>
 
-      const { data, error } = await supabaseClient.auth.signUp({
-        email,
-        password,
-        options: { data: { full_name, phone } }
-      });
+        <div id="checkoutAddressBox" style="margin-top:18px;"></div>
 
-      if (error) return toast(error.message, true);
+        <div style="margin-top:18px;padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;">
+          <h3 style="color:#ff00ff;margin-bottom:10px;">Payment Method</h3>
+          <label style="display:flex;gap:10px;align-items:center;font-weight:900;">
+            <input type="radio" name="paymentMethod" value="COD" checked>
+            Cash on Delivery
+          </label>
+          <p style="color:rgba(255,255,255,.6);font-size:13px;margin-top:8px;">
+            Online prepaid payment through Razorpay will be added later.
+          </p>
+        </div>
 
-      if (data?.user) {
-        await supabaseClient.from("user_profiles").upsert({
-          user_id: data.user.id,
-          full_name,
-          email,
-          phone
-        });
-      }
+        <div style="margin-top:18px;padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;">
+          <h3 style="color:#ff00ff;margin-bottom:10px;">Order Summary</h3>
+          <div id="checkoutSummaryBox"></div>
+          <h2 style="margin-top:12px;color:#ff00ff;">Total: <span id="checkoutTotal">₹0</span></h2>
+        </div>
 
-      toast("Signup successful. Login now.");
-      switchAuthTab("login");
-    }, true);
+        <button id="placeCodOrderBtn" class="main-btn purple" type="button" style="width:100%;margin-top:18px;">
+          Place COD Order
+        </button>
+      </div>
+    </div>
+  `);
+
+  $("closeCheckoutBtn")?.addEventListener("click", () => closeOverlay("checkoutOverlay"));
+}
+
+async function openCheckout() {
+  if (!currentUser) {
+    toast("Please login before checkout", true);
+    closeOverlay("cartOverlay");
+    openOverlay("loginOverlay");
+    return;
   }
 
-  const profileForm = $("profileForm");
-  if (profileForm) {
-    profileForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  if (!state.cart.length) return toast("Your cart is empty", true);
 
-      if (!currentUser) return toast("Please login first", true);
+  await loadCheckoutAddresses();
+  renderCheckoutSummary();
 
-      const full_name = $("profileName")?.value.trim();
-      const email = $("profileEmail")?.value.trim().toLowerCase();
-      const phone = $("profilePhone")?.value.trim();
+  closeOverlay("cartOverlay");
+  openOverlay("checkoutOverlay");
+}
 
-      const { error } = await supabaseClient.from("user_profiles").upsert({
-        user_id: currentUser.id,
-        full_name,
-        email,
-        phone
-      });
+async function loadCheckoutAddresses() {
+  const box = $("checkoutAddressBox");
+  if (!box || !currentUser) return;
 
-      if (error) return toast("Profile save failed", true);
+  box.innerHTML = "Loading addresses...";
 
-      toast("Profile saved");
-      loadAccountProfile();
+  const { data, error } = await supabaseClient
+    .from("user_addresses")
+    .select("*")
+    .eq("user_id", currentUser.id)
+    .order("created_at", { ascending: false });
+
+  if (error || !data?.length) {
+    box.innerHTML = `
+      <div style="padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;">
+        <h3 style="color:#ff00ff;margin-bottom:10px;">Delivery Address</h3>
+        <p>No address found. Please add address in Account → My Addresses.</p>
+        <button class="main-btn purple" type="button" onclick="closeOverlay('checkoutOverlay');openAccountPage();openAccountTab('addresses');">
+          Add Address
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  box.innerHTML = `
+    <div style="padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;">
+      <h3 style="color:#ff00ff;margin-bottom:10px;">Select Delivery Address</h3>
+      ${data.map((a, index) => `
+        <label style="display:block;margin-bottom:12px;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;">
+          <input type="radio" name="checkoutAddress" value="${escapeAttr(a.id)}" ${index === 0 ? "checked" : ""}>
+          <strong>${escapeHTML(a.name || "")}</strong><br>
+          ${escapeHTML(a.flat || "")}, ${escapeHTML(a.building || "")}, ${escapeHTML(a.area || "")}<br>
+          ${escapeHTML(a.city || "")}, ${escapeHTML(a.state || "")} - ${escapeHTML(a.pin || "")}<br>
+          Phone: ${escapeHTML(a.phone || "")}
+        </label>
+      `).join("")}
+    </div>
+  `;
+
+  window.__checkoutAddresses = data;
+}
+
+function renderCheckoutSummary() {
+  const box = $("checkoutSummaryBox");
+  const totalBox = $("checkoutTotal");
+  if (!box) return;
+
+  const total = state.cart.reduce((sum, item) => sum + Number(item.price) * Number(item.qty), 0);
+
+  box.innerHTML = state.cart.map(item => `
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;">
+      <span>${escapeHTML(item.name)} (${escapeHTML(item.size)} / ${escapeHTML(item.color)}) × ${item.qty}</span>
+      <strong>₹${Number(item.price) * Number(item.qty)}</strong>
+    </div>
+  `).join("");
+
+  if (totalBox) totalBox.textContent = `₹${total}`;
+}
+
+async function placeCodOrder() {
+  if (!currentUser) return toast("Please login first", true);
+  if (!state.cart.length) return toast("Cart is empty", true);
+
+  const selectedAddressId = document.querySelector("input[name='checkoutAddress']:checked")?.value;
+  const addresses = window.__checkoutAddresses || [];
+  const address = addresses.find(a => String(a.id) === String(selectedAddressId));
+
+  if (!address) return toast("Please add/select delivery address", true);
+
+  const total = state.cart.reduce((sum, item) => sum + Number(item.price) * Number(item.qty), 0);
+  const orderNo = `ZC-${Date.now().toString().slice(-6)}`;
+
+  const orderPayload = {
+    order_id: orderNo,
+    user_id: currentUser.id,
+    user_email: currentUser.email,
+    customer_email: currentUser.email,
+    customer_name: address.name || getAccountName(),
+    phone: address.phone || "",
+    customer_phone: address.phone || "",
+    address_id: address.id,
+    delivery_address: `${address.name || ""}, ${address.flat || ""}, ${address.building || ""}, ${address.area || ""}, ${address.city || ""}, ${address.state || ""} - ${address.pin || ""}. Phone: ${address.phone || ""}`,
+    items: state.cart,
+    total,
+    amount: total,
+    payment_method: "COD",
+    payment_status: "pending",
+    status: "new"
+  };
+
+  let result = await supabaseClient.from("orders").insert(orderPayload);
+
+  if (result.error) {
+    const fallbackPayload = {
+      user_email: currentUser.email,
+      customer_name: address.name || getAccountName(),
+      phone: address.phone || "",
+      delivery_address: orderPayload.delivery_address,
+      items: state.cart,
+      total,
+      payment_method: "COD",
+      status: "new"
+    };
+
+    result = await supabaseClient.from("orders").insert(fallbackPayload);
+  }
+
+  if (result.error) {
+    console.error(result.error);
+    return toast(`Order failed: ${result.error.message}`, true);
+  }
+
+  state.cart = [];
+  saveCart();
+  updateBadges();
+  renderCart();
+
+  closeOverlay("checkoutOverlay");
+  toast("COD order placed successfully");
+
+  openAccountPage();
+  openAccountTab("orders");
+}
+
+/* PROFILE + ADDRESS */
+
+function bindProfileAndAddressForms() {
+  $("profileForm")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (!currentUser) return toast("Please login first", true);
+
+    const full_name = $("profileName")?.value.trim();
+    const email = $("profileEmail")?.value.trim().toLowerCase();
+    const phone = $("profilePhone")?.value.trim();
+
+    const { error } = await supabaseClient.from("user_profiles").upsert({
+      user_id: currentUser.id,
+      full_name,
+      email,
+      phone
     });
-  }
 
-  const addressForm = $("addressForm");
-  if (addressForm) {
-    addressForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    if (error) return toast("Profile save failed", true);
 
-      if (!currentUser) return toast("Please login first", true);
+    toast("Profile saved");
+    await loadAccountProfile();
+  });
 
-      const address = {
-        user_id: currentUser.id,
-        name: $("addrName")?.value.trim(),
-        phone: $("addrPhone")?.value.trim(),
-        flat: $("addrFlat")?.value.trim(),
-        building: $("addrBuilding")?.value.trim(),
-        area: $("addrArea")?.value.trim(),
-        city: $("addrCity")?.value.trim(),
-        state: $("addrState")?.value.trim(),
-        pin: $("addrPin")?.value.trim(),
-        landmark: $("addrLandmark")?.value.trim()
-      };
+  $("addressForm")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      const { error } = await supabaseClient.from("user_addresses").insert(address);
+    if (!currentUser) return toast("Please login first", true);
 
-      if (error) return toast("Address save failed", true);
+    const address = {
+      user_id: currentUser.id,
+      name: $("addrName")?.value.trim(),
+      phone: $("addrPhone")?.value.trim(),
+      flat: $("addrFlat")?.value.trim(),
+      building: $("addrBuilding")?.value.trim(),
+      area: $("addrArea")?.value.trim(),
+      city: $("addrCity")?.value.trim(),
+      state: $("addrState")?.value.trim(),
+      pin: $("addrPin")?.value.trim(),
+      landmark: $("addrLandmark")?.value.trim()
+    };
 
-      toast("Address saved");
-      addressForm.reset();
-      loadAccountAddresses();
-    });
-  }
+    if (!address.name || !address.phone || !address.flat || !address.city || !address.pin) {
+      return toast("Fill name, phone, flat, city and pin", true);
+    }
+
+    const { error } = await supabaseClient.from("user_addresses").insert(address);
+
+    if (error) {
+      console.error(error);
+      return toast("Address save failed", true);
+    }
+
+    toast("Address saved");
+    $("addressForm")?.reset();
+    await loadAccountAddresses();
+  });
 }
 
 async function loadAccountProfile() {
@@ -1448,58 +1580,8 @@ async function loadAccountAddresses() {
   `).join("");
 }
 
-/* HELP BUTTONS */
-function patchHelpButtons() {
-  document.addEventListener("click", (e) => {
-    if (e.target.id === "helpWhatsappBtn") {
-      window.open("https://wa.me/918655171445?text=Hi%20Zaidify%20Collections,%20I%20need%20help.", "_blank");
-    }
+/* ORDERS + TRACKING */
 
-    if (e.target.id === "helpEmailSupportBtn") {
-      window.location.href = "mailto:zaidifycollections@gmail.com?subject=Support Request - Zaidify Collections&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with:";
-    }
-
-    if (e.target.id === "helpReturnsBtn") {
-      window.location.href = "mailto:zaidifycollections@gmail.com?subject=Return / Refund Request&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with return/refund.%0D%0AOrder ID:%0D%0AReason:";
-    }
-
-    if (e.target.id === "helpShippingBtn") {
-      window.location.href = "mailto:zaidifycollections@gmail.com?subject=Shipping Help&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with shipping/tracking.%0D%0AOrder ID:";
-    }
-  });
-}
-
-/* PROFESSIONAL POLICY MODAL */
-function patchPolicyModal() {
-  const policy = document.querySelector("#policyOverlay .modal");
-  if (!policy) return;
-
-  policy.innerHTML = `
-    <button id="closePolicyBtn" class="close-btn" type="button">×</button>
-    <h2>Terms & Store Policy</h2>
-
-    <div class="policy-list" style="line-height:1.8;">
-      <h3>Return Policy</h3>
-      <p>We offer a 7 day easy return policy from the date of delivery.</p>
-      <p>Products must be unused, unwashed, undamaged, and returned with original packaging.</p>
-      <p>Washed products are not accepted for return, exchange, or refund.</p>
-
-      <h3>Refund Policy</h3>
-      <p>Refunds are processed only after the returned product is received and inspected.</p>
-      <p>Refunds may take 5–7 working days after inspection approval.</p>
-
-      <h3>Delivery Policy</h3>
-      <p>Delivery usually takes 5–7 working days after the order is confirmed.</p>
-
-      <h3>Support</h3>
-      <p>WhatsApp is for customer support only. Orders should be placed through website cart/checkout.</p>
-    </div>
-  `;
-
-  $("closePolicyBtn")?.addEventListener("click", () => closeOverlay("policyOverlay"));
-}
-
-/* CUSTOMER ORDER TRACKING */
 async function loadAccountOrders() {
   const box = $("accountOrdersBox");
   if (!box || !currentUser) return;
@@ -1522,8 +1604,9 @@ async function loadAccountOrders() {
 
     return `
       <div class="account-list-item">
-        <strong>Order #${escapeHTML(order.id)}</strong>
+        <strong>Order #${escapeHTML(order.order_id || order.id)}</strong>
         <span>Total: ₹${Number(order.total || order.amount || 0)}</span>
+        <span>Payment: ${escapeHTML(order.payment_method || "COD")}</span>
         <span>Status: ${escapeHTML(status.toUpperCase())}</span>
 
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
@@ -1553,25 +1636,88 @@ function trackStep(label, status) {
   `;
 }
 
-/* ADMIN ORDER STATUS LIVE UPDATE */
-function patchAdminOrderStatusButtons() {
+/* POLICY */
+
+function patchPolicyModal() {
+  const policy = document.querySelector("#policyOverlay .modal");
+  if (!policy) return;
+
+  policy.innerHTML = `
+    <button id="closePolicyBtn" class="close-btn" type="button">×</button>
+    <h2>Terms & Store Policy</h2>
+
+    <div class="policy-list" style="line-height:1.8;">
+      <h3>Return Policy</h3>
+      <p>We offer a 7 day easy return policy from the date of delivery.</p>
+      <p>Products must be unused, unwashed, undamaged, and returned with original packaging.</p>
+      <p>Washed products are not accepted for return, exchange, or refund.</p>
+
+      <h3>Refund Policy</h3>
+      <p>Refunds are processed only after the returned product is received and inspected.</p>
+      <p>Refunds may take 5–7 working days after inspection approval.</p>
+
+      <h3>Delivery Policy</h3>
+      <p>Delivery usually takes 5–7 working days after the order is confirmed.</p>
+
+      <h3>Payment Policy</h3>
+      <p>Currently we accept Cash on Delivery only. Prepaid online payment will be added later.</p>
+
+      <h3>Support</h3>
+      <p>WhatsApp is for customer support only. Orders should be placed through website cart/checkout.</p>
+    </div>
+  `;
+
+  $("closePolicyBtn")?.addEventListener("click", () => closeOverlay("policyOverlay"));
+}
+
+/* FINAL CLICK ACTIONS */
+
+function bindFinalClickActions() {
   document.addEventListener("click", async (e) => {
-    const btn = e.target.closest("[data-order-status]");
-    if (!btn) return;
+    const target = e.target;
 
-    const orderId = btn.dataset.orderId;
-    const status = btn.dataset.orderStatus;
+    if (target.closest(".cart-footer .main-btn")) {
+      e.preventDefault();
+      openCheckout();
+    }
 
-    if (!orderId || !status) return toast("Order ID missing", true);
+    if (target.id === "placeCodOrderBtn") {
+      await placeCodOrder();
+    }
 
-    const { error } = await supabaseClient
-      .from("orders")
-      .update({ status })
-      .eq("id", orderId);
+    if (target.id === "helpWhatsappBtn") {
+      window.open("https://wa.me/918655171445?text=Hi%20Zaidify%20Collections,%20I%20need%20help.", "_blank");
+    }
 
-    if (error) return toast("Status update failed", true);
+    if (target.id === "helpEmailSupportBtn") {
+      window.location.href =
+        "mailto:zaidifycollections@gmail.com?subject=Support Request - Zaidify Collections&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with:";
+    }
 
-    toast(`Order marked ${status}`);
-    if (typeof renderAdminOrders === "function") renderAdminOrders();
+    if (target.id === "helpReturnsBtn") {
+      window.location.href =
+        "mailto:zaidifycollections@gmail.com?subject=Return / Refund Request&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with return/refund.%0D%0AOrder ID:%0D%0AReason:";
+    }
+
+    if (target.id === "helpShippingBtn") {
+      window.location.href =
+        "mailto:zaidifycollections@gmail.com?subject=Shipping Help&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with shipping/tracking.%0D%0AOrder ID:";
+    }
+
+    const statusBtn = target.closest("[data-order-status]");
+    if (statusBtn) {
+      const orderId = statusBtn.dataset.orderId;
+      const status = statusBtn.dataset.orderStatus;
+
+      const { error } = await supabaseClient
+        .from("orders")
+        .update({ status })
+        .eq("id", orderId);
+
+      if (error) return toast("Status update failed", true);
+
+      toast(`Order marked ${status}`);
+      if (typeof renderAdminOrders === "function") renderAdminOrders();
+    }
   });
 }
