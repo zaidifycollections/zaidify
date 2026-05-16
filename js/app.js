@@ -1273,4 +1273,305 @@ function debounce(fn, delay = 200) {
     clearTimeout(timer);
     timer = setTimeout(() => fn(...args), delay);
   };
+/* =========================
+   FINAL PATCH: ACCOUNT, POLICY, TRACKING, ADMIN STATUS
+========================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  patchProductBackButton();
+  patchAccountForms();
+  patchPolicyModal();
+  patchHelpButtons();
+  patchAdminOrderStatusButtons();
+});
+
+/* PRODUCT MODAL BACK BUTTON */
+function patchProductBackButton() {
+  const addBtn = () => {
+    const modal = document.querySelector("#productModal .product-modal");
+    if (!modal || document.getElementById("productBackBtn")) return;
+
+    const btn = document.createElement("button");
+    btn.id = "productBackBtn";
+    btn.type = "button";
+    btn.textContent = "← Back";
+    btn.className = "za-outline-btn";
+    btn.style.cssText = "position:absolute;top:18px;left:18px;z-index:20;";
+    btn.onclick = () => closeOverlay("productModal");
+
+    modal.appendChild(btn);
+  };
+
+  document.addEventListener("click", () => setTimeout(addBtn, 80));
+  addBtn();
+}
+
+/* SIGNUP + PROFILE + ADDRESS */
+function patchAccountForms() {
+  const signupForm = $("signupForm");
+  if (signupForm) {
+    signupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      const full_name = $("signupName")?.value.trim();
+      const email = $("signupEmail")?.value.trim().toLowerCase();
+      const phone = $("signupPhone")?.value.trim();
+      const password = $("signupPassword")?.value.trim();
+
+      if (!full_name || !email || !phone || !password) {
+        return toast("Enter name, email, phone and password", true);
+      }
+
+      const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name, phone } }
+      });
+
+      if (error) return toast(error.message, true);
+
+      if (data?.user) {
+        await supabaseClient.from("user_profiles").upsert({
+          user_id: data.user.id,
+          full_name,
+          email,
+          phone
+        });
+      }
+
+      toast("Signup successful. Login now.");
+      switchAuthTab("login");
+    }, true);
+  }
+
+  const profileForm = $("profileForm");
+  if (profileForm) {
+    profileForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (!currentUser) return toast("Please login first", true);
+
+      const full_name = $("profileName")?.value.trim();
+      const email = $("profileEmail")?.value.trim().toLowerCase();
+      const phone = $("profilePhone")?.value.trim();
+
+      const { error } = await supabaseClient.from("user_profiles").upsert({
+        user_id: currentUser.id,
+        full_name,
+        email,
+        phone
+      });
+
+      if (error) return toast("Profile save failed", true);
+
+      toast("Profile saved");
+      loadAccountProfile();
+    });
+  }
+
+  const addressForm = $("addressForm");
+  if (addressForm) {
+    addressForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (!currentUser) return toast("Please login first", true);
+
+      const address = {
+        user_id: currentUser.id,
+        name: $("addrName")?.value.trim(),
+        phone: $("addrPhone")?.value.trim(),
+        flat: $("addrFlat")?.value.trim(),
+        building: $("addrBuilding")?.value.trim(),
+        area: $("addrArea")?.value.trim(),
+        city: $("addrCity")?.value.trim(),
+        state: $("addrState")?.value.trim(),
+        pin: $("addrPin")?.value.trim(),
+        landmark: $("addrLandmark")?.value.trim()
+      };
+
+      const { error } = await supabaseClient.from("user_addresses").insert(address);
+
+      if (error) return toast("Address save failed", true);
+
+      toast("Address saved");
+      addressForm.reset();
+      loadAccountAddresses();
+    });
+  }
+}
+
+async function loadAccountProfile() {
+  if (!currentUser) return;
+
+  const { data } = await supabaseClient
+    .from("user_profiles")
+    .select("*")
+    .eq("user_id", currentUser.id)
+    .maybeSingle();
+
+  if (!data) return;
+
+  if ($("profileName")) $("profileName").value = data.full_name || "";
+  if ($("profileEmail")) $("profileEmail").value = data.email || currentUser.email || "";
+  if ($("profilePhone")) $("profilePhone").value = data.phone || "";
+
+  setText("accountUserName", data.full_name || getAccountName());
+  setText("accountUserEmail", data.email || currentUser.email);
+}
+
+async function loadAccountAddresses() {
+  const box = $("accountAddressesBox");
+  if (!box || !currentUser) return;
+
+  box.innerHTML = "Loading addresses...";
+
+  const { data, error } = await supabaseClient
+    .from("user_addresses")
+    .select("*")
+    .eq("user_id", currentUser.id)
+    .order("created_at", { ascending: false });
+
+  if (error || !data?.length) {
+    box.innerHTML = "No saved addresses found.";
+    return;
+  }
+
+  box.innerHTML = data.map(a => `
+    <div class="account-list-item">
+      <strong>${escapeHTML(a.name || "Saved Address")}</strong>
+      <span>${escapeHTML(a.flat || "")}, ${escapeHTML(a.building || "")}</span>
+      <span>${escapeHTML(a.area || "")}, ${escapeHTML(a.city || "")}, ${escapeHTML(a.state || "")} - ${escapeHTML(a.pin || "")}</span>
+      <span>Phone: ${escapeHTML(a.phone || "")}</span>
+      <span>Landmark: ${escapeHTML(a.landmark || "")}</span>
+    </div>
+  `).join("");
+}
+
+/* HELP BUTTONS */
+function patchHelpButtons() {
+  document.addEventListener("click", (e) => {
+    if (e.target.id === "helpWhatsappBtn") {
+      window.open("https://wa.me/918655171445?text=Hi%20Zaidify%20Collections,%20I%20need%20help.", "_blank");
+    }
+
+    if (e.target.id === "helpEmailSupportBtn") {
+      window.location.href = "mailto:zaidifycollections@gmail.com?subject=Support Request - Zaidify Collections&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with:";
+    }
+
+    if (e.target.id === "helpReturnsBtn") {
+      window.location.href = "mailto:zaidifycollections@gmail.com?subject=Return / Refund Request&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with return/refund.%0D%0AOrder ID:%0D%0AReason:";
+    }
+
+    if (e.target.id === "helpShippingBtn") {
+      window.location.href = "mailto:zaidifycollections@gmail.com?subject=Shipping Help&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with shipping/tracking.%0D%0AOrder ID:";
+    }
+  });
+}
+
+/* PROFESSIONAL POLICY MODAL */
+function patchPolicyModal() {
+  const policy = document.querySelector("#policyOverlay .modal");
+  if (!policy) return;
+
+  policy.innerHTML = `
+    <button id="closePolicyBtn" class="close-btn" type="button">×</button>
+    <h2>Terms & Store Policy</h2>
+
+    <div class="policy-list" style="line-height:1.8;">
+      <h3>Return Policy</h3>
+      <p>We offer a 7 day easy return policy from the date of delivery.</p>
+      <p>Products must be unused, unwashed, undamaged, and returned with original packaging.</p>
+      <p>Washed products are not accepted for return, exchange, or refund.</p>
+
+      <h3>Refund Policy</h3>
+      <p>Refunds are processed only after the returned product is received and inspected.</p>
+      <p>Refunds may take 5–7 working days after inspection approval.</p>
+
+      <h3>Delivery Policy</h3>
+      <p>Delivery usually takes 5–7 working days after the order is confirmed.</p>
+
+      <h3>Support</h3>
+      <p>WhatsApp is for customer support only. Orders should be placed through website cart/checkout.</p>
+    </div>
+  `;
+
+  $("closePolicyBtn")?.addEventListener("click", () => closeOverlay("policyOverlay"));
+}
+
+/* CUSTOMER ORDER TRACKING */
+async function loadAccountOrders() {
+  const box = $("accountOrdersBox");
+  if (!box || !currentUser) return;
+
+  box.innerHTML = "Loading orders...";
+
+  const { data, error } = await supabaseClient
+    .from("orders")
+    .select("*")
+    .or(`user_email.eq.${currentUser.email},email.eq.${currentUser.email},customer_email.eq.${currentUser.email}`)
+    .order("created_at", { ascending: false });
+
+  if (error || !data?.length) {
+    box.innerHTML = "No orders found yet.";
+    return;
+  }
+
+  box.innerHTML = data.map(order => {
+    const status = String(order.status || "new").toLowerCase();
+
+    return `
+      <div class="account-list-item">
+        <strong>Order #${escapeHTML(order.id)}</strong>
+        <span>Total: ₹${Number(order.total || order.amount || 0)}</span>
+        <span>Status: ${escapeHTML(status.toUpperCase())}</span>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+          ${trackStep("NEW", status)}
+          ${trackStep("CONFIRMED", status)}
+          ${trackStep("SHIPPED", status)}
+          ${trackStep("DELIVERED", status)}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function trackStep(label, status) {
+  const order = ["new", "confirmed", "shipped", "delivered"];
+  const active = order.indexOf(status) >= order.indexOf(label.toLowerCase());
+
+  return `
+    <span style="
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid ${active ? "#ff00ff" : "rgba(255,255,255,.2)"};
+      color:${active ? "#ff00ff" : "rgba(255,255,255,.5)"};
+      font-weight:900;
+      font-size:12px;
+    ">${label}</span>
+  `;
+}
+
+/* ADMIN ORDER STATUS LIVE UPDATE */
+function patchAdminOrderStatusButtons() {
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-order-status]");
+    if (!btn) return;
+
+    const orderId = btn.dataset.orderId;
+    const status = btn.dataset.orderStatus;
+
+    if (!orderId || !status) return toast("Order ID missing", true);
+
+    const { error } = await supabaseClient
+      .from("orders")
+      .update({ status })
+      .eq("id", orderId);
+
+    if (error) return toast("Status update failed", true);
+
+    toast(`Order marked ${status}`);
+    if (typeof renderAdminOrders === "function") renderAdminOrders();
+  });
 }
