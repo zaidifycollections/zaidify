@@ -985,10 +985,27 @@ function bindEvents() {
     btn.addEventListener("click", () => openAccountTab(btn.dataset.accountGo));
   });
 
-  $("helpWhatsappBtn")?.addEventListener("click", openWhatsAppSupport);
-  $("helpEmailSupportBtn")?.addEventListener("click", () => openEmail("Support Request - Zaidify Collections", "Hi Zaidify Collections,\n\nI need help with:\n\n"));
-  $("helpReturnsBtn")?.addEventListener("click", () => openEmail("Returns / Refund Request - Zaidify Collections", "Hi Zaidify Collections,\n\nI need help with a return/refund.\n\nOrder details:\nReason:\n\n"));
-  $("helpShippingBtn")?.addEventListener("click", () => openEmail("Shipping Help - Zaidify Collections", "Hi Zaidify Collections,\n\nI need help with shipping/tracking.\n\nOrder details:\n\n"));
+  $("helpWhatsappBtn")?.addEventListener("click", () => {
+  window.open(
+    "https://wa.me/918655171445?text=Hi%20Zaidify%20Collections,%20I%20need%20help.",
+    "_blank"
+  );
+});
+
+$("helpEmailSupportBtn")?.addEventListener("click", () => {
+  window.location.href =
+    "mailto:zaidifycollections@gmail.com?subject=Support Request - Zaidify Collections&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with:";
+});
+
+$("helpReturnsBtn")?.addEventListener("click", () => {
+  window.location.href =
+    "mailto:zaidifycollections@gmail.com?subject=Return / Refund Request&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with return/refund.%0D%0AOrder ID:%0D%0AReason:";
+});
+
+$("helpShippingBtn")?.addEventListener("click", () => {
+  window.location.href =
+    "mailto:zaidifycollections@gmail.com?subject=Shipping Help&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with shipping/tracking.%0D%0AOrder ID:";
+});
 
   $("cartBtn")?.addEventListener("click", () => { renderCart(); openOverlay("cartOverlay"); });
   $("wishlistBtn")?.addEventListener("click", () => { renderWishlist(); openOverlay("wishlistOverlay"); });
@@ -1073,7 +1090,20 @@ function bindEvents() {
 }
 
 /* HELPERS */
+function addProductBackButton() {
+  const modal = document.querySelector("#productModal .product-modal");
+  if (!modal || document.getElementById("productBackBtn")) return;
 
+  const btn = document.createElement("button");
+  btn.id = "productBackBtn";
+  btn.type = "button";
+  btn.textContent = "← Back";
+  btn.className = "za-outline-btn";
+  btn.style.cssText = "position:absolute;top:18px;left:18px;z-index:5;";
+  btn.addEventListener("click", () => closeOverlay("productModal"));
+
+  modal.appendChild(btn);
+}
 function openWhatsAppSupport() {
   const text = encodeURIComponent("Hi Zaidify Collections, I need help with my order/query.");
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
