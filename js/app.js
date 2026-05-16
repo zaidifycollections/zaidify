@@ -436,8 +436,9 @@ function openProduct(id) {
   updateModalWishlistBtn();
 
   openOverlay("productModal");
+addProductBackButton();
 }
-
+  
 function renderSizeOptions(sizes) {
   const box = $("modalSizeOptions");
   if (!box) return;
