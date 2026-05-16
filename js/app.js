@@ -23,10 +23,15 @@ const qsa = sel => Array.from(document.querySelectorAll(sel));
 document.addEventListener("DOMContentLoaded", async () => {
   injectAccountStyles();
   ensureAccountPage();
+  createCheckoutOverlay();
   bindEvents();
+  bindFinalEvents();
   setupOverlayClose();
+  patchPolicyModal();
+
   await checkAuth();
   await loadProducts();
+
   renderAll();
   updateBadges();
 });
@@ -38,9 +43,10 @@ async function checkAuth() {
   currentUser = data?.user || null;
   updateAuthUI();
 
-  supabaseClient.auth.onAuthStateChange((_event, session) => {
+  supabaseClient.auth.onAuthStateChange(async (_event, session) => {
     currentUser = session?.user || null;
     updateAuthUI();
+    if (currentUser) await loadAccountProfile();
   });
 }
 
@@ -58,6 +64,7 @@ async function loginUser(e) {
 
   currentUser = data.user;
   updateAuthUI();
+  await loadAccountProfile();
   closeOverlay("loginOverlay");
   toast("Logged in");
 }
@@ -65,14 +72,31 @@ async function loginUser(e) {
 async function signupUser(e) {
   e.preventDefault();
 
+  const full_name = $("signupName")?.value.trim() || "";
+  const phone = $("signupPhone")?.value.trim() || "";
   const email = $("signupEmail")?.value.trim().toLowerCase();
   const password = $("signupPassword")?.value.trim();
 
   if (!email || !password) return toast("Enter email and password", true);
 
-  const { error } = await supabaseClient.auth.signUp({ email, password });
+  const { data, error } = await supabaseClient.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { full_name, phone }
+    }
+  });
 
   if (error) return toast(error.message, true);
+
+  if (data?.user) {
+    await supabaseClient.from("user_profiles").upsert({
+      user_id: data.user.id,
+      full_name: full_name || email.split("@")[0],
+      email,
+      phone
+    });
+  }
 
   toast("Signup successful. Login now.");
   switchAuthTab("login");
@@ -129,6 +153,7 @@ async function loadProducts() {
     products = [];
     console.error(error);
     toast("Products failed to load", true);
+    renderAll();
     return;
   }
 
@@ -165,11 +190,6 @@ function normalizeProduct(p) {
   };
 }
 
-/* PRICE RULE:
-   XXS = price_xxs
-   XS = price_xs
-   S/M/L/XL/XXL/XXXL/3XL/4XL/5XL/6XL = price_standard
-*/
 function getSizePrices(p) {
   const standard = Number(p.price_standard || p.standard_price || p.price_std || p.price || 0);
   const xxs = Number(p.price_xxs || p.xxs || 0);
@@ -189,9 +209,7 @@ function getSizePrices(p) {
   if (!Object.keys(map).length) {
     if (xxs) map.XXS = xxs;
     if (xs) map.XS = xs;
-    if (standard) {
-      ["S", "M", "L", "XL", "XXL"].forEach(size => map[size] = standard);
-    }
+    if (standard) ["S", "M", "L", "XL", "XXL", "3XL", "4XL", "5XL", "6XL"].forEach(size => map[size] = standard);
   }
 
   return map;
@@ -209,7 +227,6 @@ function getPriceForSize(product, size) {
   if (exact) return Number(exact);
 
   const wanted = normalizeSizeKey(size);
-
   const found = Object.entries(product.sizePrices || {}).find(([k]) => normalizeSizeKey(k) === wanted);
 
   if (found) return Number(found[1]);
@@ -218,10 +235,7 @@ function getPriceForSize(product, size) {
 }
 
 function normalizeSizeKey(size) {
-  return String(size || "")
-    .trim()
-    .toUpperCase()
-    .replace("XXXL", "3XL");
+  return String(size || "").trim().toUpperCase().replace("XXXL", "3XL");
 }
 
 function normalizeSizes(value, sizePrices = {}) {
@@ -230,9 +244,7 @@ function normalizeSizes(value, sizePrices = {}) {
   if (Array.isArray(value)) {
     sizes = value.map(cleanText).filter(Boolean);
   } else if (typeof value === "string") {
-    let text = value.trim();
-
-    text = text.replace(/[{}[\]'"]/g, "");
+    let text = value.trim().replace(/[{}[\]'"]/g, "");
 
     sizes = text
       .split(",")
@@ -240,14 +252,11 @@ function normalizeSizes(value, sizePrices = {}) {
       .filter(Boolean)
       .map(s => {
         const up = s.toUpperCase();
-        if (up === "XXXL") return "3XL";
-        return up;
+        return up === "XXXL" ? "3XL" : up;
       });
   }
 
-  if (!sizes.length && sizePrices) {
-    sizes = Object.keys(sizePrices);
-  }
+  if (!sizes.length && sizePrices) sizes = Object.keys(sizePrices);
 
   return [...new Set(sizes)];
 }
@@ -435,10 +444,25 @@ function openProduct(id) {
   renderColorOptions(product);
   updateModalWishlistBtn();
 
+  addProductBackButton();
   openOverlay("productModal");
-addProductBackButton();
 }
-  
+
+function addProductBackButton() {
+  const modal = document.querySelector("#productModal .product-modal");
+  if (!modal || document.getElementById("productBackBtn")) return;
+
+  const btn = document.createElement("button");
+  btn.id = "productBackBtn";
+  btn.type = "button";
+  btn.textContent = "← Back";
+  btn.className = "za-outline-btn";
+  btn.style.cssText = "position:absolute;top:18px;left:18px;z-index:20;";
+  btn.addEventListener("click", () => closeOverlay("productModal"));
+
+  modal.appendChild(btn);
+}
+
 function renderSizeOptions(sizes) {
   const box = $("modalSizeOptions");
   if (!box) return;
@@ -683,6 +707,9 @@ function injectAccountStyles() {
       .za-user-circle.big{width:72px;height:72px;font-size:30px;margin-bottom:14px;}
       .account-quick-links,.account-help-grid{display:flex;gap:10px;flex-wrap:wrap;}
       .account-list-item{display:grid;gap:6px;border-bottom:1px solid rgba(255,255,255,.08);padding:14px 0;}
+      .tracking-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+      .tracking-step{padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5);font-weight:900;font-size:12px;}
+      .tracking-step.active{border-color:#ff00ff;color:#ff00ff;}
       @media(max-width:760px){.account-layout{grid-template-columns:1fr}.account-sidebar{grid-template-columns:1fr 1fr}.account-topbar h1{font-size:18px;letter-spacing:4px}}
     </style>
   `);
@@ -736,6 +763,20 @@ function ensureAccountPage() {
             <section id="account-addresses" class="account-section">
               <div class="account-card">
                 <h2>My Addresses</h2>
+
+                <form id="addressForm" class="za-product-form">
+                  <input id="addrName" placeholder="Full Name">
+                  <input id="addrPhone" placeholder="Phone Number">
+                  <input id="addrFlat" placeholder="Flat / House No">
+                  <input id="addrBuilding" placeholder="Building / Society">
+                  <input id="addrArea" placeholder="Area / Street">
+                  <input id="addrCity" placeholder="City">
+                  <input id="addrState" placeholder="State">
+                  <input id="addrPin" placeholder="PIN Code">
+                  <input id="addrLandmark" placeholder="Landmark">
+                  <button class="za-purple-btn" type="submit">Save Address</button>
+                </form>
+
                 <div id="accountAddressesBox" class="za-empty-box">No saved addresses found.</div>
               </div>
             </section>
@@ -743,7 +784,13 @@ function ensureAccountPage() {
             <section id="account-settings" class="account-section">
               <div class="account-card">
                 <h2>Settings</h2>
-                <p>Email: <strong id="accountSettingsEmail">Not logged in</strong></p>
+
+                <form id="profileForm" class="za-product-form">
+                  <input id="profileName" placeholder="Full Name">
+                  <input id="profileEmail" placeholder="Email">
+                  <input id="profilePhone" placeholder="Phone Number">
+                  <button class="za-purple-btn" type="submit">Save Profile</button>
+                </form>
               </div>
             </section>
 
@@ -766,13 +813,14 @@ function ensureAccountPage() {
   `);
 }
 
-function openAccountPage() {
+async function openAccountPage() {
   if (!currentUser) return openOverlay("loginOverlay");
 
   setText("accountUserEmail", currentUser.email);
   setText("accountSettingsEmail", currentUser.email);
   setText("accountUserName", getAccountName());
 
+  await loadAccountProfile();
   openAccountTab("profile");
   openOverlay("accountPage");
 }
@@ -784,32 +832,83 @@ function openAccountTab(tab) {
 
   if (tab === "orders") loadAccountOrders();
   if (tab === "addresses") loadAccountAddresses();
+  if (tab === "settings") loadAccountProfile();
 }
 
-async function loadAccountOrders() {
-  const box = $("accountOrdersBox");
-  if (!box || !currentUser) return;
+async function loadAccountProfile() {
+  if (!currentUser) return;
 
-  box.innerHTML = "Loading orders...";
-
-  const { data, error } = await supabaseClient
-    .from("orders")
+  const { data } = await supabaseClient
+    .from("user_profiles")
     .select("*")
-    .eq("user_email", currentUser.email)
-    .order("created_at", { ascending: false });
+    .eq("user_id", currentUser.id)
+    .maybeSingle();
 
-  if (error || !data?.length) {
-    box.innerHTML = "No orders found yet.";
-    return;
+  if ($("profileEmail")) $("profileEmail").value = data?.email || currentUser.email || "";
+  if ($("profileName")) $("profileName").value = data?.full_name || "";
+  if ($("profilePhone")) $("profilePhone").value = data?.phone || "";
+
+  setText("accountUserName", data?.full_name || getAccountName());
+  setText("accountUserEmail", data?.email || currentUser.email);
+}
+
+async function saveProfile(e) {
+  e.preventDefault();
+
+  if (!currentUser) return toast("Please login first", true);
+
+  const full_name = $("profileName")?.value.trim();
+  const email = $("profileEmail")?.value.trim().toLowerCase();
+  const phone = $("profilePhone")?.value.trim();
+
+  const { error } = await supabaseClient.from("user_profiles").upsert({
+    user_id: currentUser.id,
+    full_name,
+    email,
+    phone
+  });
+
+  if (error) {
+    console.error(error);
+    return toast("Profile save failed", true);
   }
 
-  box.innerHTML = data.map(o => `
-    <div class="account-list-item">
-      <strong>Order #${escapeHTML(o.id)}</strong>
-      <span>${escapeHTML(o.status || "Processing")}</span>
-      <span>₹${Number(o.total || o.amount || 0)}</span>
-    </div>
-  `).join("");
+  toast("Profile saved");
+  await loadAccountProfile();
+}
+
+async function saveAddress(e) {
+  e.preventDefault();
+
+  if (!currentUser) return toast("Please login first", true);
+
+  const address = {
+    user_id: currentUser.id,
+    name: $("addrName")?.value.trim(),
+    phone: $("addrPhone")?.value.trim(),
+    flat: $("addrFlat")?.value.trim(),
+    building: $("addrBuilding")?.value.trim(),
+    area: $("addrArea")?.value.trim(),
+    city: $("addrCity")?.value.trim(),
+    state: $("addrState")?.value.trim(),
+    pin: $("addrPin")?.value.trim(),
+    landmark: $("addrLandmark")?.value.trim()
+  };
+
+  if (!address.name || !address.phone || !address.flat || !address.city || !address.pin) {
+    return toast("Fill name, phone, flat, city and pin", true);
+  }
+
+  const { error } = await supabaseClient.from("user_addresses").insert(address);
+
+  if (error) {
+    console.error(error);
+    return toast("Address save failed", true);
+  }
+
+  toast("Address saved");
+  $("addressForm")?.reset();
+  await loadAccountAddresses();
 }
 
 async function loadAccountAddresses() {
@@ -821,7 +920,7 @@ async function loadAccountAddresses() {
   const { data, error } = await supabaseClient
     .from("user_addresses")
     .select("*")
-    .eq("user_email", currentUser.email)
+    .eq("user_id", currentUser.id)
     .order("created_at", { ascending: false });
 
   if (error || !data?.length) {
@@ -832,10 +931,56 @@ async function loadAccountAddresses() {
   box.innerHTML = data.map(a => `
     <div class="account-list-item">
       <strong>${escapeHTML(a.name || "Saved Address")}</strong>
-      <span>${escapeHTML(a.address || a.full_address || "")}</span>
-      <span>${escapeHTML(a.phone || "")}</span>
+      <span>${escapeHTML(a.flat || "")}, ${escapeHTML(a.building || "")}</span>
+      <span>${escapeHTML(a.area || "")}, ${escapeHTML(a.city || "")}, ${escapeHTML(a.state || "")} - ${escapeHTML(a.pin || "")}</span>
+      <span>Phone: ${escapeHTML(a.phone || "")}</span>
+      <span>Landmark: ${escapeHTML(a.landmark || "")}</span>
     </div>
   `).join("");
+}
+
+async function loadAccountOrders() {
+  const box = $("accountOrdersBox");
+  if (!box || !currentUser) return;
+
+  box.innerHTML = "Loading orders...";
+
+  const { data, error } = await supabaseClient
+    .from("orders")
+    .select("*")
+    .or(`user_email.eq.${currentUser.email},customer_email.eq.${currentUser.email},email.eq.${currentUser.email}`)
+    .order("created_at", { ascending: false });
+
+  if (error || !data?.length) {
+    box.innerHTML = "No orders found yet.";
+    return;
+  }
+
+  box.innerHTML = data.map(order => {
+    const status = String(order.status || "new").toLowerCase();
+
+    return `
+      <div class="account-list-item">
+        <strong>Order #${escapeHTML(order.order_id || order.id)}</strong>
+        <span>Total: ₹${Number(order.total || order.amount || 0)}</span>
+        <span>Payment: ${escapeHTML(order.payment_method || "COD")}</span>
+        <span>Status: ${escapeHTML(status.toUpperCase())}</span>
+        <div class="tracking-row">
+          ${trackStep("NEW", status)}
+          ${trackStep("CONFIRMED", status)}
+          ${trackStep("SHIPPED", status)}
+          ${trackStep("DELIVERED", status)}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function trackStep(label, status) {
+  const steps = ["new", "confirmed", "shipped", "delivered"];
+  const active = steps.indexOf(status) >= steps.indexOf(label.toLowerCase());
+
+  return `<span class="tracking-step ${active ? "active" : ""}">${label}</span>`;
 }
 
 function getAccountName() {
@@ -843,15 +988,194 @@ function getAccountName() {
   return email.split("@")[0].replace(/[^a-z0-9]/gi, "").toUpperCase() || "ZAIDIFY";
 }
 
+/* CHECKOUT */
+
+function createCheckoutOverlay() {
+  if ($("checkoutOverlay")) return;
+
+  document.body.insertAdjacentHTML("beforeend", `
+    <div id="checkoutOverlay" class="overlay hidden">
+      <div class="modal auth-modal" style="max-width:650px;">
+        <button id="closeCheckoutBtn" class="close-btn" type="button">×</button>
+        <h2>Checkout</h2>
+
+        <div id="checkoutAddressBox" style="margin-top:18px;"></div>
+
+        <div style="margin-top:18px;padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;">
+          <h3 style="color:#ff00ff;margin-bottom:10px;">Payment Method</h3>
+          <label style="display:flex;gap:10px;align-items:center;font-weight:900;">
+            <input type="radio" name="paymentMethod" value="COD" checked>
+            Cash on Delivery
+          </label>
+          <p style="color:rgba(255,255,255,.6);font-size:13px;margin-top:8px;">
+            Razorpay prepaid payment will be added later.
+          </p>
+        </div>
+
+        <div style="margin-top:18px;padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;">
+          <h3 style="color:#ff00ff;margin-bottom:10px;">Order Summary</h3>
+          <div id="checkoutSummaryBox"></div>
+          <h2 style="margin-top:12px;color:#ff00ff;">Total: <span id="checkoutTotal">₹0</span></h2>
+        </div>
+
+        <button id="placeCodOrderBtn" class="main-btn purple" type="button" style="width:100%;margin-top:18px;">
+          Place COD Order
+        </button>
+      </div>
+    </div>
+  `);
+
+  $("closeCheckoutBtn")?.addEventListener("click", () => closeOverlay("checkoutOverlay"));
+}
+
+async function openCheckout() {
+  if (!currentUser) {
+    toast("Please login before checkout", true);
+    closeOverlay("cartOverlay");
+    openOverlay("loginOverlay");
+    return;
+  }
+
+  if (!state.cart.length) return toast("Your cart is empty", true);
+
+  await loadCheckoutAddresses();
+  renderCheckoutSummary();
+
+  closeOverlay("cartOverlay");
+  openOverlay("checkoutOverlay");
+}
+
+async function loadCheckoutAddresses() {
+  const box = $("checkoutAddressBox");
+  if (!box || !currentUser) return;
+
+  box.innerHTML = "Loading addresses...";
+
+  const { data, error } = await supabaseClient
+    .from("user_addresses")
+    .select("*")
+    .eq("user_id", currentUser.id)
+    .order("created_at", { ascending: false });
+
+  if (error || !data?.length) {
+    box.innerHTML = `
+      <div style="padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;">
+        <h3 style="color:#ff00ff;margin-bottom:10px;">Delivery Address</h3>
+        <p>No address found. Add one in Account → My Addresses.</p>
+        <button class="main-btn purple" type="button" id="checkoutAddAddressBtn">Add Address</button>
+      </div>
+    `;
+    return;
+  }
+
+  window.__checkoutAddresses = data;
+
+  box.innerHTML = `
+    <div style="padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;">
+      <h3 style="color:#ff00ff;margin-bottom:10px;">Select Delivery Address</h3>
+      ${data.map((a, i) => `
+        <label style="display:block;margin-bottom:12px;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;">
+          <input type="radio" name="checkoutAddress" value="${escapeAttr(a.id)}" ${i === 0 ? "checked" : ""}>
+          <strong>${escapeHTML(a.name || "")}</strong><br>
+          ${escapeHTML(a.flat || "")}, ${escapeHTML(a.building || "")}, ${escapeHTML(a.area || "")}<br>
+          ${escapeHTML(a.city || "")}, ${escapeHTML(a.state || "")} - ${escapeHTML(a.pin || "")}<br>
+          Phone: ${escapeHTML(a.phone || "")}
+        </label>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderCheckoutSummary() {
+  const box = $("checkoutSummaryBox");
+  const totalBox = $("checkoutTotal");
+  if (!box) return;
+
+  const total = state.cart.reduce((sum, item) => sum + Number(item.price) * Number(item.qty), 0);
+
+  box.innerHTML = state.cart.map(item => `
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;">
+      <span>${escapeHTML(item.name)} (${escapeHTML(item.size)} / ${escapeHTML(item.color)}) × ${item.qty}</span>
+      <strong>₹${Number(item.price) * Number(item.qty)}</strong>
+    </div>
+  `).join("");
+
+  if (totalBox) totalBox.textContent = `₹${total}`;
+}
+
+async function placeCodOrder() {
+  if (!currentUser) return toast("Please login first", true);
+  if (!state.cart.length) return toast("Cart is empty", true);
+
+  const selectedAddressId = document.querySelector("input[name='checkoutAddress']:checked")?.value;
+  const addresses = window.__checkoutAddresses || [];
+  const address = addresses.find(a => String(a.id) === String(selectedAddressId));
+
+  if (!address) return toast("Please add/select delivery address", true);
+
+  const total = state.cart.reduce((sum, item) => sum + Number(item.price) * Number(item.qty), 0);
+  const orderNo = `ZC-${Date.now().toString().slice(-6)}`;
+
+  const fullAddress = `${address.name || ""}, ${address.flat || ""}, ${address.building || ""}, ${address.area || ""}, ${address.city || ""}, ${address.state || ""} - ${address.pin || ""}. Phone: ${address.phone || ""}`;
+
+  const fullPayload = {
+    order_id: orderNo,
+    user_id: currentUser.id,
+    user_email: currentUser.email,
+    customer_email: currentUser.email,
+    customer_name: address.name || getAccountName(),
+    phone: address.phone || "",
+    customer_phone: address.phone || "",
+    address_id: address.id,
+    delivery_address: fullAddress,
+    items: state.cart,
+    total,
+    amount: total,
+    payment_method: "COD",
+    payment_status: "pending",
+    status: "new"
+  };
+
+  let { error } = await supabaseClient.from("orders").insert(fullPayload);
+
+  if (error) {
+    const fallbackPayload = {
+      user_email: currentUser.email,
+      customer_name: address.name || getAccountName(),
+      delivery_address: fullAddress,
+      items: state.cart,
+      total,
+      status: "new"
+    };
+
+    const fallback = await supabaseClient.from("orders").insert(fallbackPayload);
+    error = fallback.error;
+  }
+
+  if (error) {
+    console.error(error);
+    return toast(`Order failed: ${error.message}`, true);
+  }
+
+  state.cart = [];
+  saveCart();
+  updateBadges();
+  renderCart();
+
+  closeOverlay("checkoutOverlay");
+  toast("COD order placed successfully");
+
+  openAccountPage();
+  openAccountTab("orders");
+}
+
 /* ADMIN */
 
 function renderAdmin() {
   setText("statProducts", products.length);
-  setText("statOrders", "0");
-  setText("statRevenue", "₹0");
-  setText("statCustomers", "0");
   renderAdminProducts();
   renderAdminInventory();
+  renderAdminOrders();
 }
 
 function renderAdminProducts() {
@@ -908,6 +1232,38 @@ function renderAdminInventory() {
   `;
 }
 
+async function renderAdminOrders() {
+  const box = $("admin-orders")?.querySelector(".za-empty-box") || $("adminOrdersTable");
+  if (!box || !isAdmin()) return;
+
+  box.innerHTML = "Loading orders...";
+
+  const { data, error } = await supabaseClient
+    .from("orders")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error || !data?.length) {
+    box.innerHTML = "No orders found.";
+    return;
+  }
+
+  box.innerHTML = data.map(o => `
+    <div class="account-list-item">
+      <strong>Order #${escapeHTML(o.order_id || o.id)}</strong>
+      <span>Customer: ${escapeHTML(o.customer_name || o.user_email || o.customer_email || "")}</span>
+      <span>Total: ₹${Number(o.total || o.amount || 0)}</span>
+      <span>Status: ${escapeHTML(o.status || "new")}</span>
+      <span>${escapeHTML(o.delivery_address || "")}</span>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+        ${["new", "confirmed", "shipped", "delivered", "cancelled"].map(status => `
+          <button class="za-outline-btn" data-order-status="${status}" data-order-id="${escapeAttr(o.id)}" type="button">${status.toUpperCase()}</button>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+
 async function saveAdminProduct(e) {
   e.preventDefault();
 
@@ -962,6 +1318,42 @@ function openAdminPage(page) {
   qsa(".za-admin-page").forEach(section => section.classList.remove("active"));
   $(`admin-${page}`)?.classList.add("active");
   setText("adminPageTitle", titleCase(page.replace("-", " ")));
+
+  if (page === "orders") renderAdminOrders();
+}
+
+/* POLICY */
+
+function patchPolicyModal() {
+  const policy = document.querySelector("#policyOverlay .modal");
+  if (!policy) return;
+
+  policy.innerHTML = `
+    <button id="closePolicyBtn" class="close-btn" type="button">×</button>
+    <h2>Terms & Store Policy</h2>
+
+    <div class="policy-list" style="line-height:1.8;">
+      <h3>Return Policy</h3>
+      <p>We offer a 7 day easy return policy from the date of delivery.</p>
+      <p>Products must be unused, unwashed, undamaged, and returned with original packaging.</p>
+      <p>Washed products are not accepted for return, exchange, or refund.</p>
+
+      <h3>Refund Policy</h3>
+      <p>Refunds are processed only after the returned product is received and inspected.</p>
+      <p>Refunds may take 5–7 working days after inspection approval.</p>
+
+      <h3>Delivery Policy</h3>
+      <p>Delivery usually takes 5–7 working days after the order is confirmed.</p>
+
+      <h3>Payment Policy</h3>
+      <p>Currently we accept Cash on Delivery only. Razorpay prepaid payment will be added later.</p>
+
+      <h3>Support</h3>
+      <p>WhatsApp is for customer support only. Orders should be placed through website cart/checkout.</p>
+    </div>
+  `;
+
+  $("closePolicyBtn")?.addEventListener("click", () => closeOverlay("policyOverlay"));
 }
 
 /* EVENTS */
@@ -977,6 +1369,9 @@ function bindEvents() {
   $("accountBackBtn")?.addEventListener("click", () => closeOverlay("accountPage"));
   $("accountLogoutBtn")?.addEventListener("click", logoutUser);
 
+  $("profileForm")?.addEventListener("submit", saveProfile);
+  $("addressForm")?.addEventListener("submit", saveAddress);
+
   qsa(".account-tab").forEach(btn => {
     if (btn.dataset.accountTab) btn.addEventListener("click", () => openAccountTab(btn.dataset.accountTab));
   });
@@ -984,28 +1379,6 @@ function bindEvents() {
   qsa("[data-account-go]").forEach(btn => {
     btn.addEventListener("click", () => openAccountTab(btn.dataset.accountGo));
   });
-
-  $("helpWhatsappBtn")?.addEventListener("click", () => {
-  window.open(
-    "https://wa.me/918655171445?text=Hi%20Zaidify%20Collections,%20I%20need%20help.",
-    "_blank"
-  );
-});
-
-$("helpEmailSupportBtn")?.addEventListener("click", () => {
-  window.location.href =
-    "mailto:zaidifycollections@gmail.com?subject=Support Request - Zaidify Collections&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with:";
-});
-
-$("helpReturnsBtn")?.addEventListener("click", () => {
-  window.location.href =
-    "mailto:zaidifycollections@gmail.com?subject=Return / Refund Request&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with return/refund.%0D%0AOrder ID:%0D%0AReason:";
-});
-
-$("helpShippingBtn")?.addEventListener("click", () => {
-  window.location.href =
-    "mailto:zaidifycollections@gmail.com?subject=Shipping Help&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with shipping/tracking.%0D%0AOrder ID:";
-});
 
   $("cartBtn")?.addEventListener("click", () => { renderCart(); openOverlay("cartOverlay"); });
   $("wishlistBtn")?.addEventListener("click", () => { renderWishlist(); openOverlay("wishlistOverlay"); });
@@ -1089,29 +1462,60 @@ $("helpShippingBtn")?.addEventListener("click", () => {
   $("clearFiltersBtn")?.addEventListener("click", clearFilters);
 }
 
+function bindFinalEvents() {
+  document.addEventListener("click", async e => {
+    const target = e.target;
+
+    if (target.closest(".cart-footer .main-btn")) {
+      e.preventDefault();
+      openCheckout();
+    }
+
+    if (target.id === "checkoutAddAddressBtn") {
+      closeOverlay("checkoutOverlay");
+      openAccountPage();
+      openAccountTab("addresses");
+    }
+
+    if (target.id === "placeCodOrderBtn") {
+      await placeCodOrder();
+    }
+
+    if (target.id === "helpWhatsappBtn") {
+      window.open("https://wa.me/918655171445?text=Hi%20Zaidify%20Collections,%20I%20need%20help.", "_blank");
+    }
+
+    if (target.id === "helpEmailSupportBtn") {
+      window.location.href = "mailto:zaidifycollections@gmail.com?subject=Support Request - Zaidify Collections&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with:";
+    }
+
+    if (target.id === "helpReturnsBtn") {
+      window.location.href = "mailto:zaidifycollections@gmail.com?subject=Return / Refund Request&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with return/refund.%0D%0AOrder ID:%0D%0AReason:";
+    }
+
+    if (target.id === "helpShippingBtn") {
+      window.location.href = "mailto:zaidifycollections@gmail.com?subject=Shipping Help&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with shipping/tracking.%0D%0AOrder ID:";
+    }
+
+    const statusBtn = target.closest("[data-order-status]");
+    if (statusBtn) {
+      const orderId = statusBtn.dataset.orderId;
+      const status = statusBtn.dataset.orderStatus;
+
+      const { error } = await supabaseClient
+        .from("orders")
+        .update({ status })
+        .eq("id", orderId);
+
+      if (error) return toast("Status update failed", true);
+
+      toast(`Order marked ${status}`);
+      renderAdminOrders();
+    }
+  });
+}
+
 /* HELPERS */
-function addProductBackButton() {
-  const modal = document.querySelector("#productModal .product-modal");
-  if (!modal || document.getElementById("productBackBtn")) return;
-
-  const btn = document.createElement("button");
-  btn.id = "productBackBtn";
-  btn.type = "button";
-  btn.textContent = "← Back";
-  btn.className = "za-outline-btn";
-  btn.style.cssText = "position:absolute;top:18px;left:18px;z-index:5;";
-  btn.addEventListener("click", () => closeOverlay("productModal"));
-
-  modal.appendChild(btn);
-}
-function openWhatsAppSupport() {
-  const text = encodeURIComponent("Hi Zaidify Collections, I need help with my order/query.");
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
-}
-
-function openEmail(subject, body) {
-  window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
 
 function switchAuthTab(type) {
   const login = type === "login";
@@ -1273,451 +1677,4 @@ function debounce(fn, delay = 200) {
     clearTimeout(timer);
     timer = setTimeout(() => fn(...args), delay);
   };
-}
-
-/* =========================
-   FINAL FIX PATCH
-   COD CHECKOUT + HELP + POLICY + ACCOUNT + ORDERS
-========================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-  setupFinalFixes();
-});
-
-function setupFinalFixes() {
-  createCheckoutOverlay();
-  patchPolicyModal();
-  bindFinalClickActions();
-  bindProfileAndAddressForms();
-}
-
-/* CHECKOUT OVERLAY */
-
-function createCheckoutOverlay() {
-  if ($("checkoutOverlay")) return;
-
-  document.body.insertAdjacentHTML("beforeend", `
-    <div id="checkoutOverlay" class="overlay hidden">
-      <div class="modal auth-modal" style="max-width:620px;">
-        <button id="closeCheckoutBtn" class="close-btn" type="button">×</button>
-        <h2>Checkout</h2>
-
-        <div id="checkoutAddressBox" style="margin-top:18px;"></div>
-
-        <div style="margin-top:18px;padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;">
-          <h3 style="color:#ff00ff;margin-bottom:10px;">Payment Method</h3>
-          <label style="display:flex;gap:10px;align-items:center;font-weight:900;">
-            <input type="radio" name="paymentMethod" value="COD" checked>
-            Cash on Delivery
-          </label>
-          <p style="color:rgba(255,255,255,.6);font-size:13px;margin-top:8px;">
-            Online prepaid payment through Razorpay will be added later.
-          </p>
-        </div>
-
-        <div style="margin-top:18px;padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;">
-          <h3 style="color:#ff00ff;margin-bottom:10px;">Order Summary</h3>
-          <div id="checkoutSummaryBox"></div>
-          <h2 style="margin-top:12px;color:#ff00ff;">Total: <span id="checkoutTotal">₹0</span></h2>
-        </div>
-
-        <button id="placeCodOrderBtn" class="main-btn purple" type="button" style="width:100%;margin-top:18px;">
-          Place COD Order
-        </button>
-      </div>
-    </div>
-  `);
-
-  $("closeCheckoutBtn")?.addEventListener("click", () => closeOverlay("checkoutOverlay"));
-}
-
-async function openCheckout() {
-  if (!currentUser) {
-    toast("Please login before checkout", true);
-    closeOverlay("cartOverlay");
-    openOverlay("loginOverlay");
-    return;
-  }
-
-  if (!state.cart.length) return toast("Your cart is empty", true);
-
-  await loadCheckoutAddresses();
-  renderCheckoutSummary();
-
-  closeOverlay("cartOverlay");
-  openOverlay("checkoutOverlay");
-}
-
-async function loadCheckoutAddresses() {
-  const box = $("checkoutAddressBox");
-  if (!box || !currentUser) return;
-
-  box.innerHTML = "Loading addresses...";
-
-  const { data, error } = await supabaseClient
-    .from("user_addresses")
-    .select("*")
-    .eq("user_id", currentUser.id)
-    .order("created_at", { ascending: false });
-
-  if (error || !data?.length) {
-    box.innerHTML = `
-      <div style="padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;">
-        <h3 style="color:#ff00ff;margin-bottom:10px;">Delivery Address</h3>
-        <p>No address found. Please add address in Account → My Addresses.</p>
-        <button class="main-btn purple" type="button" onclick="closeOverlay('checkoutOverlay');openAccountPage();openAccountTab('addresses');">
-          Add Address
-        </button>
-      </div>
-    `;
-    return;
-  }
-
-  box.innerHTML = `
-    <div style="padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;">
-      <h3 style="color:#ff00ff;margin-bottom:10px;">Select Delivery Address</h3>
-      ${data.map((a, index) => `
-        <label style="display:block;margin-bottom:12px;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;">
-          <input type="radio" name="checkoutAddress" value="${escapeAttr(a.id)}" ${index === 0 ? "checked" : ""}>
-          <strong>${escapeHTML(a.name || "")}</strong><br>
-          ${escapeHTML(a.flat || "")}, ${escapeHTML(a.building || "")}, ${escapeHTML(a.area || "")}<br>
-          ${escapeHTML(a.city || "")}, ${escapeHTML(a.state || "")} - ${escapeHTML(a.pin || "")}<br>
-          Phone: ${escapeHTML(a.phone || "")}
-        </label>
-      `).join("")}
-    </div>
-  `;
-
-  window.__checkoutAddresses = data;
-}
-
-function renderCheckoutSummary() {
-  const box = $("checkoutSummaryBox");
-  const totalBox = $("checkoutTotal");
-  if (!box) return;
-
-  const total = state.cart.reduce((sum, item) => sum + Number(item.price) * Number(item.qty), 0);
-
-  box.innerHTML = state.cart.map(item => `
-    <div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;">
-      <span>${escapeHTML(item.name)} (${escapeHTML(item.size)} / ${escapeHTML(item.color)}) × ${item.qty}</span>
-      <strong>₹${Number(item.price) * Number(item.qty)}</strong>
-    </div>
-  `).join("");
-
-  if (totalBox) totalBox.textContent = `₹${total}`;
-}
-
-async function placeCodOrder() {
-  if (!currentUser) return toast("Please login first", true);
-  if (!state.cart.length) return toast("Cart is empty", true);
-
-  const selectedAddressId = document.querySelector("input[name='checkoutAddress']:checked")?.value;
-  const addresses = window.__checkoutAddresses || [];
-  const address = addresses.find(a => String(a.id) === String(selectedAddressId));
-
-  if (!address) return toast("Please add/select delivery address", true);
-
-  const total = state.cart.reduce((sum, item) => sum + Number(item.price) * Number(item.qty), 0);
-  const orderNo = `ZC-${Date.now().toString().slice(-6)}`;
-
-  const orderPayload = {
-    order_id: orderNo,
-    user_id: currentUser.id,
-    user_email: currentUser.email,
-    customer_email: currentUser.email,
-    customer_name: address.name || getAccountName(),
-    phone: address.phone || "",
-    customer_phone: address.phone || "",
-    address_id: address.id,
-    delivery_address: `${address.name || ""}, ${address.flat || ""}, ${address.building || ""}, ${address.area || ""}, ${address.city || ""}, ${address.state || ""} - ${address.pin || ""}. Phone: ${address.phone || ""}`,
-    items: state.cart,
-    total,
-    amount: total,
-    payment_method: "COD",
-    payment_status: "pending",
-    status: "new"
-  };
-
-  let result = await supabaseClient.from("orders").insert(orderPayload);
-
-  if (result.error) {
-    const fallbackPayload = {
-      user_email: currentUser.email,
-      customer_name: address.name || getAccountName(),
-      phone: address.phone || "",
-      delivery_address: orderPayload.delivery_address,
-      items: state.cart,
-      total,
-      payment_method: "COD",
-      status: "new"
-    };
-
-    result = await supabaseClient.from("orders").insert(fallbackPayload);
-  }
-
-  if (result.error) {
-    console.error(result.error);
-    return toast(`Order failed: ${result.error.message}`, true);
-  }
-
-  state.cart = [];
-  saveCart();
-  updateBadges();
-  renderCart();
-
-  closeOverlay("checkoutOverlay");
-  toast("COD order placed successfully");
-
-  openAccountPage();
-  openAccountTab("orders");
-}
-
-/* PROFILE + ADDRESS */
-
-function bindProfileAndAddressForms() {
-  $("profileForm")?.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    if (!currentUser) return toast("Please login first", true);
-
-    const full_name = $("profileName")?.value.trim();
-    const email = $("profileEmail")?.value.trim().toLowerCase();
-    const phone = $("profilePhone")?.value.trim();
-
-    const { error } = await supabaseClient.from("user_profiles").upsert({
-      user_id: currentUser.id,
-      full_name,
-      email,
-      phone
-    });
-
-    if (error) return toast("Profile save failed", true);
-
-    toast("Profile saved");
-    await loadAccountProfile();
-  });
-
-  $("addressForm")?.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    if (!currentUser) return toast("Please login first", true);
-
-    const address = {
-      user_id: currentUser.id,
-      name: $("addrName")?.value.trim(),
-      phone: $("addrPhone")?.value.trim(),
-      flat: $("addrFlat")?.value.trim(),
-      building: $("addrBuilding")?.value.trim(),
-      area: $("addrArea")?.value.trim(),
-      city: $("addrCity")?.value.trim(),
-      state: $("addrState")?.value.trim(),
-      pin: $("addrPin")?.value.trim(),
-      landmark: $("addrLandmark")?.value.trim()
-    };
-
-    if (!address.name || !address.phone || !address.flat || !address.city || !address.pin) {
-      return toast("Fill name, phone, flat, city and pin", true);
-    }
-
-    const { error } = await supabaseClient.from("user_addresses").insert(address);
-
-    if (error) {
-      console.error(error);
-      return toast("Address save failed", true);
-    }
-
-    toast("Address saved");
-    $("addressForm")?.reset();
-    await loadAccountAddresses();
-  });
-}
-
-async function loadAccountProfile() {
-  if (!currentUser) return;
-
-  const { data } = await supabaseClient
-    .from("user_profiles")
-    .select("*")
-    .eq("user_id", currentUser.id)
-    .maybeSingle();
-
-  if (!data) return;
-
-  if ($("profileName")) $("profileName").value = data.full_name || "";
-  if ($("profileEmail")) $("profileEmail").value = data.email || currentUser.email || "";
-  if ($("profilePhone")) $("profilePhone").value = data.phone || "";
-
-  setText("accountUserName", data.full_name || getAccountName());
-  setText("accountUserEmail", data.email || currentUser.email);
-}
-
-async function loadAccountAddresses() {
-  const box = $("accountAddressesBox");
-  if (!box || !currentUser) return;
-
-  box.innerHTML = "Loading addresses...";
-
-  const { data, error } = await supabaseClient
-    .from("user_addresses")
-    .select("*")
-    .eq("user_id", currentUser.id)
-    .order("created_at", { ascending: false });
-
-  if (error || !data?.length) {
-    box.innerHTML = "No saved addresses found.";
-    return;
-  }
-
-  box.innerHTML = data.map(a => `
-    <div class="account-list-item">
-      <strong>${escapeHTML(a.name || "Saved Address")}</strong>
-      <span>${escapeHTML(a.flat || "")}, ${escapeHTML(a.building || "")}</span>
-      <span>${escapeHTML(a.area || "")}, ${escapeHTML(a.city || "")}, ${escapeHTML(a.state || "")} - ${escapeHTML(a.pin || "")}</span>
-      <span>Phone: ${escapeHTML(a.phone || "")}</span>
-      <span>Landmark: ${escapeHTML(a.landmark || "")}</span>
-    </div>
-  `).join("");
-}
-
-/* ORDERS + TRACKING */
-
-async function loadAccountOrders() {
-  const box = $("accountOrdersBox");
-  if (!box || !currentUser) return;
-
-  box.innerHTML = "Loading orders...";
-
-  const { data, error } = await supabaseClient
-    .from("orders")
-    .select("*")
-    .or(`user_email.eq.${currentUser.email},email.eq.${currentUser.email},customer_email.eq.${currentUser.email}`)
-    .order("created_at", { ascending: false });
-
-  if (error || !data?.length) {
-    box.innerHTML = "No orders found yet.";
-    return;
-  }
-
-  box.innerHTML = data.map(order => {
-    const status = String(order.status || "new").toLowerCase();
-
-    return `
-      <div class="account-list-item">
-        <strong>Order #${escapeHTML(order.order_id || order.id)}</strong>
-        <span>Total: ₹${Number(order.total || order.amount || 0)}</span>
-        <span>Payment: ${escapeHTML(order.payment_method || "COD")}</span>
-        <span>Status: ${escapeHTML(status.toUpperCase())}</span>
-
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
-          ${trackStep("NEW", status)}
-          ${trackStep("CONFIRMED", status)}
-          ${trackStep("SHIPPED", status)}
-          ${trackStep("DELIVERED", status)}
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-function trackStep(label, status) {
-  const order = ["new", "confirmed", "shipped", "delivered"];
-  const active = order.indexOf(status) >= order.indexOf(label.toLowerCase());
-
-  return `
-    <span style="
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid ${active ? "#ff00ff" : "rgba(255,255,255,.2)"};
-      color:${active ? "#ff00ff" : "rgba(255,255,255,.5)"};
-      font-weight:900;
-      font-size:12px;
-    ">${label}</span>
-  `;
-}
-
-/* POLICY */
-
-function patchPolicyModal() {
-  const policy = document.querySelector("#policyOverlay .modal");
-  if (!policy) return;
-
-  policy.innerHTML = `
-    <button id="closePolicyBtn" class="close-btn" type="button">×</button>
-    <h2>Terms & Store Policy</h2>
-
-    <div class="policy-list" style="line-height:1.8;">
-      <h3>Return Policy</h3>
-      <p>We offer a 7 day easy return policy from the date of delivery.</p>
-      <p>Products must be unused, unwashed, undamaged, and returned with original packaging.</p>
-      <p>Washed products are not accepted for return, exchange, or refund.</p>
-
-      <h3>Refund Policy</h3>
-      <p>Refunds are processed only after the returned product is received and inspected.</p>
-      <p>Refunds may take 5–7 working days after inspection approval.</p>
-
-      <h3>Delivery Policy</h3>
-      <p>Delivery usually takes 5–7 working days after the order is confirmed.</p>
-
-      <h3>Payment Policy</h3>
-      <p>Currently we accept Cash on Delivery only. Prepaid online payment will be added later.</p>
-
-      <h3>Support</h3>
-      <p>WhatsApp is for customer support only. Orders should be placed through website cart/checkout.</p>
-    </div>
-  `;
-
-  $("closePolicyBtn")?.addEventListener("click", () => closeOverlay("policyOverlay"));
-}
-
-/* FINAL CLICK ACTIONS */
-
-function bindFinalClickActions() {
-  document.addEventListener("click", async (e) => {
-    const target = e.target;
-
-    if (target.closest(".cart-footer .main-btn")) {
-      e.preventDefault();
-      openCheckout();
-    }
-
-    if (target.id === "placeCodOrderBtn") {
-      await placeCodOrder();
-    }
-
-    if (target.id === "helpWhatsappBtn") {
-      window.open("https://wa.me/918655171445?text=Hi%20Zaidify%20Collections,%20I%20need%20help.", "_blank");
-    }
-
-    if (target.id === "helpEmailSupportBtn") {
-      window.location.href =
-        "mailto:zaidifycollections@gmail.com?subject=Support Request - Zaidify Collections&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with:";
-    }
-
-    if (target.id === "helpReturnsBtn") {
-      window.location.href =
-        "mailto:zaidifycollections@gmail.com?subject=Return / Refund Request&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with return/refund.%0D%0AOrder ID:%0D%0AReason:";
-    }
-
-    if (target.id === "helpShippingBtn") {
-      window.location.href =
-        "mailto:zaidifycollections@gmail.com?subject=Shipping Help&body=Hi Zaidify Collections,%0D%0A%0D%0AI need help with shipping/tracking.%0D%0AOrder ID:";
-    }
-
-    const statusBtn = target.closest("[data-order-status]");
-    if (statusBtn) {
-      const orderId = statusBtn.dataset.orderId;
-      const status = statusBtn.dataset.orderStatus;
-
-      const { error } = await supabaseClient
-        .from("orders")
-        .update({ status })
-        .eq("id", orderId);
-
-      if (error) return toast("Status update failed", true);
-
-      toast(`Order marked ${status}`);
-      if (typeof renderAdminOrders === "function") renderAdminOrders();
-    }
-  });
 }
